@@ -3,7 +3,7 @@ CONFIG = {
     "TICKER": "NVDA",
 
     "EMA_FAST": 10,
-    "EMA_SLOW": 30,
+    "EMA_SLOW": 30, 
 
     "ATR_PERIOD": 14,
 

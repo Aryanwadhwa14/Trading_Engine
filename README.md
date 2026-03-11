@@ -12,9 +12,21 @@
 
 The system is built to separate **data, indicators, strategies, execution logic, and alerts**, allowing strategies to be tested and deployed in a structured research environment.
 
-This project currently focuses on **EMA-based strategies**, but the architecture supports building and testing any strategy.
+This project currently focuses on **EMA-based strategies**, but the architecture supports building and testing any strategy. 
 
 ---
+
+# What aryan have implemented till now : 
+```
+data/
+    historical_loader.py
+
+indicators/
+    ema.py
+    atr.py
+
+main.py
+```  
 
 # System Architecture
 
