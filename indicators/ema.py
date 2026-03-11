@@ -5,4 +5,4 @@ def calculate_ema(df, period, column="close"):
         adjust=False
     ).mean()
 
-    return ema
+    return ema 
