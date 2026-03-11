@@ -13,4 +13,4 @@ def calculate_atr(df, period=14):
 
     atr = tr.rolling(period).mean()
 
-    return atr
+    return atr  

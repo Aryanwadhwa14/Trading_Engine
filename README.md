@@ -1,6 +1,6 @@
 # Trading Engine – Algorithmic Trading Research & Signal System
 
-## Overview
+## Overview 
 
 **Trading Engine** is a modular algorithmic trading framework designed for:
 
@@ -27,6 +27,32 @@ indicators/
 
 main.py
 ```  
+# To Do next : 
+```
+strategies/
+    ema_pullback.py
+
+backtest/
+    backtest_engine.py
+
+forward_test/
+    forward_engine.py
+--- 
+
+To do next next : 
+factors/
+    factor_engine.py
+
+execution/
+    position_sizing.py
+
+alerts/
+    telegram_bot.py
+
+config.py
+
+main.py
+```
 
 # System Architecture
 
