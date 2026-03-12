@@ -25,21 +25,34 @@ indicators/
     ema.py
     atr.py
 
-main.py
-```  
-# To Do next : 
-```
 strategies/
     ema_pullback.py
 
+main.py
+```  
+
+## Results does'nt made me satisfied so i have to do more stuff in this 
+```
+[*********************100%***********************]  1 of 1 completed
+Calculating Indicators-> 
+Signal detected
+{'signal': 'SHORT', 'type': 'trend', 'reason': 'Pullback Short'}
+```
+
+# To Do next : 
+```
 backtest/
     backtest_engine.py
+
+plot/
+    plot_engine.py -> Important because to generate back test plots and charts with trades and indicators using the given strategies
 
 forward_test/
     forward_engine.py
 --- 
 
 To do next next : 
+
 factors/
     factor_engine.py
 
