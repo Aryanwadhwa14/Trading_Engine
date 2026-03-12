@@ -486,19 +486,23 @@ BOT_TOKEN
 CHAT_ID
 ```
 
-Example alert message:
+Example Telegram alert message:
 
 ```
+
 TRADE SIGNAL
 
 Ticker: NVDA
-Strategy: EMA Pullback
+Timeframe : "1D"
+Strategy: EMA 26/55 -> Strategy 1/2/3/4
 
-Direction: LONG
+Direction: LONG/SHORT
+Signal : Trend/Scalp 
 
 Entry: 912.50
-Stop Loss: 905.10
-Take Profit: 927.30
+Stop Loss(sl): 905.10
+Take Profit(tp): 927.30
+
 ```
 
 ---
