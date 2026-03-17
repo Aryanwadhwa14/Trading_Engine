@@ -25,10 +25,20 @@ def main():
     else : 
         print("No signal detected")
 
-    # print(df.tail())
+    latest = df.iloc[-1]
+    prev = df.iloc[-2]
 
-
-    # print(df[["close","ema_fast","ema_slow"]].tail())
+    print("\nDEBUG INFO")
+    print("Close:", latest["close"])
+    print("Open:", latest["open"])
+    print("EMA FAST:", latest["ema_fast"])
+    print("EMA SLOW:", latest["ema_slow"])
+    print("\nTrend:",
+      "UPTREND" if latest["ema_fast"] > latest["ema_slow"] else "DOWNTREND")
+    print("Candle:",
+      "GREEN" if latest["close"] > latest["open"] else "RED")
+    print("Prev Low:", prev["low"])
+    print("Prev High:", prev["high"])
 
 
 if __name__ == "__main__":
