@@ -12,11 +12,22 @@ def main():
         interval=CONFIG["TIMEFRAME"]
     )
 
+    # Date filter
+    df = df.loc[
+        (df.index >= CONFIG["START_DATE"]) &
+        (df.index <= CONFIG["END_DATE"])
+    ]
+
     df["ema_fast"] = calculate_ema(df, CONFIG["EMA_FAST"])
     df["ema_slow"] = calculate_ema(df, CONFIG["EMA_SLOW"])
     df["atr"] = calculate_atr(df, CONFIG["ATR_PERIOD"])
 
-    run_backtest(df, CONFIG)
+    run_backtest(
+        df,
+        CONFIG,
+        CONFIG["START_DATE"],
+        CONFIG["END_DATE"]
+    )
 
 
 if __name__ == "__main__":

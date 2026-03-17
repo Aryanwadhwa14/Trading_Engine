@@ -1,17 +1,30 @@
 CONFIG = {
 
+    # ASSET CONFIG
     "TICKER": "NVDA",
+    "TIMEFRAME": "1d",
 
-    "EMA_FAST": 10,
-    "EMA_SLOW": 30, 
+    # DATE RANGE (Backtest)
+    "START_DATE": "2025-09-01",
+    "END_DATE": "2026-02-17",
 
-    "ATR_PERIOD": 14,
+    # INDICATORS
+    "EMA_FAST": 26,
+    "EMA_SLOW": 55,
+    "ATR_PERIOD": 14,   # (kept for future use)
 
-    "RISK_PERCENT": 0.01,
-    "ATR_SL_MULT": 1.5,
-    "RR": 2.0,
-
+    # CAPITAL & RISK
     "INITIAL_BALANCE": 10000,
+    "RISK_PERCENT": 0.01,   # not yet used fully (future position sizing)
 
-    "TIMEFRAME": "1d"
+    # STRATEGY CONFIG
+    "TREND_RR": 2.0,    # Trend trades RR
+    "SCALP_RR": 1.2,    # Scalp trades RR
+
+    # BACKTEST CONTROL
+    "MAX_TRADES": 10000,
+
+    # OUTPUT CONTROL
+    "SAVE_RESULTS": True,
+    "RESULTS_FOLDER": "results"
 }
