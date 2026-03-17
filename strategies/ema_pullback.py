@@ -1,5 +1,3 @@
-
-
 def generate_signal(df):
 
     if len(df) < 5:
@@ -13,22 +11,21 @@ def generate_signal(df):
     ema_fast = latest["ema_fast"]
     ema_slow = latest["ema_slow"]
 
-    # candle color
-    green = latest["close"] > latest["open"]
-    red = latest["close"] < latest["open"]
+    close = latest["close"]
+    open_ = latest["open"]
 
-    # trend
+    # Candle type
+    green = close > open_
+    red = close < open_
+
+    # Trend
     uptrend = ema_fast > ema_slow
     downtrend = ema_fast < ema_slow
 
-    # EMA band
-    ema_high = max(ema_fast, ema_slow)
-    ema_low = min(ema_fast, ema_slow)
+    # =========================
+    # 🔴 PRIORITY 1 — SCALP
+    # =========================
 
-    def between_emas(candle):
-        return (candle["low"] <= ema_high) and (candle["high"] >= ema_low)
-
-    # 3 candle triggers
     three_red = (
         (prev1["close"] < prev1["open"]) and
         (prev2["close"] < prev2["open"]) and
@@ -41,52 +38,84 @@ def generate_signal(df):
         (prev3["close"] > prev3["open"])
     )
 
-    trigger_red = three_red and (
-        between_emas(prev1) or
-        between_emas(prev2) or
-        between_emas(prev3)
-    )
+    # SHORT SCALP
+    if uptrend and three_red:
 
-    trigger_green = three_green and (
-        between_emas(prev1) or
-        between_emas(prev2) or
-        between_emas(prev3)
-    )
+        entry = close
+        sl = prev1["high"]
+        risk = sl - entry
 
-    # Institutional Short
-    if uptrend and red and trigger_red and latest["close"] < ema_fast and latest["close"] < ema_slow:
-        return {
-            "signal": "SHORT",
-            "type": "scalp",
-            "reason": "Institutional Short"
-        }
+        if risk > 0:
+            tp = entry - 1.2 * risk
 
-    # Institutional Long
-    if downtrend and green and trigger_green and latest["close"] > ema_slow:
-        return {
-            "signal": "LONG",
-            "type": "scalp",
-            "reason": "Institutional Long"
-        }
+            return {
+                "signal": "SHORT",
+                "type": "scalp",
+                "entry": entry,
+                "stop_loss": sl,
+                "take_profit": tp,
+                "reason": "3 Red Candles (Exhaustion)"
+            }
 
-    # Pullback Long
-    if uptrend:
-        if (prev1["low"] <= prev1["ema_fast"]) or (prev1["low"] <= prev1["ema_slow"]):
-            if green:
-                return {
-                    "signal": "LONG",
-                    "type": "trend",
-                    "reason": "Pullback Long"
-                }
+    # LONG SCALP
+    if downtrend and three_green:
 
-    # Pullback Short
-    if downtrend:
-        if (prev1["high"] >= prev1["ema_fast"]) or (prev1["high"] >= prev1["ema_slow"]):
-            if red:
-                return {
-                    "signal": "SHORT",
-                    "type": "trend",
-                    "reason": "Pullback Short"
-                }
+        entry = close
+        sl = prev1["low"]
+        risk = entry - sl
+
+        if risk > 0:
+            tp = entry + 1.2 * risk
+
+            return {
+                "signal": "LONG",
+                "type": "scalp",
+                "entry": entry,
+                "stop_loss": sl,
+                "take_profit": tp,
+                "reason": "3 Green Candles (Exhaustion)"
+            }
+
+    # =========================
+    # 🔵 PRIORITY 2 — TREND
+    # =========================
+
+    # LONG TREND
+    if uptrend and close > ema_fast:
+
+        entry = close
+        sl = prev1["low"]
+        risk = entry - sl
+
+        if risk > 0:
+            tp = entry + 2.0 * risk
+
+            return {
+                "signal": "LONG",
+                "type": "trend",
+                "entry": entry,
+                "stop_loss": sl,
+                "take_profit": tp,
+                "reason": "Break Above EMA Fast"
+            }
+
+    # SHORT TREND
+    if downtrend and close < ema_slow:
+
+        entry = close
+        sl = prev1["high"]
+        risk = sl - entry
+
+        if risk > 0:
+            tp = entry - 2.0 * risk
+
+            return {
+                "signal": "SHORT",
+                "type": "trend",
+                "entry": entry,
+                "stop_loss": sl,
+                "take_profit": tp,
+                "reason": "Break Below EMA Slow"
+            }
 
     return None

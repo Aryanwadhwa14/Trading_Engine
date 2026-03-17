@@ -1,0 +1,11 @@
+
+NVDA BACKTEST RESULTS
+============================================================
+
+Total Trades: 133
+Wins: 48
+Losses: 85
+Win Rate: 36.09%
+
+Net Profit: $-7.61
+Final Balance: $9,992.41
