@@ -1,12 +1,12 @@
 CONFIG = {
 
     # ASSET CONFIG
-    "TICKER": "AAPL",
-    "TIMEFRAME": "1d",
+    "TICKER": "TSLA",
+    "TIMEFRAME": "5M",
 
     # DATE RANGE (Backtest)
-    "START_DATE": "2025-09-01",
-    "END_DATE": "2026-02-17",
+    "START_DATE": "2026-01-01",     
+    "END_DATE": "2026-03-17",
 
     # INDICATORS
     "EMA_FAST": 26,

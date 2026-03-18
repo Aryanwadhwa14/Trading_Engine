@@ -3,12 +3,13 @@ import yfinance as yf
 import pandas as pd
 
 
-def load_historical_data(ticker="NVDA", interval="1d", period="5y"):
+def load_historical_data(ticker="NVDA", interval="1d", start=None, end=None):
 
     df = yf.download(
         ticker,
         interval=interval,
-        period=period,
+        start=start,
+        end=end,
         auto_adjust=False
     )
 

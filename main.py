@@ -9,7 +9,9 @@ def main():
 
     df = load_historical_data(
         ticker=CONFIG["TICKER"],
-        interval=CONFIG["TIMEFRAME"]
+        interval=CONFIG["TIMEFRAME"],
+        start=CONFIG["START_DATE"],
+        end=CONFIG["END_DATE"]
     )
 
     # Date filter

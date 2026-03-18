@@ -1,0 +1,23 @@
+
+QQQ BACKTEST RESULTS
+============================================================
+
+Configuration:
+- Ticker:       QQQ
+- Timeframe:    5m
+- Date Range:   2026-03-16 to 2026-03-17
+- EMA:          EMA 5 / 9
+
+Performance:
+- Total Trades: 6
+- Wins:         0
+- Losses:       6
+- Win Rate:     0.0%
+- Net Profit:   $-5.29
+- Final Bal:    $9,994.71
+- Avg Win:      $0.00
+- Avg Loss:     $-0.88
+- Max Win:      $-0.24
+- Max Loss:     $-1.82
+
+Generated: 2026-03-18 17:35:37
