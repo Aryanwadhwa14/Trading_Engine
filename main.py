@@ -3,9 +3,12 @@ from data.historical_loader import load_historical_data
 from indicators.ema import calculate_ema
 from indicators.atr import calculate_atr
 from backtest.backtest_engine import run_backtest
+from forward_test.forward_test_engine import run_forward_test
 
 
-def main():
+def run_backtest_mode():
+
+    print("\n Running BACKTEST...\n")
 
     df = load_historical_data(
         ticker=CONFIG["TICKER"],
@@ -14,12 +17,11 @@ def main():
         end=CONFIG["END_DATE"]
     )
 
-    # Date filter
-    df = df.loc[
-        (df.index >= CONFIG["START_DATE"]) &
-        (df.index <= CONFIG["END_DATE"])
-    ]
+    if df is None or df.empty:
+        print("❌ No data loaded. Check ticker/timeframe.")
+        return
 
+    # Indicators
     df["ema_fast"] = calculate_ema(df, CONFIG["EMA_FAST"])
     df["ema_slow"] = calculate_ema(df, CONFIG["EMA_SLOW"])
     df["atr"] = calculate_atr(df, CONFIG["ATR_PERIOD"])
@@ -30,6 +32,27 @@ def main():
         CONFIG["START_DATE"],
         CONFIG["END_DATE"]
     )
+
+
+def run_forward_mode():
+
+    print("\n Running FORWARD TEST (LIVE)...\n")
+
+    run_forward_test(CONFIG)
+
+
+def main():
+
+    mode = CONFIG.get("MODE", "backtest")
+
+    if mode == "backtest":
+        run_backtest_mode()
+
+    elif mode == "forward":
+        run_forward_mode()
+
+    else:
+        print(" Invalid MODE in config. Use BACKTEST or FORWARD.")
 
 
 if __name__ == "__main__":

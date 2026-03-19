@@ -1,16 +1,16 @@
 CONFIG = {
 
     # ASSET CONFIG
-    "TICKER": "TSLA",
-    "TIMEFRAME": "5M",
+    "TICKER": "NVDA",
+    "TIMEFRAME": "5m",
 
     # DATE RANGE (Backtest)
-    "START_DATE": "2026-01-01",     
-    "END_DATE": "2026-03-17",
+    "START_DATE": "2026-03-01",     
+    "END_DATE": "2026-03-20",
 
     # INDICATORS
-    "EMA_FAST": 26,
-    "EMA_SLOW": 55,
+    "EMA_FAST": 5,
+    "EMA_SLOW": 9,
     "ATR_PERIOD": 14,   # (kept for future use)
 
     # CAPITAL & RISK
@@ -26,5 +26,8 @@ CONFIG = {
 
     # OUTPUT CONTROL
     "SAVE_RESULTS": True,
-    "RESULTS_FOLDER": "results"
+    "RESULTS_FOLDER": "results",
+
+    # MODES
+    "MODE": "forward"  # "backtest" or "forward"
 }
