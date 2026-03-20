@@ -374,6 +374,9 @@ CONFIG = {
     # OUTPUT
     "SAVE_RESULTS":    True,
     "RESULTS_FOLDER":  "results"
+
+    # MODES
+    "MODE": "forward"  # "backtest" or "forward"
 }
 ```
 
