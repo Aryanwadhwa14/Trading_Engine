@@ -190,3 +190,53 @@ def run_forward_test(config: dict) -> None:
         time.sleep(SLEEP_SECONDS)
 ```
 * **What this does:** At the very end of the loop, the robot goes to sleep for the 10 seconds we set at the top of the file. When 10 seconds are up, it jumps all the way back up to `while True:` and starts the whole checklist over again!
+
+---
+
+## 3. Technical Implementation Details
+
+For the developers looking under the hood, here is how the Forward Test Engine works technically:
+
+* **The Loop:** It relies on an infinite `while True:` loop inside Python, throttling itself with `time.sleep(SLEEP_SECONDS)` to ensure it does not exhaust API limits or CPU resources.
+* **State Management:** It keeps state deliberately minimal. The only thing preserved across loops is the `last_signal_key`, a tuple consisting of `(signal_direction, signal_type, strategy_id, round(entry_price, 2))`. This acts as an idempotency key to prevent spam duplicates on consecutive loops -> basically used for data deduplication.
+* **Error Handling:** Network requests and data parsing are wrapped in broad `try-except` blocks. If Yahoo Finance drops the connection or returns a `KeyError`/`ValueError` due to malformed dataset, the engine logs the traceback but continues to the next cycle. This guarantees uptime in an unpredictable live environment.
+* **Loose Coupling:** The engine doesn't know *how* `calculate_ema` or `generate_signal` works. It simply honors the DataFrame contract. This allows you to completely swap out trading strategies without touching the engine logic.
+
+---
+
+## 4. Telegram Bot Implementation (`aryan14trade_bot`)
+
+To receive real-time alerts without sitting in front of a computer, we integrated a custom Telegram bot. Here is exactly what was done to build it technically:
+
+1. **Creating the Bot with BotFather:** We opened Telegram and searched for the official `@BotFather`.
+2. **Registering the Name:** We sent the `/newbot` command and registered the bot under the handle **aryan14trade_bot**.
+3. **Securing the Token:** BotFather replied with a unique HTTP API Token (the `BOT_TOKEN`), which acts as the password for the bot to communicate.
+4. **Acquiring the Chat ID:** We sent a dummy message to `aryan14trade_bot` from the target chat group. By hitting the `https://api.telegram.org/bot<TOKEN>/getUpdates` API in our browser, we extracted the internal `CHAT_ID` of the conversation.
+5. **Code Integration (`telegram_bot.py`):**
+   * Using the `python-dotenv` package, we securely load the `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` from a hidden `.env` file so the credentials aren't pushed to GitHub.
+   * We use the standard `requests` library to send an HTTP `POST` request to Telegram's `sendMessage` endpoint.
+   * The text payload is styled using Telegram's native `Markdown` `parse_mode` to ensure cleanly formatted, bold text for our trade alerts.
+
+---
+
+## 5. System Architecture Diagram (Forward Testing)
+
+Here is a visual representation of how data flows constantly during Forward Testing. 
+
+```mermaid
+graph TD
+    A[Live Market Data] -->|Download OHLCV| B(live_data_loader.py)
+    B -->|DataFrame| C{Indicators: ema.py}
+    C -->|Calculate EMA/ATR| D[strategies/ema_pullback.py]
+    D -->|Evaluate latest candle| E{Is there a Trade Signal?}
+    E -->|Yes| F{Is it a Duplicate?}
+    F -->|No| G[_format_telegram]
+    F -->|Yes| H[Skip Alert]
+    G -->|Send POST Request| I[alerts/telegram_bot.py]
+    I -->|Deliver Message| J[aryan14trade_bot on Telegram]
+    E -->|No| K[Wait & Sleep]
+    H --> K
+    J --> K
+    K -->|Loop back| A
+```
+

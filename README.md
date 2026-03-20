@@ -428,7 +428,7 @@ results/           → trade_log.csv + summary.txt
 
 ## Forward Testing Mode (Live)
 
-```
+```text
 main.py
    │
    ▼
@@ -449,6 +449,16 @@ telegram_bot.py    → sends alert to Telegram
    ▼
 sleep(next_candle) → waits and repeats
 ```
+
+### Technical Implementation
+
+The Forward Testing Engine uses an infinite `while True:` loop inside Python paired with a `time.sleep()` delay to continuously poll the market at a set interval (e.g., 10 seconds). Each iteration:
+1. Fetches the latest live candles using the `live_data_loader`.
+2. Appends the needed EMA calculations and drops rows to satisfy the indicator warmup period.
+3. Feeds the current data to the trading strategy to evaluate signals on the most recent candle.
+4. Employs a unique `signal_key` deduplication logic (hashing signal direction, type, strategy ID, and entry price) to ensure only genuinely *new* signals fire Telegram alerts.
+5. If a script error or internet outage occurs, broad `try-except` blocks catch the error to prevent the loop from breaking, guaranteeing continuous uptime.
+
 
 ---
 
@@ -494,13 +504,18 @@ Finds the combination that maximises win rate, net profit, or any other target m
 
 Sends trade signals directly to a Telegram chat when the forward testing engine generates a signal.
 
-Setup:
+## How it was implemented (`aryan14trade_bot`)
 
-```
-1. Create bot via @BotFather on Telegram
-2. Get BOT_TOKEN and CHAT_ID
-3. Store in .env file
-```
+To make this work seamlessly and receive real-time notifications, a custom bot named **aryan14trade_bot** was created:
+
+1. **Bot Creation:** Messaged `@BotFather` on Telegram and used the `/newbot` command.
+2. **Naming the Bot:** Registered the bot under the handle `@aryan14trade_bot`.
+3. **Retrieving Credentials:** `@BotFather` provided a unique `BOT_TOKEN` for API access.
+4. **Getting the Chat ID:** Sent a test message to the new bot from the intended chat, then fetched the `CHAT_ID` using the Telegram `getUpdates` API endpoint.
+5. **Code Integration:** 
+   * Stored the `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` securely inside a local `.env` file to prevent exposing keys in the source code.
+   * `python-dotenv` loads these environment variables into `telegram_bot.py`.
+   * The `requests` Python library is used to send an HTTP `POST` request to the Telegram API `/sendMessage` endpoint.
 
 Example alert format:
 
