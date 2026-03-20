@@ -696,7 +696,7 @@ Change `config.py` only:
 2. Implement `load_data(ticker, interval) → df` matching the DataFrame contract
 3. Swap it in `main.py`
 
-The rest of the pipeline — indicators, strategy, backtest — work without any changes.
+The rest of the pipeline —> data loading, indicators, strategy, backtest, forward_test — work without any changes.
 
 ---
 
