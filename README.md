@@ -35,31 +35,22 @@ indicators/
 strategies/
     ema_pullback.py
 
+backtest/
+   backtest_engine.py
+
+forward_test/
+   forward_test_engine.py
+
+alerts/
+   telegram_bot.py
+
+config.py -> added different modes "backtest" and "forward"
+
 main.py
 ```  
 
-## Results does'nt made me satisfied so i have to do more stuff in this 
-```
-[*********************100%***********************]  1 of 1 completed
-Calculating Indicators-> 
-Signal detected
-{'signal': 'SHORT', 'type': 'trend', 'reason': 'Pullback Short'}
-```
-
 # To Do next : 
 ```
-backtest/
-    backtest_engine.py
-
-plot/
-    plot_engine.py -> Important because to generate back test plots and charts with trades and indicators using the given strategies
-
-forward_test/
-    forward_engine.py
---- 
-
-To do next next : 
-
 factors/
     factor_engine.py
 
@@ -67,7 +58,7 @@ execution/
     position_sizing.py
 
 alerts/
-    telegram_bot.py
+    telegram_bot.py  -> update the alerts 
 
 config.py
 
