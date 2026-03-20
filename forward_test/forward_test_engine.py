@@ -3,7 +3,7 @@ Forward Test Engine
 ===================
 Runs the trading strategy in a live loop, fetching the latest market data
 and printing signals to the console immediately.  Telegram alerts are sent
-only for genuinely *new* signals (deduplication by signal_key).
+only for genuinely *new* signals (deduplication  by signal_key).
 
 Debug-friendly defaults:
   - SLEEP_SECONDS = 10  (change to e.g. 60 for production)
@@ -53,7 +53,8 @@ def _print_signal(signal: dict, config: dict) -> None:
         f"  {side_icon}  NEW SIGNAL  [{ts}]\n"
         f"{'='*55}\n"
         f"  Ticker   : {config['TICKER']}\n"
-        f"  Strategy : #{signal['strategy_id']} — {signal['type'].upper()}\n"
+        f"  Timeframe: {config['TIMEFRAME']}\n" 
+        f"  Strategy : EMA {config['EMA_FAST']}/{config['EMA_SLOW']} -> Strategy {signal['strategy_id']}\n"
         f"  Side     : {signal['signal']}\n"
         f"  Entry    : {signal['entry']:.4f}\n"
         f"  Stop Loss: {signal['stop_loss']:.4f}\n"
@@ -69,7 +70,8 @@ def _format_telegram(signal: dict, config: dict) -> str:
     return (
         f"🚨 TRADE SIGNAL\n\n"
         f"Ticker  : {config['TICKER']}\n"
-        f"Strategy: #{signal['strategy_id']} ({signal['type'].upper()})\n"
+        f"Strategy: EMA {config['EMA_FAST']}/{config['EMA_SLOW']} -> Strategy {signal['strategy_id']}\n"
+        f"Timeframe: {config['TIMEFRAME']}\n"
         f"Side    : {side_icon}\n"
         f"Entry   : {signal['entry']:.4f}\n"
         f"SL      : {signal['stop_loss']:.4f}\n"

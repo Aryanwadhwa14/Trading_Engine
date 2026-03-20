@@ -426,7 +426,7 @@ results/           → trade_log.csv + summary.txt
 
 ---
 
-## Forward Testing Mode (Planned)
+## Forward Testing Mode (Live)
 
 ```
 main.py
@@ -530,8 +530,8 @@ Take Profit: 927.30
 | 3 | `strategies/ema_pullback.py` | ✅ Done |
 | 4 | `backtest/backtest_engine.py` | ✅ Done |
 | 5 | `execution/position_sizing.py` | 🔲 Planned |
-| 6 | `forward_test/forward_engine.py` | 🔲 Planned |
-| 7 | `alerts/telegram_bot.py` | 🔲 Planned |
+| 6 | `forward_test/forward_test_engine.py` | ✅ Done |
+| 7 | `alerts/telegram_bot.py` | ✅ Done |
 | 8 | `factors/factor_engine.py` | 🔲 Planned |
 
 ---

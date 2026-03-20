@@ -395,9 +395,9 @@ python main.py
 
 ## 6. Full Runtime Flow — Forward Test Mode
 
-> **Status: Planned** — `forward_test_engine.py` is created but empty.
+> **Status: Live** — `forward_test_engine.py` is fully implemented and running.
 
-When implemented, the flow will be:
+The real-time flow is:
 
 ```
 python main.py  (with MODE="forward" in config)
@@ -645,14 +645,14 @@ Zero code change. Only config.py changed.
 | Backtest engine | `backtest/backtest_engine.py` | ✅ Complete |
 | Config system | `config.py` | ✅ Complete |
 | Main orchestrator | `main.py` | ✅ Complete |
+| Forward test engine | `forward_test/forward_test_engine.py` | ✅ Complete |
+| Telegram alerts | `alerts/telegram_bot.py` | ✅ Complete |
 
 ### Planned (Files Created, Logic Empty)
 
 | Module | File | What It Will Do |
 |---|---|---|
-| Forward test engine | `forward_test/forward_test_engine.py` | Run strategy live in a loop |
 | Position sizing | `execution/position_sizing.py` | Calculate share qty from risk % |
-| Telegram alerts | `alerts/telegram_bot.py` | Send trade signals to Telegram |
 | Factor engine | `factors/factors_engine.py` | Grid search parameter optimisation |
 
 ---

@@ -2,15 +2,15 @@ CONFIG = {
 
     # ASSET CONFIG
     "TICKER": "NVDA",
-    "TIMEFRAME": "5m",
+    "TIMEFRAME": "1d",
 
     # DATE RANGE (Backtest)
     "START_DATE": "2026-03-01",     
     "END_DATE": "2026-03-20",
 
     # INDICATORS
-    "EMA_FAST": 5,
-    "EMA_SLOW": 9,
+    "EMA_FAST": 26,
+    "EMA_SLOW": 55,
     "ATR_PERIOD": 14,   # (kept for future use)
 
     # CAPITAL & RISK
