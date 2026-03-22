@@ -23,8 +23,8 @@ from alerts.telegram_bot import send_telegram_message
 
 # ── Tunable constants ─────────────────────────────────────────────────────────
 
-# Low value = fast feedback during debugging.  Set to 60 for 1-min bars in prod.
-SLEEP_SECONDS = 10
+# Low value = fast feedback during debugging.
+SLEEP_SECONDS = 5
 
 
 # ── Internal helpers ──────────────────────────────────────────────────────────
@@ -99,13 +99,11 @@ def run_forward_test(config: dict) -> None:
     ema_slow  = config["EMA_SLOW"]
 
     last_signal_key = None   # tracks the most recent signal to avoid duplicates
-    loop_count      = 0
 
     print(f"\n[forward_test] 🚀 Starting live forward test for {ticker} ({timeframe})")
     print(f"[forward_test]    EMA({ema_fast}) / EMA({ema_slow})  |  sleep={SLEEP_SECONDS}s\n")
 
-    while True:
-        loop_count += 1
+    for loop_count in range(1, 6):
         ts = datetime.now().strftime("%H:%M:%S")
 
         # ── Heartbeat ─────────────────────────────────────────────────────────
