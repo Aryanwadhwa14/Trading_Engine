@@ -97,6 +97,9 @@ def run_forward_test(config: dict) -> None:
     timeframe = config["TIMEFRAME"]
     ema_fast  = config["EMA_FAST"]
     ema_slow  = config["EMA_SLOW"]
+    
+    # Calculate max ema for data loader burn-in
+    max_ema   = max(int(ema_fast), int(ema_slow))
 
     last_signal_key = None   # tracks the most recent signal to avoid duplicates
 
@@ -110,8 +113,8 @@ def run_forward_test(config: dict) -> None:
         print(f"[{ts}] Loop #{loop_count} — fetching data for {ticker}…", end=" ", flush=True)
 
         try:
-            # 1. Fetch and clean data
-            df = load_live_data(ticker=ticker, interval=timeframe)
+            # 1. Fetch and clean data (dynamic burn-in length)
+            df = load_live_data(ticker=ticker, interval=timeframe, max_ema_length=max_ema)
             print(f"got {len(df)} rows, latest close={float(df['close'].iloc[-1]):.4f}")
 
             # 2. Compute indicators
