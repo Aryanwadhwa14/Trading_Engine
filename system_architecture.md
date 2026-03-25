@@ -698,6 +698,15 @@ Change `config.py` only:
 
 The rest of the pipeline —> data loading, indicators, strategy, backtest, forward_test — work without any changes.
 
+### Add a Multi-Asset Scanner (Automated Trading)
+
+Because `forward_test_engine.py` executes exactly *once* and cleanly exits, you can easily wrap this entire system into an automated multi-asset real-time scanner. 
+1. Create a master loop script (e.g., `scanner.py`)
+2. Define a list of tickers: `tickers = ["NVDA", "AAPL", "MSFT", "RELIANCE.NS"]`
+3. Dynamically inject the ticker into the `CONFIG` dict.
+4. Call `run_forward_test(CONFIG)` for each ticker.
+5. Use `cron` (Linux/Mac) or Task Scheduler (Windows) to run `scanner.py` repeatedly at market open or on specific intervals (e.g., every 15 minutes).
+
 ---
 
 ## Architecture Summary Diagram

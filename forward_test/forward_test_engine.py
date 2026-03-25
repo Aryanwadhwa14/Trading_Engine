@@ -11,6 +11,8 @@ Debug-friendly defaults:
   - Full tracebacks are printed on unexpected errors.
 """
 
+import os
+import csv
 import time
 import traceback
 from datetime import datetime
@@ -28,6 +30,26 @@ SLEEP_SECONDS = 5
 
 
 # ── Internal helpers ──────────────────────────────────────────────────────────
+
+def _log_latency_to_csv(ts: str, ticker: str, timeframe: str, fetch_ms: float, compute_ms: float, tg_ms: float):
+    """Appends the captured latencies to a CSV file for long-term analysis."""
+    os.makedirs("latency", exist_ok=True)
+    file_path = "latency/latency_logs.csv"
+    file_exists = os.path.isfile(file_path)
+    
+    with open(file_path, mode='a', newline='') as f:
+        writer = csv.writer(f)
+        if not file_exists:
+            writer.writerow(["Timestamp", "Ticker", "Timeframe", "API_Fetch_ms", "Compute_ms", "Telegram_ms"])
+        
+        writer.writerow([
+            ts, 
+            ticker, 
+            timeframe, 
+            f"{fetch_ms:.1f}", 
+            f"{compute_ms:.1f}", 
+            f"{tg_ms:.1f}"
+        ])
 
 def _make_signal_key(signal: dict) -> tuple:
     """
@@ -84,8 +106,8 @@ def _format_telegram(signal: dict, config: dict) -> str:
 
 def run_forward_test(config: dict) -> None:
     """
-    Continuously fetch live data, compute indicators, evaluate strategy,
-    and fire alerts for new signals.
+    Fetch live data, compute indicators, evaluate strategy,
+    and fire alerts for new signals. Executes EXACTLY ONCE.
 
     Parameters
     ----------
@@ -102,74 +124,72 @@ def run_forward_test(config: dict) -> None:
     # dynamically how far into the past it must reach for the EMA math to burn in perfectly.
     max_ema   = max(int(ema_fast), int(ema_slow))
 
-    last_signal_key = None   # tracks the most recent signal to avoid duplicates
+    print(f"\n[forward_test] 🚀 Executing Scanner Pipeline for {ticker} ({timeframe})")
+    print(f"[forward_test]    EMA({ema_fast}) / EMA({ema_slow})\n")
 
-    print(f"\n[forward_test] 🚀 Starting live forward test for {ticker} ({timeframe})")
-    print(f"[forward_test]    EMA({ema_fast}) / EMA({ema_slow})  |  sleep={SLEEP_SECONDS}s\n")
+    ts = datetime.now().strftime("%H:%M:%S")
+    
+    # Reset telemetry trackers for this run
+    fetch_ms = 0.0
+    compute_ms = 0.0
+    tg_ms = 0.0
 
-    for loop_count in range(1, 6):
-        ts = datetime.now().strftime("%H:%M:%S")
+    print(f"[{ts}] Fetching live data for {ticker}…", end=" ", flush=True)
 
-        # ── Heartbeat ─────────────────────────────────────────────────────────
-        print(f"[{ts}] Loop #{loop_count} — fetching data for {ticker}…", end=" ", flush=True)
+    try:
+        # 1. Fetch and clean data (dynamic burn-in length)
+        t_fetch_start = time.perf_counter()
+        df = load_live_data(ticker=ticker, interval=timeframe, max_ema_length=max_ema)
+        t_fetch_end = time.perf_counter()
+        fetch_ms = (t_fetch_end - t_fetch_start) * 1000
+        
+        print(f"got {len(df)} rows, latest close={float(df['close'].iloc[-1]):.4f}  | ⏱ Fetch: {fetch_ms:.0f}ms")
 
-        try:
-            # 1. Fetch and clean data (dynamic burn-in length)
-            df = load_live_data(ticker=ticker, interval=timeframe, max_ema_length=max_ema)
-            print(f"got {len(df)} rows, latest close={float(df['close'].iloc[-1]):.4f}")
+        # 2. Compute indicators
+        t_compute_start = time.perf_counter()
+        df["ema_fast"] = calculate_ema(df, ema_fast)
+        df["ema_slow"] = calculate_ema(df, ema_slow)
 
-            # 2. Compute indicators
-            df["ema_fast"] = calculate_ema(df, ema_fast)
-            df["ema_slow"] = calculate_ema(df, ema_slow)
+        # 3. Drop rows where indicators are NaN (warm-up period)
+        df.dropna(subset=["ema_fast", "ema_slow"], inplace=True)
 
-            # 3. Drop rows where indicators are NaN (warm-up period)
-            df.dropna(subset=["ema_fast", "ema_slow"], inplace=True)
+        if len(df) < 5:
+            print(f"[{ts}] Not enough rows after indicator warm-up ({len(df)}), aborting.")
+            _log_latency_to_csv(ts, ticker, timeframe, fetch_ms, 0.0, 0.0)
+            return
 
-            if len(df) < 5:
-                print(f"[{ts}] Not enough rows after indicator warm-up ({len(df)}), skipping.")
-                time.sleep(SLEEP_SECONDS)
-                continue
+        # 4. Evaluate strategy
+        signal = generate_signal(df)
+        t_compute_end = time.perf_counter()
+        compute_ms = (t_compute_end - t_compute_start) * 1000
 
-            # 4. Evaluate strategy
-            signal = generate_signal(df)
+        # 5. Handle signal
+        if signal:
+            _print_signal(signal, config)
 
-            # 5. Handle signal
-            if signal:
-                signal_key = _make_signal_key(signal)
+            try:
+                t_tg_start = time.perf_counter()
+                msg = _format_telegram(signal, config)
+                send_telegram_message(msg)
+                t_tg_end = time.perf_counter()
+                tg_ms = (t_tg_end - t_tg_start) * 1000
+                print(f"[{ts}] ✅ Telegram alert sent.  | ⏱ Compute: {compute_ms:.1f}ms | ⏱ Telegram: {tg_ms:.0f}ms")
+            except Exception as tg_err:
+                print(f"[{ts}] ⚠️  Telegram send failed: {tg_err}")
 
-                if signal_key != last_signal_key:
-                    # New signal — print + alert
-                    _print_signal(signal, config)
+        else:
+            print(f"[{ts}] No signal this bar.  | ⏱ Compute: {compute_ms:.1f}ms")
 
-                    try:
-                        msg = _format_telegram(signal, config)
-                        send_telegram_message(msg)
-                        print(f"[{ts}] ✅ Telegram alert sent.")
-                    except Exception as tg_err:
-                        # Telegram failure must not crash the engine
-                        print(f"[{ts}] ⚠️  Telegram send failed: {tg_err}")
+        # 6. Save permanent log to CSV
+        _log_latency_to_csv(ts, ticker, timeframe, fetch_ms, compute_ms, tg_ms)
 
-                    last_signal_key = signal_key
+    except ValueError as ve:
+        print(f"\n[{ts}] ⚠️  Data error: {ve}\n")
 
-                else:
-                    print(f"[{ts}] Signal unchanged ({signal['signal']} #{signal['strategy_id']}), skipping duplicate alert.")
+    except KeyError as ke:
+        print(f"\n[{ts}] ❌ Column error: {ke}")
+        traceback.print_exc()
 
-            else:
-                print(f"[{ts}] No signal this bar.")
-
-        except ValueError as ve:
-            # Data quality / empty-data errors — log and continue
-            print(f"\n[{ts}] ⚠️  Data error: {ve}\n")
-
-        except KeyError as ke:
-            # Column mismatch errors — log full traceback for diagnosis
-            print(f"\n[{ts}] ❌ Column error: {ke}")
-            traceback.print_exc()
-
-        except Exception as exc:
-            # Unexpected errors — log but never crash the loop
-            print(f"\n[{ts}] ❌ Unexpected error: {exc}")
-            traceback.print_exc()
-
-        # ── Wait before next iteration ─────────────────────────────────────
-        time.sleep(SLEEP_SECONDS)
+    except Exception as exc:
+        print(f"\n[{ts}] ❌ Unexpected error: {exc}")
+        traceback.print_exc()

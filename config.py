@@ -1,7 +1,7 @@
 CONFIG = {
 
     # ASSET CONFIG
-    "TICKER": "AAPL",
+    "TICKER": "RELIANCE.NS",
     "TIMEFRAME": "1d",
 
     # DATE RANGE (Backtest)
@@ -31,3 +31,10 @@ CONFIG = {
     # MODES
     "MODE": "forward"  # "backtest" or "forward"
 }
+
+# Indian market equity tickers
+# "TICKER": "RELIANCE.NS", "TCS.NS", "HDFCBANK.NS", "INFY.NS", "SBIN.NS", "BHARTIARTL.NS", "ICICIBANK.NS", "LT.NS", "BAJFINANCE.NS", "HINDUNILVR.NS"
+
+# US market equity tickers
+# "TICKER": "AAPL", "NVDA", "TSLA", "MSFT", "AMZN", "GOOGL", "META", "JPM", "V", "MA"
+
