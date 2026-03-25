@@ -2,59 +2,7 @@ import yfinance as yf
 import pandas as pd
 
 
-def _calculate_yf_period(interval: str, max_ema_length: int) -> str:
-    """
-    Calculate the exact yfinance period string needed to get enough 
-    candles for indicator burn-in (approx 4x the longest EMA).
-    """
-    target_candles = max(max_ema_length * 4, 100) # At least 100 candles
-
-    # Approximate candles per 6.5h trading day (US normal hours)
-    # Crypto will return more candles per day, so this is the conservative estimate.
-    candles_per_day = {
-        "1m": 390,
-        "2m": 195,
-        "5m": 78,
-        "15m": 26,
-        "30m": 13,
-        "60m": 7,
-        "1h": 7,
-        "90m": 4,
-        "1d": 1,
-    }
-    
-    cpd = candles_per_day.get(interval, 78) # Default to 5m assumption
-    days_needed = target_candles / cpd
-    
-    # yfinance max limits for intraday:
-    # 1m = max 7 days
-    # 2m, 5m, 15m, 30m, 90m = max 60 days
-    # 1h, 60m = max 730 days
-    
-    # Clamp days to valid yfinance strings
-    if interval == "1m":
-        return "7d" # Max allowed
-        
-    if interval in ["2m", "5m", "15m", "30m", "90m"]:
-        if days_needed <= 5: return "5d"
-        if days_needed <= 20: return "1mo"
-        return "60d" # Max allowed
-        
-    if interval in ["60m", "1h"]:
-        if days_needed <= 5: return "5d"
-        if days_needed <= 20: return "1mo"
-        if days_needed <= 60: return "3mo"
-        if days_needed <= 125: return "6mo"
-        if days_needed <= 250: return "1y"
-        return "2y" # Max allowed
-
-    # Daily or higher
-    if days_needed <= 250: return "1y"
-    if days_needed <= 500: return "2y"
-    if days_needed <= 1250: return "5y"
-    if days_needed <= 2500: return "10y"
-    return "max"
-
+import datetime as dt
 
 def load_live_data(ticker: str, interval: str = "5m", max_ema_length: int = 200) -> pd.DataFrame:
     """
@@ -70,11 +18,40 @@ def load_live_data(ticker: str, interval: str = "5m", max_ema_length: int = 200)
     Index: DatetimeIndex (UTC or local, depending on yfinance version)
     """
 
-    period = _calculate_yf_period(interval, max_ema_length)
+    # ── Dynamic Concept: Context-Based Burn-In Calculation ──────────────────
+    # Instead of manual "period" strings (like "1mo"), we calculate exactly 
+    # the amount of history required by the configuration (e.g. 4x the max EMA).
+
+    minutes_per_candle = 5
+    if interval.endswith('m'):
+        minutes_per_candle = int(interval[:-1])
+    elif interval.endswith('h'):
+        minutes_per_candle = int(interval[:-1]) * 60
+    elif interval.endswith('d'):
+        minutes_per_candle = int(interval[:-1]) * 1440
+
+    # Estimate candles per 6.5h trading day (US normal hours)
+    candles_per_day = max(1, 390 / minutes_per_candle)
+    target_candles = max(max_ema_length * 4, 100)
+    
+    # Required calendar days (added 45% buffer for weekends and holidays)
+    days_needed = int((target_candles / candles_per_day) * 1.45)
+    days_needed = max(days_needed, 5)
+
+    # Secure against yfinance intraday historical limits
+    if minutes_per_candle == 1:
+        days_needed = min(days_needed, 7)
+    elif minutes_per_candle < 60:
+        days_needed = min(days_needed, 59)
+    elif minutes_per_candle < 1440:
+        days_needed = min(days_needed, 720)
+    # else: daily and above have no tight historical limits.
+
+    start_time = dt.datetime.now() - dt.timedelta(days=days_needed)
 
     raw = yf.download(
         tickers=ticker,
-        period=period,
+        start=start_time.strftime('%Y-%m-%d'),
         interval=interval,
         progress=False,
         auto_adjust=True,   # avoids Adj Close confusion

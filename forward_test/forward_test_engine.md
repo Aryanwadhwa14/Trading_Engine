@@ -116,14 +116,14 @@ def run_forward_test(config: dict) -> None:
 #### Step 1 & 2: Get Data and Do Math
 ```python
         try:
-            # 1. Fetch and clean data
-            df = load_live_data(ticker=ticker, interval=timeframe)
+            # 1. Fetch and clean data (Context-aware dynamic burn-in logic)
+            df = load_live_data(ticker=ticker, interval=timeframe, max_ema_length=max_ema)
             
             # 2. Compute indicators
             df["ema_fast"] = calculate_ema(df, ema_fast)
             df["ema_slow"] = calculate_ema(df, ema_slow)
 ```
-* **What this does:** The `try:` means "Try to run this code, but if anything breaks or the internet dies, don't panic, I have backup plans below." Then, it downloads the newest market data (`load_live_data`) and calculates the fast and slow moving lines using that data (`calculate_ema`). 
+* **What this does:** The `try:` means "Try to run this code, but if anything breaks or the internet dies, don't panic, I have backup plans below." Then, it downloads the newest market data (`load_live_data`). Notice the `max_ema` variable—the engine learns from your `config.py` explicitly how long your indicators are, and passes that context downward so the data-loader accurately downloads an exact calendar date offset! After getting perfectly sized data, it calculates the fast and slow moving lines using that data (`calculate_ema`). 
 
 #### Step 3: Warm-up Period Check
 ```python

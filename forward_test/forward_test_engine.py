@@ -98,7 +98,8 @@ def run_forward_test(config: dict) -> None:
     ema_fast  = config["EMA_FAST"]
     ema_slow  = config["EMA_SLOW"]
     
-    # Calculate max ema for data loader burn-in
+    # Context-Based Learning: Extract maximum indicator depths to inform the data layer 
+    # dynamically how far into the past it must reach for the EMA math to burn in perfectly.
     max_ema   = max(int(ema_fast), int(ema_slow))
 
     last_signal_key = None   # tracks the most recent signal to avoid duplicates
