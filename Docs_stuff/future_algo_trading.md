@@ -34,6 +34,10 @@ Currently, the engine uses `yfinance` to grab data. `yfinance` is amazing for do
 To make real profit instantly on the US Market, you need millisecond-accurate sockets.
 - **The Upgrade:** You can literally replace your [live_data_loader.py](file:///d:/Aryan/Trading-engine/data/live_data_loader.py) with the **Alpaca API**. Alpaca gives you a free WebSocket that streams live, to-the-second US stock data directly into your Pandas DataFrame. 
 - Because your systems are modular, replacing `yfinance` with Alpaca takes 10 minutes and doesn't break your EMAs or Strategies!
+- **The catch:** Alpaca API is only for US Stocks. It does not support Indian Stocks.
+- **The solution:** Use **Polygon.io** or **IEX Cloud** for US Stocks. They provide free, real-time data feeds that are much faster than Yahoo Finance.
+- **The catch:** Polygon.io and IEX Cloud are not free. They are paid services.
+- **IBKR Trading API** is a free API that provides real-time data for US stocks, also gives 40 ms fetcing time from api (data fetching time is very less) - can take it from nishtha - also there is no delay in subscription based api.
 
 **Trading Indian Markets (NSE/BSE):**
 Yahoo Finance supports Indian tickers by adding `.NS` (e.g., `RELIANCE.NS`). This is perfectly fine for 1-Day timeframe swing trading.

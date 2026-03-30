@@ -15,7 +15,8 @@ import os
 import csv
 import time
 import traceback
-from datetime import datetime
+from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 
 from data.live_data_loader import load_live_data
 from indicators.ema import calculate_ema
@@ -88,16 +89,25 @@ def _print_signal(signal: dict, config: dict) -> None:
 
 def _format_telegram(signal: dict, config: dict) -> str:
     """Format the Telegram alert message."""
+    ticker = config.get("TICKER", "")
+    now_utc = datetime.now(timezone.utc)
+    
+    if ticker.endswith(".NS") or ticker.endswith(".BO"):
+        ts = now_utc.astimezone(ZoneInfo("Asia/Kolkata")).strftime("%Y-%m-%d %H:%M:%S IST")
+    else:
+        ts = now_utc.astimezone(ZoneInfo("America/New_York")).strftime("%Y-%m-%d %H:%M:%S EST")
+        
     side_icon = "🟢 LONG" if signal["signal"] == "LONG" else "🔴 SHORT"
     return (
         f"🚨 TRADE SIGNAL\n\n"
+        f"Timestamp: {ts}\n\n"
         f"Ticker  : {config['TICKER']}\n"
-        f"Strategy: EMA {config['EMA_FAST']}/{config['EMA_SLOW']} -> Strategy {signal['strategy_id']}\n"
-        f"Timeframe: {config['TIMEFRAME']}\n"
+        f"Strategy: EMA {config['EMA_FAST']}/{config['EMA_SLOW']} Crossover -> Strategy {signal['strategy_id']}\n"
+        f"Timeframe: {config['TIMEFRAME']}\n\n"
         f"Side    : {side_icon}\n"
         f"Entry   : {signal['entry']:.4f}\n"
-        f"SL      : {signal['stop_loss']:.4f}\n"
-        f"TP      : {signal['take_profit']:.4f}\n\n"
+        f"Stop Loss      : {signal['stop_loss']:.4f}\n"
+        f"Take Profit     : {signal['take_profit']:.4f}\n\n"
         f"Reason:\n{signal['reason']}"
     )
 

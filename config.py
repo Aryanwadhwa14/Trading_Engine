@@ -2,7 +2,7 @@ CONFIG = {
 
     # ASSET CONFIG
     "TICKER": "NVDA",
-    "TIMEFRAME": "15m",
+    "TIMEFRAME": "1d",
 
     # DATE RANGE (Backtest)
     "START_DATE": "2026-03-01",     

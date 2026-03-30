@@ -1,10 +1,11 @@
+import time
 from config import CONFIG
 from data.historical_loader import load_historical_data
 from indicators.ema import calculate_ema
 from indicators.atr import calculate_atr
 from backtest.backtest_engine import run_backtest
 from forward_test.forward_test_engine import run_forward_test
-
+from utils.market_schedule import is_market_open
 
 def run_backtest_mode():
 
@@ -37,9 +38,27 @@ def run_backtest_mode():
 def run_forward_mode():
 
     print("\n Running FORWARD TEST (LIVE)...\n")
-
-    run_forward_test(CONFIG)
-
+    
+    ticker = CONFIG.get("TICKER", "NVDA")
+    print(f"Starting Live Trading Engine for {ticker}...")
+    
+    while True:
+        try:
+            if is_market_open(ticker):
+                print(f"[{time.strftime('%H:%M:%S')}] Market is OPEN for {ticker}. Running scanner...")
+                run_forward_test(CONFIG)
+            else:
+                print(f"[{time.strftime('%H:%M:%S')}] Market is CLOSED for {ticker}. Waiting...")
+            
+            # Sleep for 60 seconds before next check
+            time.sleep(60)
+            
+        except KeyboardInterrupt:
+            print("\n⏹ Live Trading Engine stopped by user.")
+            break
+        except Exception as e:
+            print(f"\n❌ Error in live loop: {e}")
+            time.sleep(60)
 
 def main():
 
