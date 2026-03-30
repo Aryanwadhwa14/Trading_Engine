@@ -1,8 +1,8 @@
 CONFIG = {
 
     # ASSET CONFIG
-    "TICKER": "RELIANCE.NS",
-    "TIMEFRAME": "1d",
+    "TICKER": "NVDA",
+    "TIMEFRAME": "15m",
 
     # DATE RANGE (Backtest)
     "START_DATE": "2026-03-01",     
