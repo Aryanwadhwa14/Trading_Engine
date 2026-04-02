@@ -1,0 +1,2 @@
+Trade Date,Ticker,Side,Trade Type,Strategy No,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
+2026-03-11,HDFCBANK.NS,SHORT,TREND,2,2026-03-11,833.95,856.8,788.25,2026-03-19,788.25,11520,Break Below EMA Slow (Trend Continuation),TP Hit,45.7,WIN

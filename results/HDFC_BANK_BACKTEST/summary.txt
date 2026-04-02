@@ -1,0 +1,23 @@
+
+HDFCBANK.NS BACKTEST RESULTS
+============================================================
+
+Configuration:
+- Ticker:       HDFCBANK.NS
+- Timeframe:    1d
+- Date Range:   2026-03-01 to 2026-03-20
+- EMA:          EMA 26 / 55
+
+Performance:
+- Total Trades: 1
+- Wins:         1
+- Losses:       0
+- Win Rate:     100.0%
+- Net Profit:   $45.70
+- Final Bal:    $10,045.70
+- Avg Win:      $45.70
+- Avg Loss:     $0.00
+- Max Win:      $45.70
+- Max Loss:     $45.70
+
+Generated: 2026-04-02 17:33:32

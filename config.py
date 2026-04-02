@@ -1,12 +1,13 @@
 CONFIG = {
 
     # ASSET CONFIG
-    "TICKER": "NVDA",
+    
+    "TICKER":"MSFT",
     "TIMEFRAME": "1d",
 
     # DATE RANGE (Backtest)
     "START_DATE": "2026-03-01",     
-    "END_DATE": "2026-03-20",
+    "END_DATE": "2026-04-02",
 
     # INDICATORS
     "EMA_FAST": 26,
