@@ -54,7 +54,7 @@ def run_backtest(df, config, start_date, end_date):
                 pnl = exit_price - entry_price
 
                 trade_log.append(_log_trade(
-                    ticker, "LONG", trade_type, strategy_id,
+                    ticker, config["TIMEFRAME"], "LONG", trade_type, strategy_id,
                     entry_time, entry_price,
                     stop_loss, take_profit,
                     row.name, exit_price,
@@ -75,7 +75,7 @@ def run_backtest(df, config, start_date, end_date):
                 pnl = entry_price - exit_price
 
                 trade_log.append(_log_trade(
-                    ticker, "SHORT", trade_type, strategy_id,
+                    ticker, config["TIMEFRAME"], "SHORT", trade_type, strategy_id,
                     entry_time, entry_price,
                     stop_loss, take_profit,
                     row.name, exit_price,
@@ -106,7 +106,19 @@ def run_backtest(df, config, start_date, end_date):
 
 # ================= HELPERS ================= #
 
-def _log_trade(ticker, side, trade_type, strategy_id,
+def _format_time_pst(dt_obj):
+    try:
+        ts = pd.Timestamp(dt_obj)
+        if ts.tz is None:
+            ts = ts.tz_localize('America/New_York')
+        ts = ts.tz_convert('America/Los_Angeles')
+        return f"{ts.strftime('%Y-%m-%d %H:%M:%S')} (PST)"
+    except Exception:
+        if hasattr(dt_obj, 'strftime'):
+            return f"{dt_obj.strftime('%Y-%m-%d %H:%M:%S')} (PST)"
+        return f"{dt_obj} (PST)"
+
+def _log_trade(ticker, timeframe, side, trade_type, strategy_id,
                entry_time, entry_price,
                sl, tp,
                exit_time, exit_price,
@@ -116,14 +128,15 @@ def _log_trade(ticker, side, trade_type, strategy_id,
     return {
         "Trade Date": entry_time.date(),
         "Ticker": ticker,
+        "Timeframe": timeframe,
         "Side": side,
         "Trade Type": trade_type.upper(),
         "Strategy No": strategy_id,
-        "Entry Time": entry_time,
+        "Entry Time": _format_time_pst(entry_time),
         "Entry Price": round(entry_price, 2),
         "Stop Loss": round(sl, 2),
         "Take Profit": round(tp, 2),
-        "Exit Time": exit_time,
+        "Exit Time": _format_time_pst(exit_time),
         "Exit Price": round(exit_price, 2),
         "Duration (min)": int((exit_time - entry_time).total_seconds() / 60),
         "Entry Reason": entry_reason,
@@ -150,6 +163,25 @@ def _generate_summary(df, balance, config, start_date, end_date):
     max_win = df["PnL ($)"].max()
     max_loss = df["PnL ($)"].min()
 
+    strategy_metrics = ""
+    if "Strategy No" in df.columns:
+        strategy_metrics = "\nStrategy Breakdown:\n"
+        strategy_metrics += "-" * 30 + "\n"
+        for strat in sorted(df["Strategy No"].unique()):
+            strat_df = df[df["Strategy No"] == strat]
+            s_trades = len(strat_df)
+            s_wins = len(strat_df[strat_df["Result"] == "WIN"])
+            s_losses = len(strat_df[strat_df["Result"] == "LOSS"])
+            s_win_rate = (s_wins / s_trades) * 100 if s_trades > 0 else 0
+            s_pnl = strat_df["PnL ($)"].sum()
+            
+            side_val = strat_df["Side"].iloc[0].capitalize() if "Side" in strat_df.columns else "Unknown"
+            type_val = strat_df["Trade Type"].iloc[0].capitalize() if "Trade Type" in strat_df.columns else "Unknown"
+            
+            strategy_metrics += f"- Strategy {strat} ({side_val} -> {type_val}):\n"
+            strategy_metrics += f"    Trades: {s_trades} | Wins: {s_wins} | Losses: {s_losses} | Win Rate: {s_win_rate:.1f}%\n"
+            strategy_metrics += f"    Net PnL: ${s_pnl:,.2f}\n"
+
     return f"""
 {config['TICKER']} BACKTEST RESULTS
 ============================================================
@@ -171,7 +203,7 @@ Performance:
 - Avg Loss:     ${avg_loss:,.2f}
 - Max Win:      ${max_win:,.2f}
 - Max Loss:     ${max_loss:,.2f}
-
+{strategy_metrics}
 Generated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 """
 

@@ -1,0 +1,38 @@
+
+XOM BACKTEST RESULTS
+============================================================
+
+Configuration:
+- Ticker:       XOM
+- Timeframe:    5m
+- Date Range:   2026-03-01 to 2026-04-06
+- EMA:          EMA 26 / 55
+
+Performance:
+- Total Trades: 131
+- Wins:         31
+- Losses:       100
+- Win Rate:     23.7%
+- Net Profit:   $-21.01
+- Final Bal:    $9,979.00
+- Avg Win:      $1.11
+- Avg Loss:     $-0.56
+- Max Win:      $6.39
+- Max Loss:     $-3.22
+
+Strategy Breakdown:
+------------------------------
+- Strategy 1 (Long -> Trend):
+    Trades: 68 | Wins: 16 | Losses: 52 | Win Rate: 23.5%
+    Net PnL: $-7.02
+- Strategy 2 (Short -> Trend):
+    Trades: 38 | Wins: 6 | Losses: 32 | Win Rate: 15.8%
+    Net PnL: $-10.00
+- Strategy 3 (Short -> Scalp):
+    Trades: 20 | Wins: 6 | Losses: 14 | Win Rate: 30.0%
+    Net PnL: $-4.91
+- Strategy 4 (Long -> Scalp):
+    Trades: 5 | Wins: 3 | Losses: 2 | Win Rate: 60.0%
+    Net PnL: $0.92
+
+Generated: 2026-04-06 18:46:13

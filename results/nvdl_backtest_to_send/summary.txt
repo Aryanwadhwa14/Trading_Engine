@@ -1,0 +1,38 @@
+
+NVDL BACKTEST RESULTS
+============================================================
+
+Configuration:
+- Ticker:       NVDL
+- Timeframe:    5m
+- Date Range:   2026-03-01 to 2026-04-06
+- EMA:          EMA 26 / 55
+
+Performance:
+- Total Trades: 158
+- Wins:         55
+- Losses:       103
+- Win Rate:     34.8%
+- Net Profit:   $-2.94
+- Final Bal:    $9,997.07
+- Avg Win:      $0.90
+- Avg Loss:     $-0.51
+- Max Win:      $2.90
+- Max Loss:     $-2.20
+
+Strategy Breakdown:
+------------------------------
+- Strategy 1 (Long -> Trend):
+    Trades: 47 | Wins: 16 | Losses: 31 | Win Rate: 34.0%
+    Net PnL: $-5.47
+- Strategy 2 (Short -> Trend):
+    Trades: 72 | Wins: 28 | Losses: 44 | Win Rate: 38.9%
+    Net PnL: $7.94
+- Strategy 3 (Short -> Scalp):
+    Trades: 16 | Wins: 5 | Losses: 11 | Win Rate: 31.2%
+    Net PnL: $-2.49
+- Strategy 4 (Long -> Scalp):
+    Trades: 23 | Wins: 6 | Losses: 17 | Win Rate: 26.1%
+    Net PnL: $-2.92
+
+Generated: 2026-04-06 02:16:15

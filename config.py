@@ -2,12 +2,12 @@ CONFIG = {
 
     # ASSET CONFIG
     
-    "TICKER":"MSFT",
-    "TIMEFRAME": "1d",
+    "TICKER":"NVDA",
+    "TIMEFRAME": "5m",
 
     # DATE RANGE (Backtest)
     "START_DATE": "2026-03-01",     
-    "END_DATE": "2026-04-02",
+    "END_DATE": "2026-04-06",
 
     # INDICATORS
     "EMA_FAST": 26,
@@ -38,4 +38,43 @@ CONFIG = {
 
 # US market equity tickers
 # "TICKER": "AAPL", "NVDA", "TSLA", "MSFT", "AMZN", "GOOGL", "META", "JPM", "V", "MA"
+
+
+#===================================================================================================================================================================================================================================
+
+
+# 1. US market chip industries : "NVDA", "AMD", "INTC", "QCOM", "AVGO", "TXN", "MU", "ADI", "LRCX", "AMAT"
+# NVDA -> Nvidia
+# AMD -> Advanced Micro Devices
+# INTC -> Intel
+# QCOM -> Qualcomm
+# AVGO -> Broadcom
+# TXN -> Texas Instruments
+# MU -> Micron Technology
+# ADI -> Analog Devices
+# LRCX -> Lam Research
+# AMAT -> Applied Materials
+
+
+
+# 2. US market oil and gas tickers : "XOM", "CVX", "LNG", "GLNG", "COP", "EOG", "SLB", "HAL", "OXY", "PXD", "MPC", "PSX"
+
+# XOM -> Exxon Mobil
+# LNG -> Cheniere Energy
+# GLNG -> Golar LNG
+# CVX -> Chevron
+# COP -> ConocoPhillips
+# EOG -> EOG Resources
+# SLB -> Schlumberger
+# HAL -> Halliburton
+# OXY -> Occidental Petroleum
+# PXD -> Pioneer Natural Resources
+# MPC -> Marathon Petroleum
+# PSX -> Phillips 66
+
+
+# 3. US market containership tickers : "ZIM", "OSG"
+# ZIM -> ZIM Integrated Shipping Services Ltd.
+# OSG -> Overseas Shipholding Group, Inc.
+
 
