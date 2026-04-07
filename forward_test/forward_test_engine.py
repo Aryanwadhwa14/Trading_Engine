@@ -9,6 +9,7 @@ Debug-friendly defaults:
   - SLEEP_SECONDS = 10  (change to e.g. 60 for production)
   - Every loop iteration prints a heartbeat so you know it's alive.
   - Full tracebacks are printed on unexpected errors.
+  - Continuously logs application latencies (API Fetch, Compute, Telegram) to `latency/latency_logs.csv`.
 """
 
 import os

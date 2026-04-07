@@ -179,14 +179,15 @@ Every time a trade closes (either SL hit or TP hit), this function **packages al
 |---|---|
 | `Trade Date` | The calendar date the trade was entered |
 | `Ticker` | Stock/Asset symbol (e.g., NVDA) |
+| `Timeframe` | The timeframe used (e.g., 1d, 5m, 1h) |
 | `Side` | LONG or SHORT |
 | `Trade Type` | trend or scalp |
 | `Strategy No` | Which strategy triggered (1, 2, 3, or 4) |
-| `Entry Time` | Exact timestamp when we entered |
+| `Entry Time` | Exact timestamp when we entered (in PST) |
 | `Entry Price` | Price we paid to enter |
 | `Stop Loss` | Max loss level we set |
 | `Take Profit` | Target profit level we set |
-| `Exit Time` | When we exited |
+| `Exit Time` | When we exited (in PST) |
 | `Exit Price` | Price at exit |
 | `Duration (min)` | How long the trade lasted in minutes |
 | `Entry Reason` | Description of what triggered entry (e.g., "Break Above EMA Fast") |
@@ -245,6 +246,7 @@ max_loss = df["PnL ($)"].min()
 | `avg_loss` | On average, how much did each losing trade lose? |
 | `max_win` | Biggest single trade win |
 | `max_loss` | Biggest single trade loss |
+| `Strategy Breakdown` | Performance stats (trades, wins, losses, win rate, PnL) grouped by sub-strategy |
 
 > **No trades check:**
 > ```python

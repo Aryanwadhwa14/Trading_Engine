@@ -50,7 +50,10 @@ results/
   trade_summary.txt
 
 latency/
-  trade_speed.csv
+  latency_logs.csv
+
+utils/
+  market_schedule.py -> checks if market is open or not (US or India based on config)
 
 config.py -> added different modes "backtest" and "forward"
 
@@ -343,7 +346,7 @@ results/
       summary.txt     ← overall performance stats
 ```
 
-📄 **See full engine docs:** [`backtest/backtest_engine.md`](backtest/backtest_engine.md)
+📄 **See full backtesting engine docs:** [`backtest/backtest_engine.md`](backtest/backtest_engine.md)
 
 ---
 
@@ -469,12 +472,14 @@ The Forward Testing Engine uses an infinite `while True:` loop inside Python pai
 2. Appends the needed EMA calculations and drops rows to satisfy the indicator warmup period.
 3. Feeds the current data to the trading strategy to evaluate signals on the most recent candle.
 4. Employs a unique `signal_key` deduplication logic (hashing signal direction, type, strategy ID, and entry price) to ensure only genuinely *new* signals fire Telegram alerts.
-5. If a script error or internet outage occurs, broad `try-except` blocks catch the error to prevent the loop from breaking, guaranteeing continuous uptime.
+5. Automatically tracks system latency profiling metrics to `latency/latency_logs.csv`, including data fetch, computation, and Telegram transmission times.
+6. If a script error or internet outage occurs, broad `try-except` blocks catch the error to prevent the loop from breaking, guaranteeing continuous uptime.
 
+📄 **See full forward testing engine docs:** [`forward_test/forward_test_engine.md`](forward_test/forward_test_engine.md)
 
 ---
 
-# Risk & Execution Engine — `execution/position_sizing.py`
+# Risk & Execution Engine — `execution/position_sizing.py` - Not Implemented Yet
 
 Calculates **how many shares to buy** based on account risk settings.
 
@@ -495,7 +500,7 @@ Shares       = $100 / $2 = 50 shares
 
 ---
 
-# Factor Engine — `factors/factor_engine.py`
+# Factor Engine — `factors/factor_engine.py` - Not Implemented Yet
 
 Used for **parameter optimization** — runs the backtest across many combinations of parameters to find the best-performing settings.
 

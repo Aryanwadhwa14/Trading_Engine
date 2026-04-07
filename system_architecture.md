@@ -204,6 +204,9 @@ Trading-engine/
 │           chat via bot API.        ║          to chat ║
 │                                    ╚══════════════════╝
 │
+├── latency/                         ← TELEMETRY STORE
+│       latency_logs.csv             ← API, compute, and Telegram send times
+│
 └── results/                         ← OUTPUT STORE
         run_YYYYMMDD_HHMMSS/
             trade_log.csv            ← Every trade in detail
@@ -559,14 +562,15 @@ Every exit event logged by `_log_trade()` must produce a dict with these keys �
 {
     "Trade Date":    date,
     "Ticker":        str,
+    "Timeframe":     str,    # e.g., "1d", "5m"
     "Side":          str,    # "LONG" or "SHORT"
     "Trade Type":    str,    # "TREND" or "SCALP"
     "Strategy No":   int,
-    "Entry Time":    datetime,
+    "Entry Time":    datetime, # stored with PST timezone formatting
     "Entry Price":   float,
     "Stop Loss":     float,
     "Take Profit":   float,
-    "Exit Time":     datetime,
+    "Exit Time":     datetime, # stored with PST timezone formatting
     "Exit Price":    float,
     "Duration (min)":int,
     "Entry Reason":  str,
