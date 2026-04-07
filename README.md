@@ -72,6 +72,7 @@ config.py
 
 main.py
 ```
+Note (Data pipelinee change) : To change the api to IBKR or Alpaca with good latency for 1 minute timeframe based trades 
 
 # System Architecture
 
