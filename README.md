@@ -26,14 +26,15 @@ Currently active: **EMA Pullback Strategy** with 4 sub-strategies (2 trend + 2 s
 # What aryan have implemented till now : 
 ```
 data/
-    historical_loader.py
+    historical_loader.py  //yahoo finance2
+    live_data_loader.py 
 
 indicators/
     ema.py
     atr.py
 
 strategies/
-    ema_pullback.py
+    ema_pullback.py // 4 strategies (2-> trend, 2 -> scalp)
 
 backtest/
    backtest_engine.py
@@ -42,7 +43,14 @@ forward_test/
    forward_test_engine.py
 
 alerts/
-   telegram_bot.py
+   telegram_bot.py  -> give live signals for the single trade that have been put 
+
+results/
+  trade_metrics.csv
+  trade_summary.txt
+
+latency/
+  trade_speed.csv
 
 config.py -> added different modes "backtest" and "forward"
 
