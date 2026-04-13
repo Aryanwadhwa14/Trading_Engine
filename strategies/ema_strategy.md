@@ -90,24 +90,26 @@ Priority 4 → Strategy 2 (Trend Short)  ← checked last
 ### When Does It Trigger?
 
 ```
-Market is in an UPTREND
-+ 3 consecutive RED candles appeared before the current candle
+Market is in an UPTREND (ema_fast > ema_slow)
++ 3 consecutive RED candles appear entirely BETWEEN the fast and slow EMAs
++ The 4th consecutive candle (current one) is RED and closes BELOW the slow EMA
 ```
 
 ### Plain English
 
-> Imagine the market has been going up (uptrend). Suddenly, 3 red candles appear in a row — that's called **exhaustion**. Big players (institutions) start selling. We ride that short-term drop.
+> Imagine the market has been going up (uptrend). Suddenly, 3 red candles appear in a row between the EMA lines — that's called **exhaustion**. Then, a 4th red candle forms and drops out of the channel, closing below the slow EMA. Big players (institutions) start selling. We ride that short-term drop.
 
 ### Code Explained
 
 ```python
-three_red = (
-    (prev1["close"] < prev1["open"]) and
-    (prev2["close"] < prev2["open"]) and
-    (prev3["close"] < prev3["open"])
+three_red_between = (
+    three_red and
+    is_body_between_emas(prev1) and
+    is_body_between_emas(prev2) and
+    is_body_between_emas(prev3)
 )
 
-if uptrend and three_red:
+if uptrend and three_red_between and is_red(latest) and close < ema_slow:
     entry = close           # enter at current price
     sl    = prev1["high"]   # stop loss = top of last red candle
     risk  = sl - entry
@@ -134,7 +136,7 @@ if uptrend and three_red:
     "entry": ...,
     "stop_loss": ...,
     "take_profit": ...,
-    "reason": "3 Red Candles (Exhaustion)"
+    "reason": "4 Red Candles (3 between EMAs, 4th below Slow EMA in Uptrend)"
 }
 ```
 
@@ -145,24 +147,26 @@ if uptrend and three_red:
 ### When Does It Trigger?
 
 ```
-Market is in a DOWNTREND
-+ 3 consecutive GREEN candles appeared before the current candle
+Market is in a DOWNTREND (ema_fast < ema_slow)
++ 3 consecutive GREEN candles appear entirely BETWEEN the fast and slow EMAs
++ The 4th consecutive candle (current one) is GREEN and closes ABOVE the slow EMA
 ```
 
 ### Plain English
 
-> The market has been falling. Suddenly, 3 green candles appear in a row — institutions are buying. We ride that short-term bounce up.
+> The market has been falling. Suddenly, 3 green candles appear in a row between the EMA lines. A 4th green candle forms and powerfully breaks out, closing above the slow EMA — institutions are buying. We ride that short-term bounce up.
 
 ### Code Explained
 
 ```python
-three_green = (
-    (prev1["close"] > prev1["open"]) and
-    (prev2["close"] > prev2["open"]) and
-    (prev3["close"] > prev3["open"])
+three_green_between = (
+    three_green and
+    is_body_between_emas(prev1) and
+    is_body_between_emas(prev2) and
+    is_body_between_emas(prev3)
 )
 
-if downtrend and three_green:
+if downtrend and three_green_between and is_green(latest) and close > ema_slow:
     entry = close
     sl    = prev1["low"]    # stop loss = bottom of last green candle
     risk  = entry - sl
@@ -185,7 +189,7 @@ if downtrend and three_green:
     "type": "scalp",
     "strategy_id": 4,
     ...
-    "reason": "3 Green Candles (Exhaustion)"
+    "reason": "4 Green Candles (3 between EMAs, 4th above Slow EMA in Downtrend)"
 }
 ```
 
@@ -296,8 +300,8 @@ return None
 |---|---|---|---|---|---|---|
 | 1 | Trend Long | Uptrend | Close > EMA Fast | LONG | 2.0 | Trend |
 | 2 | Trend Short | Downtrend | Close < EMA Slow | SHORT | 2.0 | Trend |
-| 3 | Scalp Short | Uptrend | 3 red candles in a row | SHORT | 1.2 | Scalp |
-| 4 | Scalp Long | Downtrend | 3 green candles in a row | LONG | 1.2 | Scalp |
+| 3 | Scalp Short | Uptrend | 4 red candles (3 between EMAs, 4th < EMA Slow) | SHORT | 1.2 | Scalp |
+| 4 | Scalp Long | Downtrend | 4 green candles (3 between EMAs, 4th > EMA Slow) | LONG | 1.2 | Scalp |
 
 ---
 
