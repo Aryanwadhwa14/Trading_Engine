@@ -360,7 +360,9 @@ Current config:
 CONFIG = {
 
     # ASSET
-    "TICKER":          "NVDA",
+    "TICKER_ENABILITY": "multi",    # "single" or "multi"
+    "SINGLE_TICKER":   "NVDA",
+    "MULTI_TICKER":    ["NVDA", "AAPL", "TSLA"],
     "TIMEFRAME":       "1d",        # daily candles
 
     # DATE RANGE

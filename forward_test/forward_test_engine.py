@@ -76,7 +76,7 @@ def _print_signal(signal: dict, config: dict) -> None:
         f"\n{'='*55}\n"
         f"  {side_icon}  NEW SIGNAL  [{ts}]\n"
         f"{'='*55}\n"
-        f"  Ticker   : {config['TICKER']}\n"
+        f"  Ticker   : {config['SINGLE_TICKER']}\n"
         f"  Timeframe: {config['TIMEFRAME']}\n" 
         f"  Strategy : EMA {config['EMA_FAST']}/{config['EMA_SLOW']} -> Strategy {signal['strategy_id']}\n"
         f"  Side     : {signal['signal']}\n"
@@ -90,7 +90,7 @@ def _print_signal(signal: dict, config: dict) -> None:
 
 def _format_telegram(signal: dict, config: dict) -> str:
     """Format the Telegram alert message."""
-    ticker = config.get("TICKER", "")
+    ticker = config.get("SINGLE_TICKER", "")
     now_utc = datetime.now(timezone.utc)
     
     if ticker.endswith(".NS") or ticker.endswith(".BO"):
@@ -102,7 +102,7 @@ def _format_telegram(signal: dict, config: dict) -> str:
     return (
         f"🚨 TRADE SIGNAL\n\n"
         f"Timestamp: {ts}\n\n"
-        f"Ticker  : {config['TICKER']}\n"
+        f"Ticker  : {config['SINGLE_TICKER']}\n"
         f"Strategy: EMA {config['EMA_FAST']}/{config['EMA_SLOW']} Crossover -> Strategy {signal['strategy_id']}\n"
         f"Timeframe: {config['TIMEFRAME']}\n\n"
         f"Side    : {side_icon}\n"
@@ -123,10 +123,10 @@ def run_forward_test(config: dict) -> None:
     Parameters
     ----------
     config : dict
-        Must contain: TICKER, TIMEFRAME, EMA_FAST, EMA_SLOW
+        Must contain: SINGLE_TICKER, TIMEFRAME, EMA_FAST, EMA_SLOW
     """
 
-    ticker    = config["TICKER"]
+    ticker    = config["SINGLE_TICKER"]
     timeframe = config["TIMEFRAME"]
     ema_fast  = config["EMA_FAST"]
     ema_slow  = config["EMA_SLOW"]

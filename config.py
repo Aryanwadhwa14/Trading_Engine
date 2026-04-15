@@ -1,8 +1,10 @@
 CONFIG = {
 
     # ASSET CONFIG
+    "TICKER_ENABILITY": "single",  # "single" or "multi"
+    "SINGLE_TICKER": "NVDA", # single for both backtest & forward test 
     
-    "TICKER":"NVDA",
+    "MULTI_TICKER": ["NVDA", "AAPL", "TSLA"], # multi for only forward test 
     "TIMEFRAME": "1m",
 
 

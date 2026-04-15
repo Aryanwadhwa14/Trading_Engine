@@ -12,7 +12,7 @@ def run_backtest_mode():
     print("\n Running BACKTEST...\n")
 
     df = load_historical_data(
-        ticker=CONFIG["TICKER"],
+        ticker=CONFIG["SINGLE_TICKER"],
         interval=CONFIG["TIMEFRAME"],
         start=CONFIG["START_DATE"],
         end=CONFIG["END_DATE"]
@@ -39,18 +39,37 @@ def run_forward_mode():
 
     print("\n Running FORWARD TEST (LIVE)...\n")
     
-    ticker = CONFIG.get("TICKER", "NVDA")
-    print(f"Starting Live Trading Engine for {ticker}...")
+    enability = CONFIG.get("TICKER_ENABILITY", "single")
+    
+    if enability == "multi":
+        tickers = CONFIG.get("MULTI_TICKER", [])
+        # Limit to maximum 3 tickers for now as requested
+        if len(tickers) > 3:
+            print(f"Limiting to maximum of 3 tickers for forward test. Ignoring: {', '.join(tickers[3:])}")
+            tickers = tickers[:3]
+    else:
+        # Single mode fallback
+        ticker_val = CONFIG.get("SINGLE_TICKER", "NVDA")
+        tickers = [ticker_val]
+        
+    print(f"Starting Live Trading Engine for ({enability} mode): {', '.join(tickers)}...\n")
     
     while True:
         try:
-            if is_market_open(ticker):
-                print(f"[{time.strftime('%H:%M:%S')}] Market is OPEN for {ticker}. Running scanner...")
-                run_forward_test(CONFIG)
-            else:
-                print(f"[{time.strftime('%H:%M:%S')}] Market is CLOSED for {ticker}. Waiting...")
+            for ticker in tickers:
+                if is_market_open(ticker):
+                    print(f"[{time.strftime('%H:%M:%S')}] Market is OPEN for {ticker}. Running scanner...")
+                    
+                    # Create an override config specifically for this ticker iteration
+                    ticker_config = CONFIG.copy()
+                    ticker_config["SINGLE_TICKER"] = ticker
+                    run_forward_test(ticker_config)
+                    
+                else:
+                    print(f"[{time.strftime('%H:%M:%S')}] Market is CLOSED for {ticker}. Waiting...")
             
-            # Sleep for 60 seconds before next check
+            print(f"\n[{time.strftime('%H:%M:%S')}] Cycle complete. Sleeping for 60 seconds...\n")
+            # Sleep for 60 seconds before next full cycle
             time.sleep(60)
             
         except KeyboardInterrupt:
