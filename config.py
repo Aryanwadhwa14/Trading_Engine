@@ -2,7 +2,7 @@ CONFIG = {
 
     # ASSET CONFIG
     
-    "TICKER":"NVDL",
+    "TICKER":"NVDA",
     "TIMEFRAME": "1m",
 
 
