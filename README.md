@@ -297,7 +297,7 @@ Signal output structure:
     "entry":       price,
     "stop_loss":   price,
     "take_profit": price,
-    "reason":      "Break Above EMA Fast"   # human-readable trigger
+    "reason":      "Prev Candle Between EMAs + Break Above EMA Fast"   # human-readable trigger
 }
 ```
 
@@ -360,7 +360,9 @@ Current config:
 CONFIG = {
 
     # ASSET
-    "TICKER":          "NVDA",
+    "TICKER_ENABILITY": "multi",    # "single" or "multi"
+    "SINGLE_TICKER":   "NVDA",
+    "MULTI_TICKER":    ["NVDA", "AAPL", "TSLA"],
     "TIMEFRAME":       "1d",        # daily candles
 
     # DATE RANGE

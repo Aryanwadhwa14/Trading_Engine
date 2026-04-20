@@ -6,23 +6,21 @@ Here is the exact, simple blueprint for converting your current Python script in
 
 ---
 
-## Phase 1: Building the "Multi-Asset Scanner"
+## Phase 1: Native "Multi-Asset Scanner" Engine
 
-Right now, your script trades just `AAPL` (or whatever is manually typed in [config.py](file:///d:/Aryan/Trading-engine/config.py)). A **Scanner** is simply a master script that creates a loop, injecting hundreds of tickers one by one into your engine.
+Right now, your script trades natively through the `main.py` execution loop using real-time config configurations! By flipping `TICKER_ENABILITY` to `"multi"`, it operates as a full-blown master scanning orchestrator.
 
 **How it works in plain English:**
-1. You create a simple script called `master_scanner.py`.
-2. Inside, you give it lists:
-   - `us_tickers = ["AAPL", "NVDA", "TSLA", "MSFT"]`
-   - `indian_tickers = ["RELIANCE.NS", "TCS.NS", "HDFCBANK.NS", "INFY.NS"]`
-3. The script grabs the first ticker ("AAPL"), secretly replaces the `TICKER` variable in your config, and forces [forward_test_engine.py](file:///d:/Aryan/Trading-engine/forward_test/forward_test_engine.py) to run.
-4. The engine downloads AAPL data, calculates the EMA, and pushes a Telegram alert if there's a signal. 
-5. The engine shuts down (because we removed the 5-loop limit).
-6. The `master_scanner.py` immediately moves to "NVDA" and repeats this forever.
+1. You insert custom lists inside `config.py`:
+   - `"MULTI_TICKER": ["AAPL", "NVDA", "TSLA", "MSFT"]` (or a combination of Indian tickers!).
+2. `main.py` grabs the first ticker ("AAPL"), secretly passes it down through a temporary `CONFIG` replica instance, and forces your [forward_test_engine.py](file:///d:/Aryan/Trading-engine/forward_test/forward_test_engine.py) to run for AAPL.
+3. The engine downloads AAPL data, calculates the EMA, and pushes a Telegram alert if there's a signal. 
+4. The engine elegantly closes execution on AAPL.
+5. `main.py` immediately iterates seamlessly to `"NVDA"` and triggers the exact same logic.
+6. Once the entire list is cycled, it sleeps for a set pause interval (e.g. 60 seconds) and begins the loop anew!
 
 **How to trigger it:**
-You use **CronJobs** (Linux/Mac) or **Task Scheduler** (Windows) to wake up your scanner at exact intervals. 
-For example, you tell Windows: *"Every 15 minutes between 9:15 AM and 3:30 PM (Indian Time), run master_scanner.py"*.
+Simply configure `config.py` appropriately and run `python main.py` on your Windows server or a cloud VM for 24/7 autonomous scanning.
 
 ---
 

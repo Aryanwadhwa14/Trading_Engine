@@ -7,7 +7,7 @@ from strategies.ema_pullback import generate_signal
 def run_backtest(df, config, start_date, end_date):
 
     balance = config.get("INITIAL_BALANCE", 10000)
-    ticker = config["TICKER"]
+    ticker = config["SINGLE_TICKER"]
 
     position = 0
     entry_price = None
@@ -183,11 +183,11 @@ def _generate_summary(df, balance, config, start_date, end_date):
             strategy_metrics += f"    Net PnL: ${s_pnl:,.2f}\n"
 
     return f"""
-{config['TICKER']} BACKTEST RESULTS
+{config['SINGLE_TICKER']} BACKTEST RESULTS
 ============================================================
 
 Configuration:
-- Ticker:       {config['TICKER']}
+- Ticker:       {config['SINGLE_TICKER']}
 - Timeframe:    {config['TIMEFRAME']}
 - Date Range:   {start_date} to {end_date}
 - EMA:          EMA {config['EMA_FAST']} / {config['EMA_SLOW']}

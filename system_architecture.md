@@ -590,7 +590,9 @@ Every exit event logged by `_log_trade()` must produce a dict with these keys �
 CONFIG = {
 
     # ─── ASSET ──────────────────────────────────
-    "TICKER":          "NVDA",       # swap to anything: "BTC-USD", "EURUSD=X"
+    "TICKER_ENABILITY": "single",    # toggle "single" or "multi"
+    "SINGLE_TICKER":   "NVDA",
+    "MULTI_TICKER":    ["NVDA", "AAPL", "TSLA"],
     "TIMEFRAME":       "1d",         # "1m", "5m", "15m", "1h", "4h", "1d", "1wk"
 
     # ─── BACKTEST DATE WINDOW ────────────────────
@@ -684,8 +686,9 @@ The backtest engine, forward engine, and alert system all work immediately — t
 Change `config.py` only:
 
 ```python
-"TICKER":    "ETH-USD",
-"TIMEFRAME": "4h"
+"TICKER_ENABILITY": "single",
+"SINGLE_TICKER":    "ETH-USD",
+"TIMEFRAME":        "4h"
 ```
 
 ### Add a New Alert Channel (Email, Discord, etc)
@@ -702,14 +705,13 @@ Change `config.py` only:
 
 The rest of the pipeline —> data loading, indicators, strategy, backtest, forward_test — work without any changes.
 
-### Add a Multi-Asset Scanner (Automated Trading)
+### Built-In Multi-Asset Scanner (Automated Trading)
 
-Because `forward_test_engine.py` executes exactly *once* and cleanly exits, you can easily wrap this entire system into an automated multi-asset real-time scanner. 
-1. Create a master loop script (e.g., `scanner.py`)
-2. Define a list of tickers: `tickers = ["NVDA", "AAPL", "MSFT", "RELIANCE.NS"]`
-3. Dynamically inject the ticker into the `CONFIG` dict.
-4. Call `run_forward_test(CONFIG)` for each ticker.
-5. Use `cron` (Linux/Mac) or Task Scheduler (Windows) to run `scanner.py` repeatedly at market open or on specific intervals (e.g., every 15 minutes).
+Because `forward_test_engine.py` executes exactly *once* and cleanly exits, this engine now wraps the system into an automated multi-asset real-time scanner natively through the config payload!
+1. Change `TICKER_ENABILITY` to `"multi"`.
+2. Define a list of tickers: `"MULTI_TICKER": ["NVDA", "AAPL", "MSFT"]`.
+3. The `main.py` orchestrator will automatically iterate across these tickers during the live `while True:` loop inside your Python environment.
+4. It calls `run_forward_test(CONFIG)` for each ticker dynamically, swapping the active ticker variable sequentially.
 
 ---
 
