@@ -68,8 +68,8 @@ def generate_signal(df):
     # ── Scalar extractions ────────────────────────────────────────────────────
     ema_fast = float(latest["ema_fast"])
     ema_slow = float(latest["ema_slow"])
-    close    = float(latest["close"])
-    open_    = float(latest["open"])
+    close   = float(latest["close"])
+    open   = float(latest["open"])
 
     # ── Trend flags (plain Python bools) ─────────────────────────────────────
     uptrend   = ema_fast > ema_slow
@@ -83,7 +83,7 @@ def generate_signal(df):
     # Strategy 3 → SHORT SCALP  (uptrend + 3 red exhaustion candles + 3rd closes below EMA 55)
     # =========================================================================
     if uptrend and three_red and float(prev1["close"]) < ema_slow:
-        entry = close
+        entry = open
         sl    = float(prev1["high"])
         risk  = sl - entry
 
@@ -103,7 +103,7 @@ def generate_signal(df):
     # Strategy 4 → LONG SCALP  (downtrend + 3 green exhaustion candles + 3rd closes above EMA 55)
     # =========================================================================
     if downtrend and three_green and float(prev1["close"]) > ema_slow:
-        entry = close
+        entry = open
         sl    = float(prev1["low"])
         risk  = entry - sl
 
