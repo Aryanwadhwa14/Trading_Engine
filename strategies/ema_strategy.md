@@ -92,6 +92,7 @@ Priority 4 → Strategy 2 (Trend Short)  ← checked last
 ```
 Market is in an UPTREND
 + 3 consecutive RED candles appeared before the current candle
++ The 3rd red candle closes BELOW the slow EMA
 ```
 
 ### Plain English
@@ -107,7 +108,7 @@ three_red = (
     (prev3["close"] < prev3["open"])
 )
 
-if uptrend and three_red:
+if uptrend and three_red and prev1["close"] < ema_slow:
     entry = close           # enter at current price
     sl    = prev1["high"]   # stop loss = top of last red candle
     risk  = sl - entry
@@ -134,7 +135,7 @@ if uptrend and three_red:
     "entry": ...,
     "stop_loss": ...,
     "take_profit": ...,
-    "reason": "3 Red Candles (Exhaustion Pullback in Uptrend)"
+    "reason": "3 Red Candles (3rd closes below Slow EMA in Uptrend)"
 }
 ```
 
@@ -147,6 +148,7 @@ if uptrend and three_red:
 ```
 Market is in a DOWNTREND
 + 3 consecutive GREEN candles appeared before the current candle
++ The 3rd green candle closes ABOVE the slow EMA
 ```
 
 ### Plain English
@@ -162,7 +164,7 @@ three_green = (
     (prev3["close"] > prev3["open"])
 )
 
-if downtrend and three_green:
+if downtrend and three_green and prev1["close"] > ema_slow:
     entry = close
     sl    = prev1["low"]    # stop loss = bottom of last green candle
     risk  = entry - sl
@@ -185,7 +187,7 @@ if downtrend and three_green:
     "type": "scalp",
     "strategy_id": 4,
     ...
-    "reason": "3 Green Candles (Exhaustion Pullback in Downtrend)"
+    "reason": "3 Green Candles (3rd closes above Slow EMA in Downtrend)"
 }
 ```
 
