@@ -80,9 +80,9 @@ def generate_signal(df):
     three_green = is_green(prev1) and is_green(prev2) and is_green(prev3)
 
     # =========================================================================
-    # Strategy 3 → SHORT SCALP  (uptrend + 3 red exhaustion candles)
+    # Strategy 3 → SHORT SCALP  (uptrend + 3 red exhaustion candles + 3rd closes below EMA 55)
     # =========================================================================
-    if uptrend and three_red:
+    if uptrend and three_red and float(prev1["close"]) < ema_slow:
         entry = close
         sl    = float(prev1["high"])
         risk  = sl - entry
@@ -96,13 +96,13 @@ def generate_signal(df):
                 "entry":       entry,
                 "stop_loss":   sl,
                 "take_profit": tp,
-                "reason":      "3 Red Candles (Exhaustion Pullback in Uptrend)",
+                "reason":      "3 Red Candles (3rd closes below Slow EMA in Uptrend)",
             }
 
     # =========================================================================
-    # Strategy 4 → LONG SCALP  (downtrend + 3 green exhaustion candles)
+    # Strategy 4 → LONG SCALP  (downtrend + 3 green exhaustion candles + 3rd closes above EMA 55)
     # =========================================================================
-    if downtrend and three_green:
+    if downtrend and three_green and float(prev1["close"]) > ema_slow:
         entry = close
         sl    = float(prev1["low"])
         risk  = entry - sl
@@ -116,7 +116,7 @@ def generate_signal(df):
                 "entry":       entry,
                 "stop_loss":   sl,
                 "take_profit": tp,
-                "reason":      "3 Green Candles (Exhaustion Pullback in Downtrend)",
+                "reason":      "3 Green Candles (3rd closes above Slow EMA in Downtrend)",
             }
 
     # =========================================================================

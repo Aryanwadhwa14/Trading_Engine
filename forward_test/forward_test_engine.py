@@ -107,11 +107,10 @@ def _format_telegram(signal: dict, config: dict) -> str:
         f"Timeframe: {config['TIMEFRAME']}\n\n"
         f"Side    : {side_icon}\n"
         f"Entry   : {signal['entry']:.4f}\n"
-        f"Stop Loss      : {signal['stop_loss']:.4f}\n"
-        f"Take Profit     : {signal['take_profit']:.4f}\n\n"
+        f"Take Profit     : {signal['take_profit']:.4f}\n"
+        f"Stop Loss      : {signal['stop_loss']:.4f}\n\n"
         f"Reason:\n{signal['reason']}"
     )
-
 
 # ── Main engine loop ──────────────────────────────────────────────────────────
 

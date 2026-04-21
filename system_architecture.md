@@ -354,8 +354,8 @@ python main.py
               ├── IF position == 0:
               │       signal = generate_signal(current_df)
               │       │
-              │       ├── checks Strategy 3 (Short Scalp) first
-              │       ├── checks Strategy 4 (Long Scalp) second
+              │       ├── checks Strategy 3 (Short Scalp, 3rd closes < EMA 55) first
+              │       ├── checks Strategy 4 (Long Scalp, 3rd closes > EMA 55) second
               │       ├── checks Strategy 1 (Trend Long) third
               │       └── checks Strategy 2 (Trend Short) last
               │
@@ -750,8 +750,8 @@ Because `forward_test_engine.py` executes exactly *once* and cleanly exits, this
    │               strategies/ema_pullback.py                     │
    │                   generate_signal(df)                        │
    │                                                              │
-   │   Strategy 3 (Short Scalp, priority 1)                      │
-   │   Strategy 4 (Long Scalp,  priority 2)                      │
+   │   Strategy 3 (Short Scalp, 3rd closes < EMA 55, priority 1) │
+   │   Strategy 4 (Long Scalp, 3rd closes > EMA 55,  priority 2) │
    │   Strategy 1 (Trend Long,  priority 3)                      │
    │   Strategy 2 (Trend Short, priority 4)                      │
    │                                                              │

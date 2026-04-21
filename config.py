@@ -1,16 +1,16 @@
 CONFIG = {
 
     # ASSET CONFIG
-    "TICKER_ENABILITY": "single",  # "single" or "multi"
-    "SINGLE_TICKER": "NVDA", # single for both backtest & forward test 
+    "TICKER_ENABILITY": "multi",  # "single" or "multi"
+    "SINGLE_TICKER": "QQQ", # single for both backtest & forward test 
     
-    "MULTI_TICKER": ["NVDA", "AAPL", "TSLA"], # multi for only forward test 
-    "TIMEFRAME": "1m",
+    "MULTI_TICKER": ["NVDA", "MSFT", "AAPL"], # multi for only forward test 
+    "TIMEFRAME": "5m",
 
 
     # DATE RANGE (Backtest)
-    "START_DATE": "2026-03-01",     
-    "END_DATE": "2026-04-06",
+    "START_DATE": "2026-03-20",     
+    "END_DATE": "2026-04-20",
 
     # INDICATORS
     "EMA_FAST": 26,
@@ -23,7 +23,7 @@ CONFIG = {
 
     # STRATEGY CONFIG
     "TREND_RR": 2.0,    # Trend trades RR
-    "SCALP_RR": 1.2,    # Scalp trades RR
+    "SCALP_RR": 1.2,    # Scalp tradx   `es RR
 
     # BACKTEST CONTROL
     "MAX_TRADES": 10000,

@@ -1,5 +1,0 @@
-Trade Date,Ticker,Side,Trade Type,Strategy No,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
-2026-01-06,RELIANCE.NS,SHORT,TREND,2,2026-01-06 03:45:00+00:00,1506.0,1589.7,1338.6,2026-03-04 03:45:00+00:00,1338.6,82080,Break Below EMA Slow (Trend Continuation),TP Hit,167.4,WIN
-2026-03-04,RELIANCE.NS,SHORT,TREND,2,2026-03-04 07:45:00+00:00,1345.3,1348.0,1339.9,2026-03-05 03:45:00+00:00,1348.0,1200,Break Below EMA Slow (Trend Continuation),SL Hit,-2.7,LOSS
-2026-03-05,RELIANCE.NS,LONG,SCALP,4,2026-03-05 07:45:00+00:00,1386.4,1354.9,1424.2,2026-03-09 07:45:00+00:00,1424.2,5760,3 Green Candles (Exhaustion Pullback in Downtrend),TP Hit,37.8,WIN
-2026-03-10,RELIANCE.NS,SHORT,TREND,2,2026-03-10 03:45:00+00:00,1408.0,1429.0,1366.0,2026-03-11 03:45:00+00:00,1429.0,1440,Break Below EMA Slow (Trend Continuation),SL Hit,-21.0,LOSS
