@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 from config import CONFIG
 from data.historical_loader import load_historical_data
 from indicators.ema import calculate_ema
@@ -6,6 +7,29 @@ from indicators.atr import calculate_atr
 from backtest.backtest_engine import run_backtest
 from forward_test.forward_test_engine import run_forward_test
 from utils.market_schedule import is_market_open
+
+def get_seconds_to_next_candle(timeframe: str) -> int:
+    """Calculate the number of seconds until the next candlestick boundary."""
+    now = datetime.now()
+    try:
+        if timeframe.endswith('m'):
+            minutes = int(timeframe[:-1])
+            next_minute = ((now.minute // minutes) + 1) * minutes
+            delta_minutes = next_minute - now.minute
+            wait_time = (delta_minutes * 60) - now.second
+            return max(1, int(wait_time)) + 2  # 2s buffer for API update
+            
+        elif timeframe.endswith('h'):
+            hours = int(timeframe[:-1])
+            next_hour = ((now.hour // hours) + 1) * hours
+            delta_hours = next_hour - now.hour
+            wait_time = (delta_hours * 3600) - (now.minute * 60) - now.second
+            return max(1, int(wait_time)) + 2
+            
+    except Exception:
+        pass
+        
+    return 60  # Default to 60 seconds if format unknown
 
 def run_backtest_mode():
 
@@ -68,9 +92,10 @@ def run_forward_mode():
                 else:
                     print(f"[{time.strftime('%H:%M:%S')}] Market is CLOSED for {ticker}. Waiting...")
             
-            print(f"\n[{time.strftime('%H:%M:%S')}] Cycle complete. Sleeping for 60 seconds...\n")
-            # Sleep for 60 seconds before next full cycle
-            time.sleep(60)
+            wait_seconds = get_seconds_to_next_candle(CONFIG["TIMEFRAME"])
+            print(f"\n[{time.strftime('%H:%M:%S')}] Cycle complete. Sleeping for {wait_seconds} seconds (until next candle)...\n")
+            # Sleep until the next candle boundary
+            time.sleep(wait_seconds)
             
         except KeyboardInterrupt:
             print("\n⏹ Live Trading Engine stopped by user.")

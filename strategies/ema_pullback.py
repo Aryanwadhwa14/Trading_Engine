@@ -124,11 +124,9 @@ def generate_signal(df):
     # =========================================================================
     if uptrend and is_body_between_emas(prev1) and close > ema_fast:
         entry = close
-        sl    = float(prev1["low"])
+        sl    = float(prev2["low"])
         risk  = entry - sl
-        risk_percentage = abs (entry - sl)/entry  # logic change (adding risk percentage threshold)
-
-        if risk_percentage >= 0.4 and risk > 0:
+        if risk > 0:
             tp = entry + 2 * risk
             return {
                 "signal":      "LONG",
@@ -145,11 +143,9 @@ def generate_signal(df):
     # =========================================================================
     if downtrend and is_body_between_emas(prev1) and close < ema_slow:
         entry = close
-        sl    = float(prev1["high"])
+        sl    = float(prev2["high"])
         risk  = sl - entry
-        risk_percentage = abs (entry - sl)/entry  # logic change adding risk percentage threshold 
-
-        if risk_percentage >= 0.4 and risk > 0:
+        if risk > 0: 
             tp = entry - 2 * risk
             return {
                 "signal":      "SHORT",
