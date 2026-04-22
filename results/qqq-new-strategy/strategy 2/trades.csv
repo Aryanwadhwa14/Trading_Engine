@@ -1,0 +1,3 @@
+Trade Date,Ticker,Timeframe,Side,Trade Type,Strategy No,Units,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
+2026-03-24,QQQ,5m,SHORT,TREND,2,17,2026-03-24 11:05:00 (PST),584.28,584.77,583.31,2026-03-24 11:20:00 (PST),584.77,15,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-8.23,LOSS
+2026-04-20,QQQ,5m,SHORT,TREND,2,15,2026-04-20 09:50:00 (PST),645.35,645.66,644.73,2026-04-20 10:10:00 (PST),645.66,20,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-4.65,LOSS

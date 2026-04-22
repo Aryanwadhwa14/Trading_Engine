@@ -212,7 +212,7 @@ Market is in an UPTREND (ema_fast > ema_slow)
 ```python
 if uptrend and is_body_between_emas(prev1) and close > ema_fast:
     entry = close
-    sl    = prev1["low"]    # stop loss = previous candle's low
+    sl    = prev2["low"]    # stop loss = low of 2 candles ago
     risk  = entry - sl
 
     if risk > 0:
@@ -221,7 +221,7 @@ if uptrend and is_body_between_emas(prev1) and close > ema_fast:
 
 | Value | What it means |
 |---|---|
-| `sl` | Previous candle's low — if the market dips that far, uptrend may have failed |
+| `sl` | Low of 2 candles ago — if the market dips that far, uptrend may have failed |
 | `tp` | Entry + 2× risk — trend trades target bigger moves, hence RR = 2.0 |
 | `2.0 RR` | For every $1 risked, we target $2.00 profit |
 
@@ -258,7 +258,7 @@ Market is in a DOWNTREND (ema_fast < ema_slow)
 ```python
 if downtrend and is_body_between_emas(prev1) and close < ema_slow:
     entry = close
-    sl    = prev1["high"]   # stop loss = previous candle's high
+    sl    = prev2["high"]   # stop loss = high of 2 candles ago
     risk  = sl - entry
 
     if risk > 0:
@@ -267,7 +267,7 @@ if downtrend and is_body_between_emas(prev1) and close < ema_slow:
 
 | Value | What it means |
 |---|---|
-| `sl` | Previous candle's high — if price goes above that, downtrend may be reversing |
+| `sl` | High of 2 candles ago — if price goes above that, downtrend may be reversing |
 | `tp` | Entry minus 2× risk — targeting a 2:1 R:R move down |
 
 ### Signal Returned

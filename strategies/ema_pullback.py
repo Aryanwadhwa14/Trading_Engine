@@ -84,7 +84,7 @@ def generate_signal(df):
     # =========================================================================
     if uptrend and three_red and float(prev1["close"]) < ema_slow:
         entry = open
-        sl    = float(prev1["high"])
+        sl    = float(prev3["high"]) # first candle high 
         risk  = sl - entry
 
         if risk > 0:
@@ -104,7 +104,7 @@ def generate_signal(df):
     # =========================================================================
     if downtrend and three_green and float(prev1["close"]) > ema_slow:
         entry = open
-        sl    = float(prev1["low"])
+        sl    = float(prev3["low"]) # first candle low
         risk  = entry - sl
 
         if risk > 0:
@@ -124,9 +124,8 @@ def generate_signal(df):
     # =========================================================================
     if uptrend and is_body_between_emas(prev1) and close > ema_fast:
         entry = close
-        sl    = float(prev1["low"])
+        sl    = float(prev2["low"])
         risk  = entry - sl
-
         if risk > 0:
             tp = entry + 2 * risk
             return {
@@ -144,10 +143,9 @@ def generate_signal(df):
     # =========================================================================
     if downtrend and is_body_between_emas(prev1) and close < ema_slow:
         entry = close
-        sl    = float(prev1["high"])
+        sl    = float(prev2["high"])
         risk  = sl - entry
-
-        if risk > 0:
+        if risk > 0: 
             tp = entry - 2 * risk
             return {
                 "signal":      "SHORT",

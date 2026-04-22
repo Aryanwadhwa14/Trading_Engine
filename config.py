@@ -9,8 +9,8 @@ CONFIG = {
 
 
     # DATE RANGE (Backtest)
-    "START_DATE": "2026-03-20",     
-    "END_DATE": "2026-04-20",
+    "START_DATE": "2026-03-21",     
+    "END_DATE": "2026-04-21",
 
     # INDICATORS
     "EMA_FAST": 26,
@@ -23,7 +23,7 @@ CONFIG = {
 
     # STRATEGY CONFIG
     "TREND_RR": 2.0,    # Trend trades RR
-    "SCALP_RR": 1.2,    # Scalp tradx   `es RR
+    "SCALP_RR": 1.2,    # Scalp trades RR
 
     # BACKTEST CONTROL
     "MAX_TRADES": 10000,
@@ -33,7 +33,7 @@ CONFIG = {
     "RESULTS_FOLDER": "results",
 
     # MODES
-    "MODE": "forward"  # "backtest" or "forward"
+    "MODE": "backtest"  # "backtest" or "forward"
 }
 
 # Indian market equity tickers

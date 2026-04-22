@@ -1,0 +1,11 @@
+Trade Date,Ticker,Timeframe,Side,Trade Type,Strategy No,Units,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
+2026-03-23,NVDL,5m,LONG,SCALP,4,134,2026-03-23 10:40:00 (PST),74.5,74.31,74.73,2026-03-23 10:45:00 (PST),74.31,5,3 Green Candles (3rd closes above Slow EMA in Downtrend),SL Hit,-26.13,LOSS
+2026-03-23,NVDL,5m,LONG,SCALP,4,133,2026-03-23 11:05:00 (PST),74.85,74.64,75.1,2026-03-23 11:15:00 (PST),74.64,10,3 Green Candles (3rd closes above Slow EMA in Downtrend),SL Hit,-27.84,LOSS
+2026-03-24,NVDL,5m,LONG,SCALP,4,133,2026-03-24 08:25:00 (PST),74.51,74.24,74.84,2026-03-24 08:30:00 (PST),74.24,5,3 Green Candles (3rd closes above Slow EMA in Downtrend),SL Hit,-36.5,LOSS
+2026-03-24,NVDL,5m,LONG,SCALP,4,133,2026-03-24 11:00:00 (PST),74.0,73.61,74.47,2026-03-24 11:35:00 (PST),74.47,35,3 Green Candles (3rd closes above Slow EMA in Downtrend),TP Hit,63.04,WIN
+2026-03-24,NVDL,5m,LONG,SCALP,4,133,2026-03-24 11:40:00 (PST),74.64,74.32,75.02,2026-03-24 11:45:00 (PST),74.32,5,3 Green Candles (3rd closes above Slow EMA in Downtrend),SL Hit,-42.49,LOSS
+2026-03-30,NVDL,5m,LONG,SCALP,4,146,2026-03-30 08:05:00 (PST),67.76,67.55,68.02,2026-03-30 08:10:00 (PST),67.55,5,3 Green Candles (3rd closes above Slow EMA in Downtrend),SL Hit,-31.14,LOSS
+2026-03-30,NVDL,5m,LONG,SCALP,4,146,2026-03-30 08:45:00 (PST),67.5,67.15,67.92,2026-03-30 08:55:00 (PST),67.15,10,3 Green Candles (3rd closes above Slow EMA in Downtrend),SL Hit,-51.1,LOSS
+2026-04-02,NVDL,5m,LONG,SCALP,4,131,2026-04-02 08:05:00 (PST),74.25,73.68,74.93,2026-04-02 09:15:00 (PST),73.68,70,3 Green Candles (3rd closes above Slow EMA in Downtrend),SL Hit,-74.67,LOSS
+2026-04-16,NVDL,5m,LONG,SCALP,4,103,2026-04-16 07:35:00 (PST),92.63,92.23,93.1,2026-04-16 07:45:00 (PST),93.1,10,3 Green Candles (3rd closes above Slow EMA in Downtrend),TP Hit,49.07,WIN
+2026-04-16,NVDL,5m,LONG,SCALP,4,102,2026-04-16 11:45:00 (PST),93.1,92.99,93.23,2026-04-16 11:50:00 (PST),92.99,5,3 Green Candles (3rd closes above Slow EMA in Downtrend),SL Hit,-11.41,LOSS
