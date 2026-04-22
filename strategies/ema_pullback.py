@@ -84,7 +84,7 @@ def generate_signal(df):
     # =========================================================================
     if uptrend and three_red and float(prev1["close"]) < ema_slow:
         entry = open
-        sl    = float(prev1["high"])
+        sl    = float(prev3["high"]) # first candle high 
         risk  = sl - entry
 
         if risk > 0:
@@ -104,7 +104,7 @@ def generate_signal(df):
     # =========================================================================
     if downtrend and three_green and float(prev1["close"]) > ema_slow:
         entry = open
-        sl    = float(prev1["low"])
+        sl    = float(prev3["low"]) # first candle low
         risk  = entry - sl
 
         if risk > 0:
@@ -126,8 +126,9 @@ def generate_signal(df):
         entry = close
         sl    = float(prev1["low"])
         risk  = entry - sl
+        risk_percentage = abs (entry - sl)/entry  # logic change (adding risk percentage threshold)
 
-        if risk > 0:
+        if risk_percentage >= 0.4 and risk > 0:
             tp = entry + 2 * risk
             return {
                 "signal":      "LONG",
@@ -146,8 +147,9 @@ def generate_signal(df):
         entry = close
         sl    = float(prev1["high"])
         risk  = sl - entry
+        risk_percentage = abs (entry - sl)/entry  # logic change adding risk percentage threshold 
 
-        if risk > 0:
+        if risk_percentage >= 0.4 and risk > 0:
             tp = entry - 2 * risk
             return {
                 "signal":      "SHORT",

@@ -10,6 +10,7 @@ def run_backtest(df, config, start_date, end_date):
     ticker = config["SINGLE_TICKER"]
 
     position = 0
+    units = 0
     entry_price = None
     entry_time = None
     stop_loss = None
@@ -39,6 +40,9 @@ def run_backtest(df, config, start_date, end_date):
                 entry_price = signal["entry"]
                 stop_loss = signal["stop_loss"]
                 take_profit = signal["take_profit"]
+                
+                # Maximizing profit by using all available capital
+                units = max(1, int(balance / entry_price)) if entry_price > 0 else 1
 
                 entry_time = row.name
                 entry_reason = signal["reason"]
@@ -51,7 +55,8 @@ def run_backtest(df, config, start_date, end_date):
             if low <= stop_loss or high >= take_profit:
 
                 exit_price = stop_loss if low <= stop_loss else take_profit
-                pnl = exit_price - entry_price
+                raw_pnl = exit_price - entry_price
+                pnl = raw_pnl * units
 
                 trade_log.append(_log_trade(
                     ticker, config["TIMEFRAME"], "LONG", trade_type, strategy_id,
@@ -60,7 +65,8 @@ def run_backtest(df, config, start_date, end_date):
                     row.name, exit_price,
                     entry_reason,
                     "SL Hit" if low <= stop_loss else "TP Hit",
-                    pnl
+                    pnl,
+                    units
                 ))
 
                 balance += pnl
@@ -72,7 +78,8 @@ def run_backtest(df, config, start_date, end_date):
             if high >= stop_loss or low <= take_profit:
 
                 exit_price = stop_loss if high >= stop_loss else take_profit
-                pnl = entry_price - exit_price
+                raw_pnl = entry_price - exit_price
+                pnl = raw_pnl * units
 
                 trade_log.append(_log_trade(
                     ticker, config["TIMEFRAME"], "SHORT", trade_type, strategy_id,
@@ -81,7 +88,8 @@ def run_backtest(df, config, start_date, end_date):
                     row.name, exit_price,
                     entry_reason,
                     "SL Hit" if high >= stop_loss else "TP Hit",
-                    pnl
+                    pnl,
+                    units
                 ))
 
                 balance += pnl
@@ -89,17 +97,43 @@ def run_backtest(df, config, start_date, end_date):
 
     trades_df = pd.DataFrame(trade_log)
 
-    results_dir = _create_results_folder()
+    ticker = config.get("SINGLE_TICKER", "UNKNOWN")
+    sd_str = str(start_date).split(' ')[0]
+    ed_str = str(end_date).split(' ')[0]
+    
+    base_folder_name = f"{ticker.lower()}_results({sd_str} - {ed_str})"
+    base_dir = os.path.join("results", base_folder_name)
+    os.makedirs(base_dir, exist_ok=True)
+
+    initial_balance = config.get("INITIAL_BALANCE", 10000)
 
     if len(trades_df) > 0:
-        trades_df.to_csv(os.path.join(results_dir, "trade_log.csv"), index=False)
-
-    summary = _generate_summary(trades_df, balance, config, start_date, end_date)
-
-    with open(os.path.join(results_dir, "summary.txt"), "w") as f:
-        f.write(summary)
-
-    print(summary)
+        if "Strategy No" in trades_df.columns:
+            strategies = sorted(trades_df["Strategy No"].dropna().unique())
+            for strat in strategies:
+                strat_df = trades_df[trades_df["Strategy No"] == strat]
+                
+                strat_dir = os.path.join(base_dir, f"strategy {int(strat)}")
+                os.makedirs(strat_dir, exist_ok=True)
+                
+                strat_df.to_csv(os.path.join(strat_dir, "trades.csv"), index=False)
+                
+                summary = _generate_summary(strat_df, initial_balance, config, start_date, end_date, int(strat))
+                with open(os.path.join(strat_dir, "trades_summary.txt"), "w") as f:
+                    f.write(summary)
+                    
+                print(summary)
+        else:
+            trades_df.to_csv(os.path.join(base_dir, "trades.csv"), index=False)
+            summary = _generate_summary(trades_df, initial_balance, config, start_date, end_date)
+            with open(os.path.join(base_dir, "trades_summary.txt"), "w") as f:
+                f.write(summary)
+            print(summary)
+    else:
+        summary = _generate_summary(trades_df, initial_balance, config, start_date, end_date)
+        with open(os.path.join(base_dir, "trades_summary.txt"), "w") as f:
+            f.write(summary)
+        print(summary)
 
     return trades_df
 
@@ -123,7 +157,7 @@ def _log_trade(ticker, timeframe, side, trade_type, strategy_id,
                sl, tp,
                exit_time, exit_price,
                entry_reason, exit_reason,
-               pnl):
+               pnl, units=0):
 
     return {
         "Trade Date": entry_time.date(),
@@ -132,6 +166,7 @@ def _log_trade(ticker, timeframe, side, trade_type, strategy_id,
         "Side": side,
         "Trade Type": trade_type.upper(),
         "Strategy No": strategy_id,
+        "Units": units,
         "Entry Time": _format_time_pst(entry_time),
         "Entry Price": round(entry_price, 2),
         "Stop Loss": round(sl, 2),
@@ -146,7 +181,7 @@ def _log_trade(ticker, timeframe, side, trade_type, strategy_id,
     }
 
 
-def _generate_summary(df, balance, config, start_date, end_date):
+def _generate_summary(df, initial_balance, config, start_date, end_date, strategy_id=None):
 
     if len(df) == 0:
         return "No trades."
@@ -154,36 +189,25 @@ def _generate_summary(df, balance, config, start_date, end_date):
     wins = len(df[df["Result"] == "WIN"])
     losses = len(df[df["Result"] == "LOSS"])
 
-    win_rate = (wins / len(df)) * 100
-    net_profit = df["PnL ($)"].sum()
+    win_rate = (wins / len(df)) * 100 if len(df) > 0 else 0
+    net_profit = df["PnL ($)"].sum() if len(df) > 0 else 0
+
+    final_bal = initial_balance + net_profit
 
     avg_win = df[df["Result"] == "WIN"]["PnL ($)"].mean() if wins else 0
     avg_loss = df[df["Result"] == "LOSS"]["PnL ($)"].mean() if losses else 0
+    
+    avg_units = df["Units"].mean() if "Units" in df.columns and len(df) > 0 else 0
 
-    max_win = df["PnL ($)"].max()
-    max_loss = df["PnL ($)"].min()
+    max_win = df["PnL ($)"].max() if len(df) > 0 else 0
+    max_loss = df["PnL ($)"].min() if len(df) > 0 else 0
 
-    strategy_metrics = ""
-    if "Strategy No" in df.columns:
-        strategy_metrics = "\nStrategy Breakdown:\n"
-        strategy_metrics += "-" * 30 + "\n"
-        for strat in sorted(df["Strategy No"].unique()):
-            strat_df = df[df["Strategy No"] == strat]
-            s_trades = len(strat_df)
-            s_wins = len(strat_df[strat_df["Result"] == "WIN"])
-            s_losses = len(strat_df[strat_df["Result"] == "LOSS"])
-            s_win_rate = (s_wins / s_trades) * 100 if s_trades > 0 else 0
-            s_pnl = strat_df["PnL ($)"].sum()
-            
-            side_val = strat_df["Side"].iloc[0].capitalize() if "Side" in strat_df.columns else "Unknown"
-            type_val = strat_df["Trade Type"].iloc[0].capitalize() if "Trade Type" in strat_df.columns else "Unknown"
-            
-            strategy_metrics += f"- Strategy {strat} ({side_val} -> {type_val}):\n"
-            strategy_metrics += f"    Trades: {s_trades} | Wins: {s_wins} | Losses: {s_losses} | Win Rate: {s_win_rate:.1f}%\n"
-            strategy_metrics += f"    Net PnL: ${s_pnl:,.2f}\n"
+    header = f"{config['SINGLE_TICKER']} BACKTEST RESULTS"
+    if strategy_id is not None:
+        header += f" -> Strategy {strategy_id}"
 
     return f"""
-{config['SINGLE_TICKER']} BACKTEST RESULTS
+{header}
 ============================================================
 
 Configuration:
@@ -194,17 +218,16 @@ Configuration:
 
 Performance:
 - Total Trades: {len(df)}
+- Number of Units:    {avg_units:.0f}
 - Wins:         {wins}
 - Losses:       {losses}
 - Win Rate:     {win_rate:.1f}%
 - Net Profit:   ${net_profit:,.2f}
-- Final Bal:    ${balance:,.2f}
+- Final Bal:    ${final_bal:,.2f}
 - Avg Win:      ${avg_win:,.2f}
 - Avg Loss:     ${avg_loss:,.2f}
 - Max Win:      ${max_win:,.2f}
 - Max Loss:     ${max_loss:,.2f}
-{strategy_metrics}
-Generated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 """
 
 
