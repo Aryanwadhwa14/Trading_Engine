@@ -106,7 +106,7 @@ def generate_signal(df):
         entry = open
         sl    = float(prev3["low"]) # first candle low
         risk  = entry - sl
-
+        
         if risk > 0:
             tp = entry + 1.2 * risk
             return {

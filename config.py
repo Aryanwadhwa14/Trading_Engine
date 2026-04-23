@@ -33,7 +33,7 @@ CONFIG = {
     "RESULTS_FOLDER": "results",
 
     # MODES
-    "MODE": "backtest"  # "backtest" or "forward"
+    "MODE": "forward"  # "backtest" or "forward"
 }
 
 # Indian market equity tickers
