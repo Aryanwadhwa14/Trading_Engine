@@ -110,7 +110,8 @@ three_red = (
 
 if uptrend and three_red and prev1["close"] < ema_slow:
     entry = close           # enter at current price
-    sl    = prev1["high"]   # stop loss = top of last red candle
+    # sl    = prev1["high"]->   # stop loss = top of last red candle
+    sl    = prev3["high"]   # v3.1: stop loss = top of first red candle
     risk  = sl - entry
 
     if risk > 0:
@@ -121,6 +122,7 @@ if uptrend and three_red and prev1["close"] < ema_slow:
 |---|---|
 | `entry` | Current closing price — where we enter the SHORT |
 | `sl` (stop loss) | High of the previous candle — if price goes above here, the short thesis is wrong |
+| `sl` | **v3.1**: High of first red candle (`prev3`) — if price goes above here, the short thesis is wrong 
 | `risk` | Distance from entry to stop loss |
 | `tp` (take profit) | Entry minus 1.2× risk — targeting a small but quick move down |
 | `1.2 RR` | Risk:Reward ratio of 1.2 — for every $1 risked, we target $1.20 profit |
@@ -166,7 +168,7 @@ three_green = (
 
 if downtrend and three_green and prev1["close"] > ema_slow:
     entry = close
-    sl    = prev1["low"]    # stop loss = bottom of last green candle
+    sl    = prev3["low"]    # v4.1: stop loss = bottom of first green candle
     risk  = entry - sl
 
     if risk > 0:
@@ -176,7 +178,7 @@ if downtrend and three_green and prev1["close"] > ema_slow:
 | Value | What it means |
 |---|---|
 | `entry` | Current close — enter the LONG |
-| `sl` | Low of the previous candle — if price drops below here, the bounce failed |
+| `sl` | **v4.1**: Low of first green candle (`prev3`) — if price drops below here, the bounce failed |
 | `tp` | Entry plus 1.2× risk — small profit target on the bounce |
 
 ### Signal Returned
@@ -212,7 +214,8 @@ Market is in an UPTREND (ema_fast > ema_slow)
 ```python
 if uptrend and is_body_between_emas(prev1) and close > ema_fast:
     entry = close
-    sl    = prev2["low"]    # stop loss = low of 2 candles ago
+    # sl = prev2["low"]     # v1.1: stop loss = low of 2 candles ago
+    sl    = ema_slow        # v1.2: stop loss = slow EMA value
     risk  = entry - sl
 
     if risk > 0:
@@ -221,7 +224,7 @@ if uptrend and is_body_between_emas(prev1) and close > ema_fast:
 
 | Value | What it means |
 |---|---|
-| `sl` | Low of 2 candles ago — if the market dips that far, uptrend may have failed |
+| `sl` | **v1.1**: Low of 2 candles ago (`prev2`).<br>**v1.2**: Value of `ema_slow` (Current Active Logic). |
 | `tp` | Entry + 2× risk — trend trades target bigger moves, hence RR = 2.0 |
 | `2.0 RR` | For every $1 risked, we target $2.00 profit |
 
@@ -258,7 +261,8 @@ Market is in a DOWNTREND (ema_fast < ema_slow)
 ```python
 if downtrend and is_body_between_emas(prev1) and close < ema_slow:
     entry = close
-    sl    = prev2["high"]   # stop loss = high of 2 candles ago
+    # sl = prev2["high"]    # v2.1: stop loss = high of 2 candles ago
+    sl    = ema_slow        # v2.2: stop loss = slow EMA value
     risk  = sl - entry
 
     if risk > 0:
@@ -267,7 +271,7 @@ if downtrend and is_body_between_emas(prev1) and close < ema_slow:
 
 | Value | What it means |
 |---|---|
-| `sl` | High of 2 candles ago — if price goes above that, downtrend may be reversing |
+| `sl` | **v2.1 **: High of 2 candles ago (`prev2`).<br>**v2.2**: Value of `ema_slow` (Current Active Logic). |
 | `tp` | Entry minus 2× risk — targeting a 2:1 R:R move down |
 
 ### Signal Returned
