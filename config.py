@@ -2,7 +2,7 @@ CONFIG = {
 
     # ASSET CONFIG
     "TICKER_ENABILITY": "multi",  # "single" or "multi"
-    "SINGLE_TICKER": "QQQ", # single for both backtest & forward test 
+    "SINGLE_TICKER": "NVDA", # single for both backtest & forward test 
     
     "MULTI_TICKER": ["NVDA", "MSFT", "AAPL"], # multi for only forward test 
     "TIMEFRAME": "5m",
@@ -33,7 +33,7 @@ CONFIG = {
     "RESULTS_FOLDER": "results",
 
     # MODES
-    "MODE": "backtest"  # "backtest" or "forward"
+    "MODE": "forward"  # "backtest" or "forward"
 }
 
 # Indian market equity tickers
