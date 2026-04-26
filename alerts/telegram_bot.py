@@ -12,7 +12,7 @@ CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 def send_telegram_message(message):
 
     if not BOT_TOKEN or not CHAT_ID:
-        print("❌ Missing TELEGRAM credentials in .env")
+        print("Missing TELEGRAM credentials in .env")
         return
 
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"

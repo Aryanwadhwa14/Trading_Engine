@@ -19,4 +19,4 @@ Performance:
 - Avg Win:      $203.12
 - Avg Loss:     $-42.54
 - Max Win:      $261.95
-- Max Loss:     $-128.71
+- Max Loss:     $-128.71    
