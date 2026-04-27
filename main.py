@@ -67,6 +67,13 @@ def run_forward_mode():
     
     if enability == "multi":
         tickers = CONFIG.get("MULTI_TICKER", [])
+<<<<<<< HEAD
+=======
+        # Limit to maximum 3 tickers for now as requested
+        # if len(tickers) > 3:
+        #     print(f"Limiting to maximum of 3 tickers for forward test. Ignoring: {', '.join(tickers[3:])}")
+        #     tickers = tickers[:3]
+>>>>>>> df12596519768b292918827da95771b7fdd98c69
     else:
         # Single mode fallback
         ticker_val = CONFIG.get("SINGLE_TICKER", "NVDA")

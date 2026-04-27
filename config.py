@@ -2,15 +2,19 @@ CONFIG = {
 
     # ASSET CONFIG
     "TICKER_ENABILITY": "multi",  # "single" or "multi"
-    "SINGLE_TICKER": "NVDA", # single for both backtest & forward test 
+    "SINGLE_TICKER": "CVX", # single for both backtest & forward test 
     
+<<<<<<< HEAD
     "MULTI_TICKER": ["NVDA", "MSFT", "AAPL","NVDL", "TQQQ", "TSLA", "AMD", "MU", "SNDK"], # multi for only forward test 
+=======
+    "MULTI_TICKER": ["NVDA", "MSFT", "AAPL","NVDL", "TQQQ", "TSLA", "AMD", "MU", "SNDK", "SOXL", "SNXX","JPM","V","MS","AXP","XOM","OXY","CVX"]                                   , # multi for only forward test 
+>>>>>>> df12596519768b292918827da95771b7fdd98c69
     "TIMEFRAME": "5m",
 
 
     # DATE RANGE (Backtest)
-    "START_DATE": "2026-03-21",     
-    "END_DATE": "2026-04-21",
+    "START_DATE": "2026-02-27",     
+    "END_DATE": "2026-04-27",
 
     # INDICATORS
     "EMA_FAST": 26,
@@ -33,7 +37,7 @@ CONFIG = {
     "RESULTS_FOLDER": "results",
 
     # MODES
-    "MODE": "forward"  # "backtest" or "forward"
+    "MODE": "backtest"  # "backtest" or "forward"
 }
 
 # Indian market equity tickers

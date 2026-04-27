@@ -1,0 +1,22 @@
+
+NVDL BACKTEST RESULTS -> Strategy 4
+============================================================
+
+Configuration:
+- Ticker:       NVDL
+- Timeframe:    5m
+- Date Range:   2026-03-21 to 2026-04-21
+- EMA:          EMA 26 / 55
+
+Performance:
+- Total Trades: 10
+- Number of Units:    127
+- Wins:         4
+- Losses:       6
+- Win Rate:     40.0%
+- Net Profit:   $-312.00
+- Final Bal:    $9,688.00
+- Avg Win:      $71.44
+- Avg Loss:     $-99.63
+- Max Win:      $107.74
+- Max Loss:     $-141.48

@@ -1,0 +1,22 @@
+
+XOM BACKTEST RESULTS -> Strategy 4
+============================================================
+
+Configuration:
+- Ticker:       XOM
+- Timeframe:    5m
+- Date Range:   2026-02-27 to 2026-04-27
+- EMA:          EMA 26 / 55
+
+Performance:
+- Total Trades: 29
+- Number of Units:    63
+- Wins:         14
+- Losses:       15
+- Win Rate:     48.3%
+- Net Profit:   $127.62
+- Final Bal:    $10,127.62
+- Avg Win:      $39.28
+- Avg Loss:     $-28.16
+- Max Win:      $96.26
+- Max Loss:     $-84.43

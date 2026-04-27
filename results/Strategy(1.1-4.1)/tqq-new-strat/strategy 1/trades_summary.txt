@@ -1,0 +1,22 @@
+
+TQQQ BACKTEST RESULTS -> Strategy 1
+============================================================
+
+Configuration:
+- Ticker:       TQQQ
+- Timeframe:    5m
+- Date Range:   2026-03-21 to 2026-04-21
+- EMA:          EMA 26 / 55
+
+Performance:
+- Total Trades: 5
+- Number of Units:    205
+- Wins:         3
+- Losses:       2
+- Win Rate:     60.0%
+- Net Profit:   $274.64
+- Final Bal:    $10,274.64
+- Avg Win:      $122.49
+- Avg Loss:     $-46.42
+- Max Win:      $171.73
+- Max Loss:     $-50.31

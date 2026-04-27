@@ -1,0 +1,11 @@
+Trade Date,Ticker,Timeframe,Side,Trade Type,Strategy No,Units,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
+2026-03-23,NVDL,5m,SHORT,SCALP,3,132,2026-03-23 08:40:00 (PST),75.22,76.05,74.22,2026-03-23 08:50:00 (PST),74.22,10,3 Red Candles (3rd closes below Slow EMA in Uptrend),TP Hit,131.47,WIN
+2026-03-25,NVDL,5m,SHORT,SCALP,3,130,2026-03-25 12:05:00 (PST),76.17,76.88,75.32,2026-03-25 12:20:00 (PST),76.88,15,3 Red Candles (3rd closes below Slow EMA in Uptrend),SL Hit,-92.3,LOSS
+2026-04-01,NVDL,5m,SHORT,SCALP,3,134,2026-04-01 11:00:00 (PST),73.86,74.38,73.23,2026-04-01 11:15:00 (PST),73.23,15,3 Red Candles (3rd closes below Slow EMA in Uptrend),TP Hit,84.42,WIN
+2026-04-09,NVDL,5m,SHORT,SCALP,3,122,2026-04-09 07:00:00 (PST),78.39,78.78,77.92,2026-04-09 07:05:00 (PST),78.78,5,3 Red Candles (3rd closes below Slow EMA in Uptrend),SL Hit,-47.58,LOSS
+2026-04-09,NVDL,5m,SHORT,SCALP,3,120,2026-04-09 11:35:00 (PST),79.66,79.99,79.27,2026-04-09 11:40:00 (PST),79.99,5,3 Red Candles (3rd closes below Slow EMA in Uptrend),SL Hit,-39.0,LOSS
+2026-04-10,NVDL,5m,SHORT,SCALP,3,113,2026-04-10 12:55:00 (PST),84.28,84.87,83.57,2026-04-13 06:30:00 (PST),83.57,3935,3 Red Candles (3rd closes below Slow EMA in Uptrend),TP Hit,80.0,WIN
+2026-04-15,NVDL,5m,SHORT,SCALP,3,104,2026-04-15 09:45:00 (PST),92.7,93.97,91.18,2026-04-15 11:00:00 (PST),91.18,75,3 Red Candles (3rd closes below Slow EMA in Uptrend),TP Hit,158.18,WIN
+2026-04-16,NVDL,5m,SHORT,SCALP,3,106,2026-04-16 09:35:00 (PST),92.95,93.98,91.71,2026-04-17 06:30:00 (PST),93.98,1255,3 Red Candles (3rd closes below Slow EMA in Uptrend),SL Hit,-109.35,LOSS
+2026-04-17,NVDL,5m,SHORT,SCALP,3,102,2026-04-17 10:20:00 (PST),94.84,95.32,94.26,2026-04-17 11:15:00 (PST),95.32,55,3 Red Candles (3rd closes below Slow EMA in Uptrend),SL Hit,-48.96,LOSS
+2026-04-21,NVDL,5m,SHORT,SCALP,3,101,2026-04-21 08:55:00 (PST),95.45,95.93,94.88,2026-04-21 09:20:00 (PST),94.88,25,3 Red Candles (3rd closes below Slow EMA in Uptrend),TP Hit,57.57,WIN

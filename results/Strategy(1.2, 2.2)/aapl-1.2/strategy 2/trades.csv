@@ -1,0 +1,10 @@
+Trade Date,Ticker,Timeframe,Side,Trade Type,Strategy No,Units,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
+2026-03-30,AAPL,5m,SHORT,TREND,2,40,2026-03-30 09:50:00 (PST),247.24,247.62,246.47,2026-03-30 10:15:00 (PST),246.47,25,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),TP Hit,30.65,WIN
+2026-03-30,AAPL,5m,SHORT,TREND,2,40,2026-03-30 10:50:00 (PST),246.97,247.29,246.32,2026-03-30 11:30:00 (PST),246.32,40,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),TP Hit,25.82,WIN
+2026-03-30,AAPL,5m,SHORT,TREND,2,40,2026-03-30 12:00:00 (PST),246.77,247.03,246.24,2026-03-30 12:10:00 (PST),246.24,10,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),TP Hit,21.0,WIN
+2026-04-07,AAPL,5m,SHORT,TREND,2,40,2026-04-07 09:10:00 (PST),249.16,251.29,244.89,2026-04-07 10:00:00 (PST),251.29,50,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-85.35,LOSS
+2026-04-07,AAPL,5m,SHORT,TREND,2,40,2026-04-07 11:45:00 (PST),250.71,251.26,249.63,2026-04-07 12:10:00 (PST),251.26,25,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-21.71,LOSS
+2026-04-13,AAPL,5m,SHORT,TREND,2,38,2026-04-13 09:35:00 (PST),257.81,258.07,257.28,2026-04-13 09:45:00 (PST),258.07,10,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-10.03,LOSS
+2026-04-13,AAPL,5m,SHORT,TREND,2,38,2026-04-13 09:50:00 (PST),257.89,258.06,257.55,2026-04-13 10:15:00 (PST),258.06,25,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-6.38,LOSS
+2026-04-13,AAPL,5m,SHORT,TREND,2,38,2026-04-13 10:30:00 (PST),257.7,258.02,257.07,2026-04-13 11:15:00 (PST),258.02,45,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-11.96,LOSS
+2026-04-21,AAPL,5m,SHORT,TREND,2,35,2026-04-21 11:15:00 (PST),266.4,267.7,263.81,2026-04-21 11:50:00 (PST),267.7,35,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-45.37,LOSS

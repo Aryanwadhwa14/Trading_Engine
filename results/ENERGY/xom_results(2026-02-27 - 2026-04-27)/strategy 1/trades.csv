@@ -1,0 +1,15 @@
+Trade Date,Ticker,Timeframe,Side,Trade Type,Strategy No,Units,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
+2026-03-02,XOM,5m,LONG,TREND,1,64,2026-03-02 08:20:00 (PST),154.73,153.39,157.42,2026-03-02 09:10:00 (PST),153.39,50,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),SL Hit,-85.95,LOSS
+2026-03-02,XOM,5m,LONG,TREND,1,64,2026-03-02 10:00:00 (PST),154.01,153.69,154.65,2026-03-02 10:15:00 (PST),153.69,15,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),SL Hit,-20.54,LOSS
+2026-03-06,XOM,5m,LONG,TREND,1,65,2026-03-06 11:15:00 (PST),151.7,151.41,152.27,2026-03-06 12:30:00 (PST),151.41,75,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),SL Hit,-18.53,LOSS
+2026-03-11,XOM,5m,LONG,TREND,1,65,2026-03-11 09:00:00 (PST),150.59,150.05,151.67,2026-03-11 11:35:00 (PST),151.67,155,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),TP Hit,70.1,WIN
+2026-03-11,XOM,5m,LONG,TREND,1,65,2026-03-11 12:25:00 (PST),151.54,151.07,152.48,2026-03-12 06:30:00 (PST),152.48,1085,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),TP Hit,61.31,WIN
+2026-03-12,XOM,5m,LONG,TREND,1,64,2026-03-12 10:25:00 (PST),154.15,153.54,155.36,2026-03-12 12:55:00 (PST),153.54,150,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),SL Hit,-38.87,LOSS
+2026-03-13,XOM,5m,LONG,TREND,1,64,2026-03-13 07:30:00 (PST),154.55,154.24,155.19,2026-03-13 07:50:00 (PST),154.24,20,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),SL Hit,-20.36,LOSS
+2026-03-16,XOM,5m,LONG,TREND,1,62,2026-03-16 09:20:00 (PST),157.31,156.79,158.35,2026-03-16 09:45:00 (PST),156.79,25,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),SL Hit,-32.28,LOSS
+2026-03-16,XOM,5m,LONG,TREND,1,62,2026-03-16 10:35:00 (PST),157.11,156.88,157.55,2026-03-16 11:50:00 (PST),157.55,75,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),TP Hit,27.79,WIN
+2026-03-27,XOM,5m,LONG,TREND,1,57,2026-03-27 10:40:00 (PST),170.2,169.24,172.12,2026-03-30 06:30:00 (PST),172.12,4070,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),TP Hit,109.37,WIN
+2026-04-06,XOM,5m,LONG,TREND,1,59,2026-04-06 11:45:00 (PST),162.31,161.98,162.98,2026-04-06 12:50:00 (PST),162.98,65,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),TP Hit,39.49,WIN
+2026-04-09,XOM,5m,LONG,TREND,1,61,2026-04-09 08:25:00 (PST),157.88,156.85,159.95,2026-04-09 08:35:00 (PST),156.85,10,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),SL Hit,-63.12,LOSS
+2026-04-15,XOM,5m,LONG,TREND,1,65,2026-04-15 11:25:00 (PST),149.57,149.17,150.35,2026-04-15 12:40:00 (PST),149.17,75,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),SL Hit,-25.51,LOSS
+2026-04-22,XOM,5m,LONG,TREND,1,65,2026-04-22 08:50:00 (PST),148.99,148.78,149.41,2026-04-22 09:05:00 (PST),148.78,15,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),SL Hit,-13.56,LOSS

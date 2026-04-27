@@ -1,0 +1,22 @@
+
+AAPL BACKTEST RESULTS -> Strategy 3
+============================================================
+
+Configuration:
+- Ticker:       AAPL
+- Timeframe:    5m
+- Date Range:   2026-03-23 to 2026-04-23
+- EMA:          EMA 26 / 55
+
+Performance:
+- Total Trades: 12
+- Number of Units:    38
+- Wins:         5
+- Losses:       7
+- Win Rate:     41.7%
+- Net Profit:   $-253.89
+- Final Bal:    $9,746.11
+- Avg Win:      $34.22
+- Avg Loss:     $-60.72
+- Max Win:      $56.16
+- Max Loss:     $-156.14

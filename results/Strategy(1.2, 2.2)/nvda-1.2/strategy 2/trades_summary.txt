@@ -1,0 +1,22 @@
+
+NVDA BACKTEST RESULTS -> Strategy 2
+============================================================
+
+Configuration:
+- Ticker:       NVDA
+- Timeframe:    5m
+- Date Range:   2026-03-21 to 2026-04-21
+- EMA:          EMA 26 / 55
+
+Performance:
+- Total Trades: 14
+- Number of Units:    53
+- Wins:         5
+- Losses:       9
+- Win Rate:     35.7%
+- Net Profit:   $12.10
+- Final Bal:    $10,012.10
+- Avg Win:      $36.96
+- Avg Loss:     $-19.19
+- Max Win:      $89.00
+- Max Loss:     $-59.76

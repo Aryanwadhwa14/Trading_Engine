@@ -1,0 +1,22 @@
+
+oxy BACKTEST RESULTS -> Strategy 3
+============================================================
+
+Configuration:
+- Ticker:       oxy
+- Timeframe:    5m
+- Date Range:   2026-02-27 to 2026-04-27
+- EMA:          EMA 26 / 55
+
+Performance:
+- Total Trades: 34
+- Number of Units:    159
+- Wins:         15
+- Losses:       19
+- Win Rate:     44.1%
+- Net Profit:   $-93.21
+- Final Bal:    $9,906.79
+- Avg Win:      $41.78
+- Avg Loss:     $-37.89
+- Max Win:      $90.38
+- Max Loss:     $-121.24
