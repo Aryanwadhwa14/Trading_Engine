@@ -1,0 +1,3 @@
+Trade Date,Ticker,Timeframe,Side,Trade Type,Strategy No,Units,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
+2026-04-13,aapl,5m,LONG,SCALP,4,38,2026-04-13 11:20:00 (PST),258.03,257.77,258.33,2026-04-13 11:40:00 (PST),258.33,20,3 Green Candles (3rd closes above Slow EMA in Downtrend),TP Hit,11.6,WIN
+2026-04-16,aapl,5m,LONG,SCALP,4,37,2026-04-16 08:55:00 (PST),263.29,262.91,263.75,2026-04-16 09:05:00 (PST),263.75,10,3 Green Candles (3rd closes above Slow EMA in Downtrend),TP Hit,17.06,WIN

@@ -68,21 +68,30 @@ def generate_signal(df):
     # ── Scalar extractions ────────────────────────────────────────────────────
     ema_fast = float(latest["ema_fast"])
     ema_slow = float(latest["ema_slow"])
-    close   = float(latest["close"])
-    open   = float(latest["open"])
+    close   = float(latest["close"]) # 4th candle close 
+    open   = float(latest["open"]) # 4th candle open 
 
     # ── Trend flags (plain Python bools) ─────────────────────────────────────
     uptrend   = ema_fast > ema_slow
     downtrend = ema_fast < ema_slow
 
     # ── Multi-candle pattern flags ────────────────────────────────────────────
-    three_red   = is_red(prev1)   and is_red(prev2)   and is_red(prev3)
-    three_green = is_green(prev1) and is_green(prev2) and is_green(prev3)
+    s3_pattern = (
+        is_red(prev3) and float(prev3["close"]) > ema_fast and
+        is_red(prev2) and is_body_between_emas(prev2) and
+        is_red(prev1) and float(prev1["close"]) < ema_slow
+    )
+    
+    s4_pattern = (
+        is_green(prev3) and float(prev3["close"]) < ema_slow and
+        is_green(prev2) and is_body_between_emas(prev2) and
+        is_green(prev1) and float(prev1["close"]) > ema_slow
+    )
 
     # =========================================================================
     # Strategy 3 → SHORT SCALP  (uptrend + 3 red exhaustion candles + 3rd closes below EMA 55)
     # =========================================================================
-    if uptrend and three_red and float(prev1["close"]) < ema_slow:
+    if uptrend and s3_pattern:
         entry = open
         sl    = ema_fast # S3.2 (sl = fast ema -> ema 26)
         risk  = sl - entry
@@ -102,7 +111,7 @@ def generate_signal(df):
     # =========================================================================
     # Strategy 4 → LONG SCALP  (downtrend + 3 green exhaustion candles + 3rd closes above EMA 55)
     # =========================================================================
-    if downtrend and three_green and float(prev1["close"]) > ema_slow:
+    if downtrend and s4_pattern:
         entry = open
         sl    = ema_fast # S4.2 (sl = fast ema -> ema 26)
         risk  = entry - sl
