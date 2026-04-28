@@ -84,7 +84,7 @@ def generate_signal(df):
     # =========================================================================
     if uptrend and three_red and float(prev1["close"]) > ema_slow and float(prev3["open"]) < ema_fast: # changed logic in the code for first candle (S3.2)
         entry = open
-        sl    = ema_fast # S3.2 (sl = fast ema -> ema 26)
+        sl    = prev3["open"] # S3.3 (sl = first candle open)
         risk  = sl - entry
 
         if risk > 0:
@@ -104,7 +104,7 @@ def generate_signal(df):
     # =========================================================================
     if downtrend and three_green and float(prev1["close"]) > ema_fast and float(prev3["open"]) > ema_slow : # changed logic in the code (S4.2)
         entry = open
-        sl    = ema_fast # S4.2 (sl = fast ema -> ema 26)
+        sl    = prev3["open"] # S4.3 (sl = first candle open)
         risk  = entry - sl
 
         if risk > 0:
