@@ -284,7 +284,7 @@ The strategy (`ema_pullback.py`) implements **4 sub-strategies** divided into tw
 
 | Type | Strategies | RR | Priority |
 |---|---|---|---|
-| Scalp (Institutional) | Strategy 3 (Short, 3rd candle closes below EMA 55), Strategy 4 (Long, 3rd candle closes above EMA 55) | 1.2 | High |
+| Scalp (Institutional) | Strategy 3 (Short, Red-Red-Red crossing down), Strategy 4 (Long, Green-Red-Green crossing up) | 1.2 | High |
 | Trend | Strategy 1 (Long), Strategy 2 (Short) | 2.0 | Low |
 
 Signal output structure:

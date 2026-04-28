@@ -91,27 +91,27 @@ Priority 4 → Strategy 2 (Trend Short)  ← checked last
 
 ```
 Market is in an UPTREND
-+ 3 consecutive RED candles appeared before the current candle
-+ The 3rd red candle closes BELOW the slow EMA
++ 1st red candle closes ABOVE the fast EMA
++ 2nd red candle forms BETWEEN the fast and slow EMAs
++ 3rd red candle closes BELOW the slow EMA
 ```
 
 ### Plain English
 
-> Imagine the market has been going up (uptrend). Suddenly, 3 red candles appear in a row — that's called **exhaustion**. Big players (institutions) start selling. We ride that short-term drop.
+> Imagine the market has been going up (uptrend). A distinct sequence of 3 red candles steps down through the moving averages — starting above the fast EMA, pausing perfectly between them, and finally breaking decisively below the slow EMA. Big players are reversing the local trend. We ride that short-term drop.
 
 ### Code Explained
 
 ```python
-three_red = (
-    (prev1["close"] < prev1["open"]) and
-    (prev2["close"] < prev2["open"]) and
-    (prev3["close"] < prev3["open"])
+s3_pattern = (
+    is_red(prev3) and float(prev3["close"]) > ema_fast and
+    is_red(prev2) and is_body_between_emas(prev2) and
+    is_red(prev1) and float(prev1["close"]) < ema_slow
 )
 
-if uptrend and three_red and prev1["close"] < ema_slow:
+if uptrend and s3_pattern:
     entry = close           # enter at current price
-    # sl    = prev1["high"]->   # stop loss = top of last red candle
-    sl    = prev3["high"]   # v3.1: stop loss = top of first red candle
+    sl    = ema_fast        # v3.2: stop loss = fast ema
     risk  = sl - entry
 
     if risk > 0:
@@ -137,7 +137,7 @@ if uptrend and three_red and prev1["close"] < ema_slow:
     "entry": ...,
     "stop_loss": ...,
     "take_profit": ...,
-    "reason": "3 Red Candles (3rd closes below Slow EMA in Uptrend)"
+    "reason": "Red-Red-Red Pattern crossing EMAs downwards in Uptrend"
 }
 ```
 
@@ -149,26 +149,27 @@ if uptrend and three_red and prev1["close"] < ema_slow:
 
 ```
 Market is in a DOWNTREND
-+ 3 consecutive GREEN candles appeared before the current candle
-+ The 3rd green candle closes ABOVE the slow EMA
++ 1st green candle closes BELOW the slow EMA
++ 2nd green candle forms BETWEEN the fast and slow EMAs
++ 3rd green candle closes ABOVE the slow EMA
 ```
 
 ### Plain English
 
-> The market has been falling. Suddenly, 3 green candles appear in a row — institutions are buying. We ride that short-term bounce up.
+> The market has been falling. Suddenly, a distinct 3 green pattern breaks up through the moving averages — starting below the slow EMA, and decisively breaking above the slow EMA with a green candle. Institutions are buying the reversal. We ride that short-term bounce up.
 
 ### Code Explained
 
 ```python
-three_green = (
-    (prev1["close"] > prev1["open"]) and
-    (prev2["close"] > prev2["open"]) and
-    (prev3["close"] > prev3["open"])
+s4_pattern = (
+    is_green(prev3) and float(prev3["close"]) < ema_slow and
+    is_green(prev2) and is_body_between_emas(prev2) and
+    is_green(prev1) and float(prev1["close"]) > ema_slow
 )
 
-if downtrend and three_green and prev1["close"] > ema_slow:
+if downtrend and s4_pattern:
     entry = close
-    sl    = prev3["low"]    # v4.1: stop loss = bottom of first green candle
+    sl    = ema_fast        # v4.2: stop loss = fast ema
     risk  = entry - sl
 
     if risk > 0:
@@ -189,7 +190,7 @@ if downtrend and three_green and prev1["close"] > ema_slow:
     "type": "scalp",
     "strategy_id": 4,
     ...
-    "reason": "3 Green Candles (3rd closes above Slow EMA in Downtrend)"
+    "reason": "Green-Red-Green Pattern crossing EMAs upwards in Downtrend"
 }
 ```
 
@@ -304,8 +305,8 @@ return None
 |---|---|---|---|---|---|---|
 | 1 | Trend Long | Uptrend | Prev Candle In EMAs + Close > EMA Fast | LONG | 2.0 | Trend |
 | 2 | Trend Short | Downtrend | Prev Candle In EMAs + Close < EMA Slow | SHORT | 2.0 | Trend |
-| 3 | Scalp Short | Uptrend | 3 red candles in a row | SHORT | 1.2 | Scalp |
-| 4 | Scalp Long | Downtrend | 3 green candles in a row | LONG | 1.2 | Scalp |
+| 3 | Scalp Short | Uptrend | Red-Red-Red cross down | SHORT | 1.2 | Scalp |
+| 4 | Scalp Long | Downtrend | Green-Red-Green cross up | LONG | 1.2 | Scalp |
 
 ---
 

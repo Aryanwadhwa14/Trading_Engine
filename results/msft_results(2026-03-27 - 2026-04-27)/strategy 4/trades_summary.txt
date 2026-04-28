@@ -1,0 +1,22 @@
+
+msft BACKTEST RESULTS -> Strategy 4
+============================================================
+
+Configuration:
+- Ticker:       msft
+- Timeframe:    5m
+- Date Range:   2026-03-27 to 2026-04-27
+- EMA:          EMA 26 / 55
+
+Performance:
+- Total Trades: 3
+- Number of Units:    26
+- Wins:         1
+- Losses:       2
+- Win Rate:     33.3%
+- Net Profit:   $-39.24
+- Final Bal:    $9,960.76
+- Avg Win:      $27.89
+- Avg Loss:     $-33.56
+- Max Win:      $27.89
+- Max Loss:     $-43.50

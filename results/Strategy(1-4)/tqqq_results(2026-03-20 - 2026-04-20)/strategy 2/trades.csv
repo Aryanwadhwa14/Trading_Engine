@@ -1,2 +1,0 @@
-Trade Date,Ticker,Timeframe,Side,Trade Type,Strategy No,Units,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
-2026-03-30,TQQQ,5m,SHORT,TREND,2,244,2026-03-30 06:45:00 (PST),38.99,39.32,38.33,2026-03-30 08:05:00 (PST),39.32,80,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-80.5,LOSS

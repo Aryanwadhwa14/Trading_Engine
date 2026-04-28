@@ -1,7 +1,0 @@
-Trade Date,Ticker,Timeframe,Side,Trade Type,Strategy No,Units,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
-2026-03-25,NVDL,5m,LONG,TREND,1,127,2026-03-25 09:50:00 (PST),77.24,77.1,77.52,2026-03-25 09:55:00 (PST),77.1,5,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),SL Hit,-17.78,LOSS
-2026-03-25,NVDL,5m,LONG,TREND,1,127,2026-03-25 10:35:00 (PST),77.16,76.77,77.94,2026-03-25 11:50:00 (PST),76.77,75,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),SL Hit,-49.48,LOSS
-2026-04-02,NVDL,5m,LONG,TREND,1,130,2026-04-02 09:25:00 (PST),73.96,73.64,74.59,2026-04-02 10:15:00 (PST),74.59,50,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),TP Hit,82.32,WIN
-2026-04-09,NVDL,5m,LONG,TREND,1,121,2026-04-09 07:35:00 (PST),78.66,78.29,79.4,2026-04-09 07:50:00 (PST),79.4,15,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),TP Hit,89.54,WIN
-2026-04-13,NVDL,5m,LONG,TREND,1,114,2026-04-13 08:35:00 (PST),84.6,84.33,85.14,2026-04-13 08:40:00 (PST),84.33,5,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),SL Hit,-30.78,LOSS
-2026-04-16,NVDL,5m,LONG,TREND,1,102,2026-04-16 09:45:00 (PST),93.54,93.22,94.18,2026-04-16 10:00:00 (PST),93.22,15,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),SL Hit,-32.64,LOSS

@@ -2,14 +2,14 @@ CONFIG = {
 
     # ASSET CONFIG
     "TICKER_ENABILITY": "multi",  # "single" or "multi"
-    "SINGLE_TICKER": "CVX", # single for both backtest & forward test 
+    "SINGLE_TICKER": "NVDL", # single for both backtest & forward test 
     
     "MULTI_TICKER": ["NVDA", "MSFT", "AAPL","NVDL", "TQQQ", "TSLA", "AMD", "MU", "SNDK", "SOXL", "SNXX","JPM","V","MS","AXP","XOM","OXY","CVX"]                                   , # multi for only forward test 
     "TIMEFRAME": "5m",
 
 
     # DATE RANGE (Backtest)
-    "START_DATE": "2026-02-27",     
+    "START_DATE": "2026-03-27",     
     "END_DATE": "2026-04-27",
 
     # INDICATORS
