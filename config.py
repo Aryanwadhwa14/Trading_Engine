@@ -7,7 +7,7 @@ CONFIG = {
     "MULTI_TICKER": ["NVDA", "MSFT", "AAPL","NVDL", "TQQQ", "TSLA", "AMD", "MU", "SNDK", "SOXL", "SNXX","JPM","V","MS","AXP","XOM","OXY","CVX"]                                   , # multi for only forward test 
     "TIMEFRAME": "5m",
 
-
+            
     # DATE RANGE (Backtest)
     "START_DATE": "2026-02-28",     
     "END_DATE": "2026-04-28",
