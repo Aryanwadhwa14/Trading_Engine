@@ -29,6 +29,14 @@ def run_backtest(df, config, start_date, end_date):
         high = row["high"]
         low = row["low"]
 
+        # Check if current candle is the last one of the day
+        is_last_candle = False
+        if i < len(df) - 1:
+            if row.name.date() != df.iloc[i+1].name.date():
+                is_last_candle = True
+        else:
+            is_last_candle = True
+
         # ENTRY
         if position == 0:
 
@@ -71,6 +79,26 @@ def run_backtest(df, config, start_date, end_date):
 
                 balance += pnl
                 position = 0
+            
+            elif is_last_candle:
+                
+                exit_price = row["close"]
+                raw_pnl = exit_price - entry_price
+                pnl = raw_pnl * units
+
+                trade_log.append(_log_trade(
+                    ticker, config["TIMEFRAME"], "LONG", trade_type, strategy_id,
+                    entry_time, entry_price,
+                    stop_loss, take_profit,
+                    row.name, exit_price,
+                    entry_reason,
+                    "EOD Close",
+                    pnl,
+                    units
+                ))
+
+                balance += pnl
+                position = 0
 
         # EXIT SHORT
         elif position == -1:
@@ -88,6 +116,26 @@ def run_backtest(df, config, start_date, end_date):
                     row.name, exit_price,
                     entry_reason,
                     "SL Hit" if high >= stop_loss else "TP Hit",
+                    pnl,
+                    units
+                ))
+
+                balance += pnl
+                position = 0
+                
+            elif is_last_candle:
+                
+                exit_price = row["close"]
+                raw_pnl = entry_price - exit_price
+                pnl = raw_pnl * units
+
+                trade_log.append(_log_trade(
+                    ticker, config["TIMEFRAME"], "SHORT", trade_type, strategy_id,
+                    entry_time, entry_price,
+                    stop_loss, take_profit,
+                    row.name, exit_price,
+                    entry_reason,
+                    "EOD Close",
                     pnl,
                     units
                 ))
