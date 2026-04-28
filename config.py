@@ -2,13 +2,9 @@ CONFIG = {
 
     # ASSET CONFIG
     "TICKER_ENABILITY": "multi",  # "single" or "multi"
-    "SINGLE_TICKER": "CVX", # single for both backtest & forward test 
+    "SINGLE_TICKER": "NVDA", # single for both backtest & forward test 
     
-<<<<<<< HEAD
-    "MULTI_TICKER": ["NVDA", "MSFT", "AAPL","NVDL", "TQQQ", "TSLA", "AMD", "MU", "SNDK"], # multi for only forward test 
-=======
     "MULTI_TICKER": ["NVDA", "MSFT", "AAPL","NVDL", "TQQQ", "TSLA", "AMD", "MU", "SNDK", "SOXL", "SNXX","JPM","V","MS","AXP","XOM","OXY","CVX"]                                   , # multi for only forward test 
->>>>>>> df12596519768b292918827da95771b7fdd98c69
     "TIMEFRAME": "5m",
 
 
