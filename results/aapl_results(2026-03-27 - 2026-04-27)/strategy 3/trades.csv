@@ -1,2 +1,0 @@
-Trade Date,Ticker,Timeframe,Side,Trade Type,Strategy No,Units,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
-2026-04-23,aapl,5m,SHORT,SCALP,3,35,2026-04-23 09:45:00 (PST),273.06,273.47,272.57,2026-04-23 10:00:00 (PST),272.57,15,3 Red Candles (3rd closes below Slow EMA in Uptrend),TP Hit,17.04,WIN

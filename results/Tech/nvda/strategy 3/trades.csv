@@ -1,0 +1,2 @@
+Trade Date,Ticker,Timeframe,Side,Trade Type,Strategy No,Units,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
+2026-03-13,NVDA,5m,SHORT,SCALP,3,53,2026-03-13 07:20:00 (PST),183.87,184.01,183.7,2026-03-13 07:25:00 (PST),184.01,5,3 Red Candles (3rd closes below Slow EMA in Uptrend),SL Hit,-7.56,LOSS

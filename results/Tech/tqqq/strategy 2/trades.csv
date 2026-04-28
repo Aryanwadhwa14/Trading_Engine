@@ -1,0 +1,22 @@
+Trade Date,Ticker,Timeframe,Side,Trade Type,Strategy No,Units,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
+2026-03-03,TQQQ,5m,SHORT,TREND,2,210,2026-03-03 08:30:00 (PST),47.24,47.83,46.07,2026-03-03 08:45:00 (PST),47.83,15,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-123.27,LOSS
+2026-03-03,TQQQ,5m,SHORT,TREND,2,206,2026-03-03 08:50:00 (PST),47.74,47.79,47.64,2026-03-03 08:55:00 (PST),47.79,5,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-10.65,LOSS
+2026-03-03,TQQQ,5m,SHORT,TREND,2,206,2026-03-03 09:00:00 (PST),47.62,47.78,47.3,2026-03-03 09:10:00 (PST),47.3,10,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),TP Hit,65.49,WIN
+2026-03-03,TQQQ,5m,SHORT,TREND,2,207,2026-03-03 09:15:00 (PST),47.6,47.75,47.31,2026-03-03 09:25:00 (PST),47.75,10,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-30.2,LOSS
+2026-03-03,TQQQ,5m,SHORT,TREND,2,206,2026-03-03 09:50:00 (PST),47.4,47.71,46.77,2026-03-03 10:00:00 (PST),47.71,10,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-64.65,LOSS
+2026-03-06,TQQQ,5m,SHORT,TREND,2,194,2026-03-06 08:30:00 (PST),48.36,48.65,47.78,2026-03-06 08:35:00 (PST),48.65,5,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-56.59,LOSS
+2026-03-09,TQQQ,5m,SHORT,TREND,2,199,2026-03-09 07:50:00 (PST),47.02,47.32,46.41,2026-03-09 08:25:00 (PST),47.32,35,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-60.6,LOSS
+2026-03-11,TQQQ,5m,SHORT,TREND,2,188,2026-03-11 09:40:00 (PST),49.34,49.47,49.09,2026-03-11 09:55:00 (PST),49.47,15,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-23.48,LOSS
+2026-03-11,TQQQ,5m,SHORT,TREND,2,188,2026-03-11 12:00:00 (PST),49.14,49.3,48.81,2026-03-11 12:30:00 (PST),49.3,30,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-30.54,LOSS
+2026-03-12,TQQQ,5m,SHORT,TREND,2,194,2026-03-12 08:45:00 (PST),47.43,48.09,46.11,2026-03-13 06:45:00 (PST),48.09,1320,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-127.59,LOSS
+2026-03-13,TQQQ,5m,SHORT,TREND,2,197,2026-03-13 11:40:00 (PST),46.28,46.36,46.14,2026-03-13 12:00:00 (PST),46.14,20,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),TP Hit,28.07,WIN
+2026-03-18,TQQQ,5m,SHORT,TREND,2,193,2026-03-18 11:15:00 (PST),47.19,47.46,46.67,2026-03-18 11:55:00 (PST),46.67,40,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),TP Hit,100.76,WIN
+2026-03-19,TQQQ,5m,SHORT,TREND,2,205,2026-03-19 11:00:00 (PST),44.88,45.27,44.11,2026-03-19 11:10:00 (PST),45.27,10,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-79.88,LOSS
+2026-03-19,TQQQ,5m,SHORT,TREND,2,202,2026-03-19 11:30:00 (PST),45.05,45.25,44.64,2026-03-19 11:55:00 (PST),45.25,25,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-41.15,LOSS
+2026-03-20,TQQQ,5m,SHORT,TREND,2,205,2026-03-20 09:10:00 (PST),44.35,44.55,43.97,2026-03-20 09:30:00 (PST),43.97,20,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),TP Hit,78.91,WIN
+2026-03-24,TQQQ,5m,SHORT,TREND,2,210,2026-03-24 08:10:00 (PST),44.14,44.29,43.84,2026-03-24 08:15:00 (PST),44.29,5,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-31.4,LOSS
+2026-03-24,TQQQ,5m,SHORT,TREND,2,210,2026-03-24 11:05:00 (PST),43.71,43.95,43.24,2026-03-24 11:30:00 (PST),43.95,25,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-49.58,LOSS
+2026-03-30,TQQQ,5m,SHORT,TREND,2,234,2026-03-30 06:45:00 (PST),38.99,39.32,38.34,2026-03-30 08:05:00 (PST),39.32,80,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-76.47,LOSS
+2026-04-20,TQQQ,5m,SHORT,TREND,2,166,2026-04-20 09:50:00 (PST),57.67,57.81,57.41,2026-04-20 10:15:00 (PST),57.81,25,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-21.89,LOSS
+2026-04-21,TQQQ,5m,SHORT,TREND,2,165,2026-04-21 10:55:00 (PST),57.77,57.89,57.53,2026-04-21 11:00:00 (PST),57.89,5,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-19.61,LOSS
+2026-04-23,TQQQ,5m,SHORT,TREND,2,159,2026-04-23 11:40:00 (PST),59.35,59.56,58.92,2026-04-23 11:55:00 (PST),58.92,15,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),TP Hit,67.94,WIN

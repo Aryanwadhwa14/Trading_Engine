@@ -1,16 +1,16 @@
 CONFIG = {
 
     # ASSET CONFIG
-    "TICKER_ENABILITY": "multi",  # "single" or "multi"
-    "SINGLE_TICKER": "NVDL", # single for both backtest & forward test 
+    "TICKER_ENABILITY": "multi",  # multi ticker for only forward test 
+    "SINGLE_TICKER": "NVDL", # single ticker for both backtest & forward test 
     
     "MULTI_TICKER": ["NVDA", "MSFT", "AAPL","NVDL", "TQQQ", "TSLA", "AMD", "MU", "SNDK", "SOXL", "SNXX","JPM","V","MS","AXP","XOM","OXY","CVX"]                                   , # multi for only forward test 
     "TIMEFRAME": "5m",
 
 
     # DATE RANGE (Backtest)
-    "START_DATE": "2026-03-27",     
-    "END_DATE": "2026-04-27",
+    "START_DATE": "2026-02-28",     
+    "END_DATE": "2026-04-28",
 
     # INDICATORS
     "EMA_FAST": 26,
@@ -80,4 +80,13 @@ CONFIG = {
 # ZIM -> ZIM Integrated Shipping Services Ltd.
 # OSG -> Overseas Shipholding Group, Inc.
 
-
+# 4. Banks and finance tickers : "JPM","V","MS","AXP","BAC","WFC","GS","MS","C","USB"
+# JPM -> JPMorgan Chase & Co.
+# V -> Visa Inc.
+# MS -> Morgan Stanley
+# AXP -> American Express Company
+# BAC -> Bank of America Corporation
+# WFC -> Wells Fargo & Company  
+# GS -> Goldman Sachs Group, Inc.
+# C -> Citigroup Inc.
+# USB -> U.S. Bancorp
