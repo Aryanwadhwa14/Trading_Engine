@@ -3,3 +3,6 @@ pandas
 yfinance
 requests
 python-dotenv
+gspread
+google-auth
+tenacity

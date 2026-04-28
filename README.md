@@ -13,69 +13,55 @@ The system is designed around a clean **separation of concerns** — data flows 
 | `strategies/` | Generates trade signals (LONG / SHORT / None) |
 | `backtest/` | Simulates trades on historical data and produces performance stats |
 | `forward_test/` | Runs strategy on live data without real money (paper trading) |
-| `factors/` | Tests combinations of parameters to find the best settings |
-| `execution/` | Calculates position size based on account risk |
+| `upload/` | Uploads backtest results (trade logs + summary rows) to Google Sheets |
 | `alerts/` | Sends trade signals directly to Telegram |
 | `config.py` | Central settings file — change everything from one place |
 | `main.py` | Entry point — orchestrates the full pipeline |
+| `upload.py` | Standalone CLI to upload past backtest runs to Google Sheets |
 
 Currently active: **EMA Pullback Strategy** with 4 sub-strategies (2 trend + 2 scalp).
 
 ---
 
-# What aryan have implemented till now : 
+# Setup
+
+## 1. Install dependencies
+
+This project uses **`uv`** as the package manager. Do **not** use `pip install -r requirements.txt` (it's way to slow bro). The python version is mentioned in `.python-version` file.
+
+```bash
+uv sync
 ```
-data/
-    historical_loader.py  //yahoo finance2
-    live_data_loader.py 
 
-indicators/
-    ema.py
-    atr.py
+This reads `pyproject.toml`, resolves the lockfile, and installs all dependencies into the `.venv`.
 
-strategies/
-    ema_pullback.py // 4 strategies (2-> trend, 2 -> scalp)
+## 2. Configure environment
 
-backtest/
-   backtest_engine.py
+Copy `.env.example` to `.env`/`.env.local` and fill in your credentials:
 
-forward_test/
-   forward_test_engine.py
-
-alerts/
-   telegram_bot.py  -> give live signals for the single trade that have been put 
-
-results/
-  trade_metrics.csv
-  trade_summary.txt
-
-latency/
-  latency_logs.csv
-
-utils/
-  market_schedule.py -> checks if market is open or not (US or India based on config)
-
-config.py -> added different modes "backtest" and "forward"
-
-main.py
-```  
-
-# To Do next : 
+```bash
+cp .env.example .env
 ```
-factors/
-    factor_engine.py
 
-execution/
-    position_sizing.py
-
-alerts/
-    telegram_bot.py  -> update the alerts 
-
-config.py
-
-main.py
+```env
+TELEGRAM_BOT_TOKEN=your_token_here
+TELEGRAM_CHAT_ID=your_chat_id_here
+GOOGLE_SERVICE_ACCOUNT_JSON={"type":"service_account",...}   # paste full JSON as one line
 ```
-Note (Data pipelinee change) : To change the api to IBKR or Alpaca with good latency for 1 minute timeframe based trades 
+
+## 3. Run
+
+Use `uv run` instead of `python` to ensure the correct virtual environment is used:
+
+```bash
+uv run main.py                          # uses MODE from config.py
+uv run main.py --mode backtest          # force backtest mode
+uv run main.py --mode forward           # force forward test mode
+uv run main.py --mode backtest --use_multi true   # multi-ticker backtest
+uv run upload.py                        # upload past runs to Google Sheets
+```
+
+---
 
 # System Architecture
 
@@ -99,19 +85,22 @@ trading_engine/
 │   ├── backtest_engine.md          ← Full engine documentation
 │
 ├── forward_test/
-│   ├── forward_engine.py           ← Live paper trading loop
+│   ├── forward_test_engine.py      ← Live paper trading loop
 │
-├── factors/
-│   ├── factor_engine.py            ← Parameter optimization / grid search
-│
-├── execution/
-│   ├── position_sizing.py          ← Position size calculation from risk %
+├── upload/
+│   ├── __init__.py
+│   ├── tradelogs_update.py         ← Google Sheets upload logic
 │
 ├── alerts/
 │   ├── telegram_bot.py             ← Sends trade signals to Telegram
 │
+├── utils/
+│   ├── market_schedule.py          ← US/India market open/close check
+│   ├── logger.py                   ← Centralised loguru logger
+│
 ├── config.py                       ← All settings in one place
 ├── main.py                         ← Entry point — runs the full pipeline
+├── upload.py                       ← Standalone Sheets uploader CLI
 └── README.md
 ```
 
@@ -123,150 +112,281 @@ trading_engine/
 Market Data  (historical_loader / live_data_loader)
      │
      ▼
-Indicators   (ema.py → adds ema_fast, ema_slow columns)
-     │        (atr.py → adds atr column)
+Indicators   (ema.py → ema_fast, ema_slow columns)
+     │        (atr.py → atr column)
      ▼
-Strategy     (ema_pullback.py → returns signal dict or None)
+Strategy     (ema_pullback.py → signal dict or None)
      │
      ▼
-Backtest     (backtest_engine.py → loops candles, simulates SL/TP exits)
+Backtest     (backtest_engine.py → candle-by-candle simulation)
      │
      ▼
-Results      (trade_log.csv + summary.txt → saved in results/run_TIMESTAMP/)
+Results      (trades.csv + trades_summary.txt per strategy per ticker)
+     │
+     ▼
+Upload       (tradelogs_update.py → Google Sheets trade log tab + strategy row)
 ```
 
 ---
 
-# Module Explanation
+# Configuration System — `config.py`
 
----
-
-# Data Layer
-
-## Purpose
-
-The **data layer** provides market data to the trading system. It is the first step of the pipeline — everything else depends on clean, properly formatted price data.
-
-Two types of data are used:
-
-* **Historical data** → for backtesting (replay of the past)
-* **Live data** → for forward testing (paper trading)
-
----
-
-## historical_loader.py
-
-Loads historical market data used for backtesting. Under the hood it uses `yfinance` to download OHLCV price data from Yahoo Finance.
-
-Responsibilities:
-
-* Download historical price data for any ticker
-* Clean and normalize the dataset (lowercase columns, datetime index)
-* Return a standardized DataFrame ready for indicator calculation
-
-Expected output format:
-
-```
-datetime (index) | open | high | low | close | volume
-```
-
-Important rules:
-
-* Index must be **datetime**
-* Column names must be **lowercase**
-* Data must be **chronologically sorted** (oldest → newest)
-
----
-
-## live_data_loader.py
-
-Fetches the most recent candles for forward testing / paper trading.
-
-Responsibilities:
-
-* Retrieve latest market data for the configured ticker
-* Provide sufficient historical candles for indicator warm-up
-* Return the same format as `historical_loader`
-
-Indicators require **warm-up data** before becoming reliable.
-
-Example:
-
-```
-EMA 55 needs at least ~200 candles to stabilise
-```
-
----
-
-# Indicator Engine
-
-Indicators are separated into their own modules so they can be reused across any strategy.
-
-```
-indicators/
-    ema.py
-    atr.py
-```
-
-Ouput columns added to the DataFrame:
-
-```
-df["ema_fast"]   ← EMA of period EMA_FAST (e.g. 26)
-df["ema_slow"]   ← EMA of period EMA_SLOW (e.g. 55)
-df["atr"]        ← ATR of period ATR_PERIOD (e.g. 14)
-```
-
----
-
-## ema.py
-
-Calculates the **Exponential Moving Average (EMA)** — a smoothed average that gives more weight to recent prices.
-
-EMA formula:
-
-```
-EMA = Price × k + EMA_previous × (1 − k)
-k   = 2 / (period + 1)
-```
-
-Implementation uses pandas:
+All system parameters live in one place. Change here — no need to touch strategy or engine code.
 
 ```python
-df["close"].ewm(span=period, adjust=False).mean()
+from datetime import datetime, timedelta
+
+end_date   = datetime.now()
+start_date = end_date - timedelta(days=60)   # rolling 60-day window
+
+CONFIG = {
+
+    # ── ASSET CONFIG ────────────────────────────────────────────────────────
+    "USE_MULTI":    True,          # True = multi-ticker run, False = single ticker
+    "SINGLE_TICKER": "NVDL",      # used when USE_MULTI = False
+    "MULTI_TICKER": [              # full list for multi-ticker runs
+        "NVDA", "MSFT", "AAPL", "NVDL", "TQQQ", "TSLA",
+        "AMD",  "MU",   "SNDK", "SOXL", "SNXX",
+        "JPM",  "V",    "MS",   "AXP",
+        "XOM",  "OXY",  "CVX"
+    ],
+    "TIMEFRAME": "5m",             # candle interval (1m, 5m, 15m, 1h, 1d …)
+
+    # ── DATE RANGE (Backtest) ────────────────────────────────────────────────
+    "START_DATE": start_date.strftime("%Y-%m-%d"),
+    "END_DATE":   end_date.strftime("%Y-%m-%d"),
+
+    # ── INDICATORS ───────────────────────────────────────────────────────────
+    "EMA_FAST":   26,
+    "EMA_SLOW":   55,
+    "ATR_PERIOD": 14,              # kept for future use
+    "INDICATORS": "EMA 26/55",    # label written to trade log & strategy sheet
+    "MARKET":     "US",           # written to trade log & strategy sheet
+
+    # ── CAPITAL & RISK ───────────────────────────────────────────────────────
+    "INITIAL_BALANCE": 10000,     # starting capital ($)
+    "RISK_PERCENT":    0.01,      # 1% risk per trade (future position sizing)
+
+    # ── STRATEGY CONFIG ──────────────────────────────────────────────────────
+    "ENABLE_S1": True,            # Trend Long
+    "ENABLE_S2": True,            # Trend Short
+    "ENABLE_S3": False,           # Scalp Short (Red-Red-Red)
+    "ENABLE_S4": False,           # Scalp Long  (Green-Red-Green)
+    "TREND_RR":  2.0,             # Risk:Reward for trend trades
+    "SCALP_RR":  1.2,             # Risk:Reward for scalp trades
+
+    # ── OUTPUT CONTROL ───────────────────────────────────────────────────────
+    "SAVE_RESULTS":   True,
+    "RESULTS_FOLDER": "results",
+
+    # ── MODE ─────────────────────────────────────────────────────────────────
+    "MODE": "backtest",           # "backtest" or "forward"
+
+    # ── GOOGLE SHEETS UPLOAD ─────────────────────────────────────────────────
+    "UPLOAD_TO_SHEETS":   False,  # True = auto-upload after every backtest run
+                                  # False = skip (upload manually via upload.py)
+    "STRATEGY_SHEET_ID":   "11dMzBHzDPkDgPYgDwdf9xAMu5-9OxtiVlCfJx08Miq0",
+    "STRATEGY_SHEET_NAME": "Strategy Sheet 2 months",
+    "TRADE_LOG_SHEET_ID":  "1ScmIPXicEoS_Jlk05tYAinPQDGXTd4HmlIuSJZGSfk8",
+    "TRADE_LOG_SHEET_NAME": "",   # not used — tab name = folder name at runtime
+}
 ```
 
-`adjust=False` is critical — it ensures the EMA matches the **standard trading platform EMA** (e.g. TradingView).
+### Config quick-reference
 
-Currently configured:
+| Key | Type | What it controls |
+|---|---|---|
+| `USE_MULTI` | bool | Single vs multi-ticker mode |
+| `SINGLE_TICKER` | str | Ticker when `USE_MULTI = False` |
+| `MULTI_TICKER` | list | All tickers for multi-ticker runs |
+| `TIMEFRAME` | str | Candle interval passed to yfinance |
+| `START_DATE` / `END_DATE` | str | Backtest date window (auto-computed as rolling 60 days) |
+| `EMA_FAST` / `EMA_SLOW` | int | EMA periods |
+| `INDICATORS` | str | Label written to CSV + Sheets |
+| `MARKET` | str | Market label written to CSV + Sheets |
+| `INITIAL_BALANCE` | int | Starting capital for PnL calculation |
+| `ENABLE_S1..S4` | bool | Toggle individual strategies on/off |
+| `TREND_RR` / `SCALP_RR` | float | Risk:Reward multiplier per trade type |
+| `MODE` | str | `"backtest"` or `"forward"` |
+| `UPLOAD_TO_SHEETS` | bool | Auto-upload to Sheets after backtest |
+| `STRATEGY_SHEET_ID` | str | Google Sheet ID for strategy summary |
+| `TRADE_LOG_SHEET_ID` | str | Google Sheet ID for raw trade logs |
 
+---
+
+# Running Scripts
+
+## `main.py` — Primary entry point
+
+```bash
+# Run using MODE set in config.py
+uv run main.py
+
+# Override mode via CLI flag
+uv run main.py --mode backtest
+uv run main.py --mode forward
+
+# Override multi-ticker toggle
+uv run main.py --mode backtest --use_multi true
+uv run main.py --mode backtest --use_multi false
 ```
-EMA_FAST = 26
-EMA_SLOW = 55
+
+## `upload.py` — Standalone Google Sheets uploader
+
+Used to manually upload past backtest runs (or selectively upload without rerunning backtests).
+
+```bash
+# Upload ALL runs in results/
+uv run upload.py
+
+# Upload a specific run folder
+uv run upload.py --run results/01_run
+
+# Upload only one ticker from a run
+uv run upload.py --run results/01_run --ticker nvdl
+
+# Override the strategy sheet name
+uv run upload.py --sheet "Strategy Sheet 2 months"
+
+# Dry-run: see what would be uploaded without writing anything
+uv run upload.py --dry-run
+
+# Combine flags
+uv run upload.py --run results/01_run --ticker aapl --dry-run
 ```
 
 ---
 
-## atr.py
-
-Calculates **Average True Range (ATR)** — a measure of how much a market moves on average per candle.
-
-Used for:
-
-* Stop-loss placement (kept for future use)
-* Risk management
-* Position sizing
-
-True Range formula:
+# Backtesting Engine
 
 ```
-TR = max(
-    high − low,
-    abs(high − previous_close),
-    abs(low  − previous_close)
-)
+backtest/
+    backtest_engine.py
+    backtest_engine.md   ← Full engine documentation
 ```
 
-ATR = rolling mean of TR over `ATR_PERIOD` candles (currently 14).
+The backtesting engine **replays historical data candle by candle** and simulates exactly what would happen if the strategy were live.
+
+### How it works
+
+```
+1. Loop through every candle (starting from candle 5)
+2. If no position → ask strategy for a signal
+3. If signal → enter trade (record entry, SL, TP, units)
+4. If LONG → check: low hit SL? high hit TP? last candle of day?
+5. If SHORT → check: high hit SL? low hit TP? last candle of day?
+6. On any exit → log trade with full details
+7. After all candles → compute summary stats
+```
+
+### Output structure
+
+Each backtest run creates a numbered folder under `results/`:
+
+```
+results/
+  01_run/
+    nvdl_results(2026-02-28 - 2026-04-29)/
+      strategy 1/
+        trades.csv            ← every trade, all columns
+        trades_summary.txt    ← performance summary
+      strategy 2/
+        trades.csv
+        trades_summary.txt
+    aapl_results(2026-02-28 - 2026-04-29)/
+      strategy 1/
+        ...
+  02_run/
+    ...
+```
+
+### trades.csv schema
+
+| Column | Description |
+|---|---|
+| Trade Date | Calendar date of trade entry |
+| Ticker | Asset symbol |
+| Market | Market label (e.g. `US`) |
+| Timeframe | Candle interval |
+| Side | `LONG` or `SHORT` |
+| Trade Type | `TREND` or `SCALP` |
+| Strategy No | 1 / 2 / 3 / 4 |
+| Indicators | Indicator label (e.g. `EMA 26/55`) |
+| Units | Number of shares traded |
+| Entry Time | Entry timestamp (PST) |
+| Entry Price | Entry price (rounded to 2 dp) |
+| Stop Loss | SL price |
+| Take Profit | TP price |
+| Exit Time | Exit timestamp (PST) |
+| Exit Price | Exit price |
+| Duration (min) | Trade duration in minutes |
+| Entry Reason | Human-readable signal trigger |
+| Exit Reason | `SL Hit` / `TP Hit` / `EOD Close` |
+| PnL ($) | Dollar profit/loss |
+| Return % | % return on entry price |
+| Result | `WIN` or `LOSS` |
+
+### Performance metrics (trades_summary.txt)
+
+```
+Total Trades    Win Rate       Net Profit
+Wins / Losses   Avg Win ($)    Avg Loss ($)
+Max Win ($)     Max Loss ($)   Final Balance ($)
+Avg Units
+```
+
+📄 **See full engine docs:** [`backtest/backtest_engine.md`](backtest/backtest_engine.md)
+
+---
+
+# Google Sheets Upload
+
+The upload system writes results to two separate spreadsheets after a backtest run.
+
+## How it works
+
+```
+backtest_engine.py
+    │
+    ├─ (after each strategy CSV is saved)
+    │
+    ├── upload_trade_log_tab()    → Trade Log Sheet
+    │     tab name = folder name  (e.g. nvdl_results(2026-02-28 - 2026-04-29))
+    │     writes: full trades.csv content (header + all rows)
+    │
+    └── append_strategy_row()    → Strategy Sheet
+          finds last filled row → appends one summary row below it
+```
+
+## Strategy Sheet columns
+
+| Col | Field | Source |
+|---|---|---|
+| A | Ticker | trades.csv |
+| B | Market | `config["MARKET"]` |
+| C | Category | *(blank — fill manually)* |
+| D | Type | trades.csv (`Trade Type`) |
+| E | Indicators | `config["INDICATORS"]` |
+| F | Strategy (Updated) | Strategy number |
+| G | Backtest %age | Win rate % |
+| H | PnL $ | Net profit |
+| I | Return % | Net PnL / initial balance |
+| J | Backtesting Trade logs | Local file path to trades.csv |
+| K | Backtesting Summary | Local file path to trades_summary.txt |
+| L | Paper trading result | *(blank — fill manually)* |
+| M | Actual Trading Result | *(blank — fill manually)* |
+
+## Auto-upload toggle
+
+```python
+# config.py
+"UPLOAD_TO_SHEETS": True    # uploads automatically after every backtest
+"UPLOAD_TO_SHEETS": False   # skips — use upload.py to upload manually later
+```
+
+## Auth
+
+Reads `GOOGLE_SERVICE_ACCOUNT_JSON` from `.env` as a raw JSON string (service account credentials from Google Cloud Console).
 
 ---
 
@@ -275,19 +395,30 @@ ATR = rolling mean of TR over `ATR_PERIOD` candles (currently 14).
 ```
 strategies/
     ema_pullback.py
-    ema_strategy.md   ← Full strategy documentation (see this file)
+    ema_strategy.md   ← Full strategy documentation
 ```
 
-This layer generates **trade signals only** — it never executes anything.
+Generates **trade signals only** — never executes anything.
 
-The strategy (`ema_pullback.py`) implements **4 sub-strategies** divided into two types:
+Implements **4 sub-strategies**:
 
-| Type | Strategies | RR | Priority |
-|---|---|---|---|
-| Scalp (Institutional) | Strategy 3 (Short, Red-Red-Red crossing down), Strategy 4 (Long, Green-Red-Green crossing up) | 1.2 | High |
-| Trend | Strategy 1 (Long), Strategy 2 (Short) | 2.0 | Low |
+| # | Side | Type | Trigger | RR |
+|---|---|---|---|---|
+| S1 | LONG | Trend | Candle between EMAs → breaks above EMA Fast | 2.0 |
+| S2 | SHORT | Trend | Candle between EMAs → breaks below EMA Fast | 2.0 |
+| S3 | SHORT | Scalp | 3 consecutive red candles crossing down through EMAs | 1.2 |
+| S4 | LONG | Scalp | Green-Red-Green pattern crossing up through EMAs | 1.2 |
 
-Signal output structure:
+Toggle strategies individually in config:
+
+```python
+"ENABLE_S1": True,
+"ENABLE_S2": True,
+"ENABLE_S3": False,
+"ENABLE_S4": False,
+```
+
+Signal output:
 
 ```python
 {
@@ -297,261 +428,101 @@ Signal output structure:
     "entry":       price,
     "stop_loss":   price,
     "take_profit": price,
-    "reason":      "Prev Candle Between EMAs + Break Above EMA Fast"   # human-readable trigger
+    "reason":      "Prev Candle Between EMAs + Break Above EMA Fast"
 }
 ```
 
-If no setup is found → returns `None` (no trade).
+Returns `None` if no setup found.
 
 📄 **See full strategy docs:** [`strategies/ema_strategy.md`](strategies/ema_strategy.md)
 
 ---
 
-# Backtesting Engine
+# Forward Testing Mode (Live)
 
 ```
-backtest/
-    backtest_engine.py
-    backtest_engine.md   ← Full engine documentation (see this file)
+forward_test/
+    forward_test_engine.py
 ```
 
-The backtesting engine **replays historical data candle by candle** and simulates exactly what would happen if the strategy were live.
-
-How it works:
-
-```
-1. Loop through every candle (starting from candle 5)
-2. If no position → ask strategy for a signal
-3. If signal → enter trade (store entry, SL, TP)
-4. If in LONG → check if low hit SL or high hit TP → exit
-5. If in SHORT → check if high hit SL or low hit TP → exit
-6. Log every trade with full details
-7. After all candles → compute summary stats
+```bash
+uv run main.py --mode forward
 ```
 
-Metrics generated:
+Runs an infinite loop — fetches live candles every `N` seconds (aligned to the next candle boundary), evaluates the strategy, and fires a Telegram alert if a signal is found.
 
-```
-Total Trades    Win Rate       Net Profit
-Wins / Losses   Avg Win        Avg Loss
-Max Win         Max Loss       Final Balance
-```
+Key behaviours:
+- **Signal deduplication** — hashes signal direction + type + strategy ID + entry price to avoid duplicate alerts within the same candle
+- **Latency profiling** — logs fetch/compute/Telegram times to `latency/latency_logs.csv`
+- **Error resilience** — broad try/except keeps the loop alive through network hiccups
 
-Output files saved per run:
-
-```
-results/
-  run_YYYYMMDD_HHMMSS/
-      trade_log.csv   ← every trade with all details
-      summary.txt     ← overall performance stats
-```
-
-📄 **See full backtesting engine docs:** [`backtest/backtest_engine.md`](backtest/backtest_engine.md)
-
----
-
-# Configuration System — `config.py`
-
-All system parameters live in one place. Change anything here — no need to touch strategy or engine code.
-
-Current config:
-
-```python
-CONFIG = {
-
-    # ASSET
-    "TICKER_ENABILITY": "multi",    # "single" or "multi"
-    "SINGLE_TICKER":   "NVDA",
-    "MULTI_TICKER":    ["NVDA", "AAPL", "TSLA"],
-    "TIMEFRAME":       "1d",        # daily candles
-
-    # DATE RANGE
-    "START_DATE":      "2025-09-01",
-    "END_DATE":        "2026-02-17",
-
-    # INDICATORS
-    "EMA_FAST":        26,
-    "EMA_SLOW":        55,
-    "ATR_PERIOD":      14,
-
-    # CAPITAL & RISK
-    "INITIAL_BALANCE": 10000,       # starting $10,000
-    "RISK_PERCENT":    0.01,        # 1% risk per trade (future use)
-
-    # STRATEGY
-    "TREND_RR":        2.0,         # Trend trades: 1:2 RR
-    "SCALP_RR":        1.2,         # Scalp trades: 1:1.2 RR
-
-    # BACKTEST CONTROL
-    "MAX_TRADES":      10000,
-
-    # OUTPUT
-    "SAVE_RESULTS":    True,
-    "RESULTS_FOLDER":  "results"
-
-    # MODES
-    "MODE": "forward"  # "backtest" or "forward"
-}
-```
-
----
-
-# Main Entry Point — `main.py`
-
-`main.py` is the **single command** that runs the entire pipeline.
-
-```python
-python main.py
-```
-
-What it does step by step:
-
-```
-1. Load config from config.py
-2. Download historical data (yfinance)
-3. Filter to START_DATE → END_DATE
-4. Calculate EMA Fast, EMA Slow, ATR
-5. Run backtest_engine
-6. Save trade_log.csv + summary.txt
-7. Print summary to terminal
-```
-
----
-
-# Complete Workflows
-
-## Backtesting Mode (Currently Active)
-
-```
-main.py
-   │
-   ▼
-historical_loader  → downloads NVDA 1d from yfinance
-   │
-   ▼
-ema.py + atr.py    → adds EMA26, EMA55, ATR14 columns
-   │
-   ▼
-ema_pullback.py    → checks each candle for signals
-   │
-   ▼
-backtest_engine    → simulates entries/exits, tracks PnL
-   │
-   ▼
-results/           → trade_log.csv + summary.txt
-```
-
----
-
-## Forward Testing Mode (Live)
-
-```text
-main.py
-   │
-   ▼
-live_data_loader   → fetches latest candles
-   │
-   ▼
-ema.py + atr.py
-   │
-   ▼
-ema_pullback.py    → generates signal on latest candle
-   │
-   ▼
-position_sizing.py → calculates shares based on account risk
-   │
-   ▼
-telegram_bot.py    → sends alert to Telegram
-   │
-   ▼
-sleep(next_candle) → waits and repeats
-```
-
-### Technical Implementation
-
-The Forward Testing Engine uses an infinite `while True:` loop inside Python paired with a `time.sleep()` delay to continuously poll the market at a set interval (e.g., 10 seconds). Each iteration:
-1. Fetches the latest live candles using the `live_data_loader`.
-2. Appends the needed EMA calculations and drops rows to satisfy the indicator warmup period.
-3. Feeds the current data to the trading strategy to evaluate signals on the most recent candle.
-4. Employs a unique `signal_key` deduplication logic (hashing signal direction, type, strategy ID, and entry price) to ensure only genuinely *new* signals fire Telegram alerts.
-5. Automatically tracks system latency profiling metrics to `latency/latency_logs.csv`, including data fetch, computation, and Telegram transmission times.
-6. If a script error or internet outage occurs, broad `try-except` blocks catch the error to prevent the loop from breaking, guaranteeing continuous uptime.
-
-📄 **See full forward testing engine docs:** [`forward_test/forward_test_engine.md`](forward_test/forward_test_engine.md)
-
----
-
-# Risk & Execution Engine — `execution/position_sizing.py` - Not Implemented Yet
-
-Calculates **how many shares to buy** based on account risk settings.
-
-Formula:
-
-```
-Risk per trade = Account Balance × Risk %
-Shares         = Risk / (Entry Price − Stop Loss)
-```
-
-Example with current config (`RISK_PERCENT = 0.01`, `INITIAL_BALANCE = $10,000`):
-
-```
-Risk         = $10,000 × 1% = $100
-SL Distance  = $2
-Shares       = $100 / $2 = 50 shares
-```
-
----
-
-# Factor Engine — `factors/factor_engine.py` - Not Implemented Yet
-
-Used for **parameter optimization** — runs the backtest across many combinations of parameters to find the best-performing settings.
-
-Example grid search:
-
-```python
-for fast in [9, 15, 26]:
-    for slow in [30, 55, 100]:
-        for rr in [1.5, 2.0, 2.5]:
-            run_backtest(fast, slow, rr)
-```
-
-Finds the combination that maximises win rate, net profit, or any other target metric.
+📄 **See full docs:** [`forward_test/forward_test_engine.md`](forward_test/forward_test_engine.md)
 
 ---
 
 # Telegram Alert System — `alerts/telegram_bot.py`
 
-Sends trade signals directly to a Telegram chat when the forward testing engine generates a signal.
+Sends signals to a Telegram chat when the forward test engine fires.
 
-## How it was implemented (`aryan14trade_bot`)
+Setup (one-time):
+1. Message `@BotFather` → `/newbot` → get `BOT_TOKEN`
+2. Send a message to the bot → fetch `CHAT_ID` via `getUpdates`
+3. Store both in `.env`
 
-To make this work seamlessly and receive real-time notifications, a custom bot named **aryan14trade_bot** was created:
-
-1. **Bot Creation:** Messaged `@BotFather` on Telegram and used the `/newbot` command.
-2. **Naming the Bot:** Registered the bot under the handle `@aryan14trade_bot`.
-3. **Retrieving Credentials:** `@BotFather` provided a unique `BOT_TOKEN` for API access.
-4. **Getting the Chat ID:** Sent a test message to the new bot from the intended chat, then fetched the `CHAT_ID` using the Telegram `getUpdates` API endpoint.
-5. **Code Integration:** 
-   * Stored the `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` securely inside a local `.env` file to prevent exposing keys in the source code.
-   * `python-dotenv` loads these environment variables into `telegram_bot.py`.
-   * The `requests` Python library is used to send an HTTP `POST` request to the Telegram API `/sendMessage` endpoint.
-
-Example alert format:
+Example alert:
 
 ```
 TRADE SIGNAL
 
-Ticker:     NVDA
-Timeframe:  1D
-Strategy:   EMA 26/55 → Strategy 1
+Ticker:      NVDA
+Timeframe:   5m
+Strategy:    EMA 26/55 → Strategy 1
 
-Direction:  LONG
-Type:       Trend
+Direction:   LONG
+Type:        Trend
 
-Entry:      912.50
-Stop Loss:  905.10
+Entry:       912.50
+Stop Loss:   905.10
 Take Profit: 927.30
 ```
+
+---
+
+# Data Layer
+
+## `historical_loader.py`
+
+Downloads OHLCV data via `yfinance`. Returns a standardised DataFrame:
+
+```
+datetime (index) | open | high | low | close | volume
+```
+
+Rules: index must be datetime, columns must be lowercase, data sorted oldest → newest.
+
+## `live_data_loader.py`
+
+Fetches the most recent candles for forward testing. Same output format as historical loader. Includes sufficient warm-up candles for EMA stability (EMA 55 needs ~200 candles).
+
+---
+
+# Indicator Engine
+
+```
+indicators/
+    ema.py
+    atr.py
+```
+
+Columns added to DataFrame:
+
+```
+df["ema_fast"]   ← EMA(EMA_FAST)   e.g. EMA 26
+df["ema_slow"]   ← EMA(EMA_SLOW)   e.g. EMA 55
+df["atr"]        ← ATR(ATR_PERIOD) e.g. ATR 14
+```
+
+EMA uses `adjust=False` to match TradingView's standard EMA.
 
 ---
 
@@ -561,23 +532,23 @@ Take Profit: 927.30
 |---|---|---|
 | 1 | `data/historical_loader.py` | ✅ Done |
 | 2 | `indicators/ema.py`, `atr.py` | ✅ Done |
-| 3 | `strategies/ema_pullback.py` | ✅ Done |
+| 3 | `strategies/ema_pullback.py` (S1–S4) | ✅ Done |
 | 4 | `backtest/backtest_engine.py` | ✅ Done |
-| 5 | `execution/position_sizing.py` | 🔲 Planned |
-| 6 | `forward_test/forward_test_engine.py` | ✅ Done |
-| 7 | `alerts/telegram_bot.py` | ✅ Done |
-| 8 | `factors/factor_engine.py` | 🔲 Planned |
+| 5 | `forward_test/forward_test_engine.py` | ✅ Done |
+| 6 | `alerts/telegram_bot.py` | ✅ Done |
+| 7 | `upload/tradelogs_update.py` + `upload.py` | ✅ Done |
 
 ---
 
 # Future Improvements
 
-* Walk-forward testing (avoid overfitting)
-* Portfolio backtesting (multiple assets)
-* Multi-timeframe analysis (e.g. daily + 1h confluence)
-* Monte Carlo simulation (robustness testing)
-* Machine learning signal filters
-* Live trade execution via broker API
+- Walk-forward testing (avoid overfitting)
+- Portfolio backtesting (multiple assets simultaneously)
+- Multi-timeframe analysis (daily + 1h confluence)
+- Monte Carlo simulation (robustness testing)
+- Machine learning signal filters
+- Live trade execution via IBKR / Alpaca API
+- Link strategy sheet rows to trade log tabs dynamically
 
 ---
 

@@ -90,7 +90,7 @@ def _print_signal(signal: dict, config: dict) -> None:
 
 def _format_telegram(signal: dict, config: dict) -> str:
     """Format the Telegram alert message."""
-    ticker = config.get("SINGLE_TICKER", "")
+    ticker = config["SINGLE_TICKER"]
     now_utc = datetime.now(timezone.utc)
     
     if ticker.endswith(".NS") or ticker.endswith(".BO"):
@@ -169,7 +169,7 @@ def run_forward_test(config: dict) -> None:
             return
 
         # 4. Evaluate strategy
-        signal = generate_signal(df)
+        signal = generate_signal(df, config)
         t_compute_end = time.perf_counter()
         compute_ms = (t_compute_end - t_compute_start) * 1000
 
