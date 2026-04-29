@@ -1,0 +1,13 @@
+Trade Date,Ticker,Timeframe,Side,Trade Type,Strategy No,Units,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
+2026-03-03,NVDA,5m,LONG,SCALP,4,55,2026-03-03 10:45:00 (PST),180.6,180.17,181.12,2026-03-03 11:00:00 (PST),180.17,15,3 Green Candles (3rd closes above Slow EMA in Downtrend),SL Hit,-23.65,LOSS
+2026-03-05,NVDA,5m,LONG,SCALP,4,54,2026-03-05 12:20:00 (PST),181.92,181.1,182.9,2026-03-05 12:50:00 (PST),182.9,30,3 Green Candles (3rd closes above Slow EMA in Downtrend),TP Hit,53.14,WIN
+2026-03-12,NVDA,5m,LONG,SCALP,4,53,2026-03-12 09:05:00 (PST),184.83,183.87,185.98,2026-03-12 09:50:00 (PST),183.87,45,3 Green Candles (3rd closes above Slow EMA in Downtrend),SL Hit,-50.87,LOSS
+2026-03-18,NVDA,5m,LONG,SCALP,4,54,2026-03-18 11:05:00 (PST),183.01,182.49,183.62,2026-03-18 11:15:00 (PST),182.49,10,3 Green Candles (3rd closes above Slow EMA in Downtrend),SL Hit,-27.81,LOSS
+2026-03-19,NVDA,5m,LONG,SCALP,4,55,2026-03-19 11:30:00 (PST),178.98,178.86,179.12,2026-03-19 11:35:00 (PST),178.86,5,3 Green Candles (3rd closes above Slow EMA in Downtrend),SL Hit,-6.6,LOSS
+2026-03-19,NVDA,5m,LONG,SCALP,4,54,2026-03-19 12:20:00 (PST),179.83,178.83,181.03,2026-03-19 12:30:00 (PST),178.83,10,3 Green Candles (3rd closes above Slow EMA in Downtrend),SL Hit,-54.0,LOSS
+2026-03-24,NVDA,5m,LONG,SCALP,4,56,2026-03-24 11:30:00 (PST),175.43,175.28,175.61,2026-03-24 11:35:00 (PST),175.61,5,3 Green Candles (3rd closes above Slow EMA in Downtrend),TP Hit,10.08,WIN
+2026-04-02,NVDA,5m,LONG,SCALP,4,56,2026-04-02 08:05:00 (PST),176.41,175.59,177.39,2026-04-02 12:10:00 (PST),177.39,245,3 Green Candles (3rd closes above Slow EMA in Downtrend),TP Hit,55.1,WIN
+2026-04-20,NVDA,5m,LONG,SCALP,4,49,2026-04-20 10:25:00 (PST),199.71,199.51,199.94,2026-04-20 10:30:00 (PST),199.51,5,3 Green Candles (3rd closes above Slow EMA in Downtrend),SL Hit,-9.8,LOSS
+2026-04-20,NVDA,5m,LONG,SCALP,4,49,2026-04-20 10:55:00 (PST),200.07,199.7,200.53,2026-04-20 11:25:00 (PST),200.53,30,3 Green Candles (3rd closes above Slow EMA in Downtrend),TP Hit,22.34,WIN
+2026-04-21,NVDA,5m,LONG,SCALP,4,49,2026-04-21 12:30:00 (PST),200.96,200.48,201.54,2026-04-21 12:35:00 (PST),200.48,5,3 Green Candles (3rd closes above Slow EMA in Downtrend),SL Hit,-23.52,LOSS
+2026-04-28,NVDA,5m,LONG,SCALP,4,45,2026-04-28 11:20:00 (PST),212.43,211.74,213.25,2026-04-28 11:35:00 (PST),213.25,15,3 Green Candles (3rd closes above Slow EMA in Downtrend),TP Hit,36.99,WIN

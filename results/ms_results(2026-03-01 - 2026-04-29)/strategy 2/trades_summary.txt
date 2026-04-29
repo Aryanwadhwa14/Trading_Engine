@@ -1,0 +1,22 @@
+
+MS BACKTEST RESULTS -> Strategy 2
+============================================================
+
+Configuration:
+- Ticker:       MS
+- Timeframe:    5m
+- Date Range:   2026-03-01 to 2026-04-29
+- EMA:          EMA 26 / 55
+
+Performance:
+- Total Trades: 12
+- Number of Units:    59
+- Wins:         6
+- Losses:       6
+- Win Rate:     50.0%
+- Net Profit:   $108.14
+- Final Bal:    $10,108.14
+- Avg Win:      $55.73
+- Avg Loss:     $-37.71
+- Max Win:      $133.80
+- Max Loss:     $-72.23

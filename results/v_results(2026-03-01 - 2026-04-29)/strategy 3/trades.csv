@@ -1,0 +1,5 @@
+Trade Date,Ticker,Timeframe,Side,Trade Type,Strategy No,Units,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
+2026-03-04,V,5m,SHORT,SCALP,3,31,2026-03-04 09:10:00 (PST),323.09,323.35,322.78,2026-03-04 09:20:00 (PST),322.78,10,3 Red Candles (3rd closes below Slow EMA in Uptrend),TP Hit,9.67,WIN
+2026-03-04,V,5m,SHORT,SCALP,3,31,2026-03-04 09:25:00 (PST),322.81,323.09,322.47,2026-03-04 09:30:00 (PST),322.47,5,3 Red Candles (3rd closes below Slow EMA in Uptrend),TP Hit,10.42,WIN
+2026-04-06,V,5m,SHORT,SCALP,3,32,2026-04-06 11:00:00 (PST),303.07,303.4,302.67,2026-04-06 11:05:00 (PST),303.4,5,3 Red Candles (3rd closes below Slow EMA in Uptrend),SL Hit,-10.56,LOSS
+2026-04-16,V,5m,SHORT,SCALP,3,31,2026-04-16 07:10:00 (PST),315.32,315.73,314.83,2026-04-16 07:25:00 (PST),314.83,15,3 Red Candles (3rd closes below Slow EMA in Uptrend),TP Hit,15.25,WIN

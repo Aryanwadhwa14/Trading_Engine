@@ -1,0 +1,22 @@
+
+TSLA BACKTEST RESULTS -> Strategy 2
+============================================================
+
+Configuration:
+- Ticker:       TSLA
+- Timeframe:    5m
+- Date Range:   2026-03-01 to 2026-04-29
+- EMA:          EMA 26 / 55
+
+Performance:
+- Total Trades: 23
+- Number of Units:    25
+- Wins:         9
+- Losses:       14
+- Win Rate:     39.1%
+- Net Profit:   $-15.54
+- Final Bal:    $9,984.46
+- Avg Win:      $52.04
+- Avg Loss:     $-34.56
+- Max Win:      $123.74
+- Max Loss:     $-70.93

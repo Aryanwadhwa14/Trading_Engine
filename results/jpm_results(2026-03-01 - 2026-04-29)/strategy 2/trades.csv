@@ -1,0 +1,19 @@
+Trade Date,Ticker,Timeframe,Side,Trade Type,Strategy No,Units,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
+2026-03-04,JPM,5m,SHORT,TREND,2,33,2026-03-04 09:25:00 (PST),298.42,298.71,297.83,2026-03-04 09:40:00 (PST),297.83,15,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),TP Hit,19.37,WIN
+2026-03-05,JPM,5m,SHORT,TREND,2,33,2026-03-05 10:15:00 (PST),294.98,295.93,293.08,2026-03-05 11:25:00 (PST),293.08,70,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),TP Hit,62.55,WIN
+2026-03-06,JPM,5m,SHORT,TREND,2,34,2026-03-06 10:35:00 (PST),287.09,288.16,284.95,2026-03-06 11:20:00 (PST),288.16,45,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-36.44,LOSS
+2026-03-09,JPM,5m,SHORT,TREND,2,35,2026-03-09 08:30:00 (PST),283.49,284.89,280.69,2026-03-09 09:25:00 (PST),284.89,55,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-49.03,LOSS
+2026-03-11,JPM,5m,SHORT,TREND,2,34,2026-03-11 11:35:00 (PST),286.21,286.95,284.75,2026-03-11 11:50:00 (PST),286.95,15,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-24.93,LOSS
+2026-03-12,JPM,5m,SHORT,TREND,2,34,2026-03-12 09:05:00 (PST),281.23,282.89,277.92,2026-03-12 09:20:00 (PST),282.89,15,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-56.31,LOSS
+2026-03-12,JPM,5m,SHORT,TREND,2,34,2026-03-12 09:45:00 (PST),281.62,282.66,279.54,2026-03-12 11:15:00 (PST),282.66,90,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-35.4,LOSS
+2026-03-19,JPM,5m,SHORT,TREND,2,33,2026-03-19 09:35:00 (PST),285.91,286.39,284.96,2026-03-19 09:40:00 (PST),286.39,5,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-15.71,LOSS
+2026-03-19,JPM,5m,SHORT,TREND,2,33,2026-03-19 09:50:00 (PST),285.68,286.35,284.34,2026-03-19 10:30:00 (PST),286.35,40,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-22.16,LOSS
+2026-03-26,JPM,5m,SHORT,TREND,2,32,2026-03-26 12:10:00 (PST),291.98,292.39,291.15,2026-03-26 12:55:00 (PST),291.71,45,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),EOD Close,8.64,WIN
+2026-04-10,JPM,5m,SHORT,TREND,2,30,2026-04-10 08:00:00 (PST),309.35,309.57,308.9,2026-04-10 08:05:00 (PST),309.57,5,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-6.72,LOSS
+2026-04-10,JPM,5m,SHORT,TREND,2,30,2026-04-10 10:00:00 (PST),308.93,309.24,308.32,2026-04-10 10:35:00 (PST),309.24,35,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-9.18,LOSS
+2026-04-15,JPM,5m,SHORT,TREND,2,31,2026-04-15 11:35:00 (PST),305.65,306.44,304.07,2026-04-15 12:55:00 (PST),305.86,80,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),EOD Close,-6.51,LOSS
+2026-04-21,JPM,5m,SHORT,TREND,2,30,2026-04-21 12:40:00 (PST),312.9,314.7,309.32,2026-04-21 12:55:00 (PST),313.01,15,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),EOD Close,-3.15,LOSS
+2026-04-22,JPM,5m,SHORT,TREND,2,30,2026-04-22 10:55:00 (PST),312.64,313.05,311.82,2026-04-22 12:30:00 (PST),313.05,95,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-12.23,LOSS
+2026-04-23,JPM,5m,SHORT,TREND,2,30,2026-04-23 12:35:00 (PST),311.59,311.99,310.79,2026-04-23 12:50:00 (PST),311.99,15,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-12.08,LOSS
+2026-04-24,JPM,5m,SHORT,TREND,2,30,2026-04-24 09:10:00 (PST),309.77,310.42,308.47,2026-04-24 09:35:00 (PST),308.47,25,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),TP Hit,39.11,WIN
+2026-04-24,JPM,5m,SHORT,TREND,2,31,2026-04-24 12:45:00 (PST),308.19,308.83,306.91,2026-04-24 12:55:00 (PST),308.83,10,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-19.83,LOSS

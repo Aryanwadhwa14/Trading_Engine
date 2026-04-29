@@ -1,0 +1,22 @@
+
+AXP BACKTEST RESULTS -> Strategy 3
+============================================================
+
+Configuration:
+- Ticker:       AXP
+- Timeframe:    5m
+- Date Range:   2026-03-01 to 2026-04-29
+- EMA:          EMA 26 / 55
+
+Performance:
+- Total Trades: 2
+- Number of Units:    32
+- Wins:         1
+- Losses:       1
+- Win Rate:     50.0%
+- Net Profit:   $-7.39
+- Final Bal:    $9,992.61
+- Avg Win:      $7.49
+- Avg Loss:     $-14.88
+- Max Win:      $7.49
+- Max Loss:     $-14.88

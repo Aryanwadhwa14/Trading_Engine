@@ -1,0 +1,22 @@
+
+JPM BACKTEST RESULTS -> Strategy 2
+============================================================
+
+Configuration:
+- Ticker:       JPM
+- Timeframe:    5m
+- Date Range:   2026-03-01 to 2026-04-29
+- EMA:          EMA 26 / 55
+
+Performance:
+- Total Trades: 18
+- Number of Units:    32
+- Wins:         4
+- Losses:       14
+- Win Rate:     22.2%
+- Net Profit:   $-180.01
+- Final Bal:    $9,819.99
+- Avg Win:      $32.42
+- Avg Loss:     $-22.12
+- Max Win:      $62.55
+- Max Loss:     $-56.31

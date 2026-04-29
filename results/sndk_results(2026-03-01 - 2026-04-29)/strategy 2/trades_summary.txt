@@ -1,0 +1,22 @@
+
+SNDK BACKTEST RESULTS -> Strategy 2
+============================================================
+
+Configuration:
+- Ticker:       SNDK
+- Timeframe:    5m
+- Date Range:   2026-03-01 to 2026-04-29
+- EMA:          EMA 26 / 55
+
+Performance:
+- Total Trades: 19
+- Number of Units:    15
+- Wins:         7
+- Losses:       12
+- Win Rate:     36.8%
+- Net Profit:   $-255.81
+- Final Bal:    $9,744.19
+- Avg Win:      $89.59
+- Avg Loss:     $-73.58
+- Max Win:      $194.05
+- Max Loss:     $-132.18

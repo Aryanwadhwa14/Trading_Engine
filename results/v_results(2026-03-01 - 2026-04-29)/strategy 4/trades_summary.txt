@@ -1,0 +1,22 @@
+
+V BACKTEST RESULTS -> Strategy 4
+============================================================
+
+Configuration:
+- Ticker:       V
+- Timeframe:    5m
+- Date Range:   2026-03-01 to 2026-04-29
+- EMA:          EMA 26 / 55
+
+Performance:
+- Total Trades: 6
+- Number of Units:    32
+- Wins:         2
+- Losses:       4
+- Win Rate:     33.3%
+- Net Profit:   $-23.78
+- Final Bal:    $9,976.22
+- Avg Win:      $31.58
+- Avg Loss:     $-21.73
+- Max Win:      $39.06
+- Max Loss:     $-34.24

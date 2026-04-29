@@ -1,0 +1,2 @@
+Trade Date,Ticker,Timeframe,Side,Trade Type,Strategy No,Units,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
+2026-04-08,SOXL,5m,SHORT,SCALP,3,172,2026-04-08 12:00:00 (PST),65.87,66.84,64.71,2026-04-08 12:10:00 (PST),66.84,10,3 Red Candles (3rd closes below Slow EMA in Uptrend),SL Hit,-166.84,LOSS

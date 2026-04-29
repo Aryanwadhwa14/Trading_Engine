@@ -1,0 +1,8 @@
+Trade Date,Ticker,Timeframe,Side,Trade Type,Strategy No,Units,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
+2026-03-03,MSFT,5m,LONG,SCALP,4,24,2026-03-03 08:30:00 (PST),400.08,398.4,402.11,2026-03-03 09:05:00 (PST),402.11,35,3 Green Candles (3rd closes above Slow EMA in Downtrend),TP Hit,48.54,WIN
+2026-03-09,MSFT,5m,LONG,SCALP,4,24,2026-03-09 12:40:00 (PST),409.55,406.85,412.8,2026-03-09 12:55:00 (PST),409.45,15,3 Green Candles (3rd closes above Slow EMA in Downtrend),EOD Close,-2.4,LOSS
+2026-03-16,MSFT,5m,LONG,SCALP,4,24,2026-03-16 07:25:00 (PST),397.76,396.78,398.94,2026-03-16 07:35:00 (PST),396.78,10,3 Green Candles (3rd closes above Slow EMA in Downtrend),SL Hit,-23.52,LOSS
+2026-04-02,MSFT,5m,LONG,SCALP,4,27,2026-04-02 08:10:00 (PST),370.53,369.25,372.07,2026-04-02 12:20:00 (PST),372.07,250,3 Green Candles (3rd closes above Slow EMA in Downtrend),TP Hit,41.5,WIN
+2026-04-07,MSFT,5m,LONG,SCALP,4,27,2026-04-07 09:55:00 (PST),371.04,370.45,371.75,2026-04-07 10:10:00 (PST),370.45,15,3 Green Candles (3rd closes above Slow EMA in Downtrend),SL Hit,-15.93,LOSS
+2026-04-09,MSFT,5m,LONG,SCALP,4,26,2026-04-09 09:55:00 (PST),372.23,371.23,373.44,2026-04-09 10:30:00 (PST),371.23,35,3 Green Candles (3rd closes above Slow EMA in Downtrend),SL Hit,-26.13,LOSS
+2026-04-09,MSFT,5m,LONG,SCALP,4,26,2026-04-09 12:25:00 (PST),371.99,371.1,373.06,2026-04-09 12:50:00 (PST),373.06,25,3 Green Candles (3rd closes above Slow EMA in Downtrend),TP Hit,27.92,WIN

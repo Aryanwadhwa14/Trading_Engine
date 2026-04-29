@@ -1,0 +1,3 @@
+Trade Date,Ticker,Timeframe,Side,Trade Type,Strategy No,Units,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
+2026-03-04,AXP,5m,SHORT,SCALP,3,32,2026-03-04 09:55:00 (PST),310.94,311.14,310.71,2026-03-04 10:00:00 (PST),310.71,5,3 Red Candles (3rd closes below Slow EMA in Uptrend),TP Hit,7.49,WIN
+2026-03-04,AXP,5m,SHORT,SCALP,3,32,2026-03-04 10:05:00 (PST),310.57,311.04,310.01,2026-03-04 10:10:00 (PST),311.04,5,3 Red Candles (3rd closes below Slow EMA in Uptrend),SL Hit,-14.88,LOSS

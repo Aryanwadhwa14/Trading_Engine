@@ -1,0 +1,22 @@
+
+SNXX BACKTEST RESULTS -> Strategy 4
+============================================================
+
+Configuration:
+- Ticker:       SNXX
+- Timeframe:    5m
+- Date Range:   2026-02-28 to 2026-04-28
+- EMA:          EMA 26 / 55
+
+Performance:
+- Total Trades: 3
+- Number of Units:    225
+- Wins:         2
+- Losses:       1
+- Win Rate:     66.7%
+- Net Profit:   $379.18
+- Final Bal:    $10,379.18
+- Avg Win:      $296.19
+- Avg Loss:     $-213.21
+- Max Win:      $429.05
+- Max Loss:     $-213.21

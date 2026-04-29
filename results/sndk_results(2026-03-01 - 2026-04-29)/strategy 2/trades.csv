@@ -1,0 +1,20 @@
+Trade Date,Ticker,Timeframe,Side,Trade Type,Strategy No,Units,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
+2026-03-02,SNDK,5m,SHORT,TREND,2,16,2026-03-02 08:55:00 (PST),617.82,625.65,602.16,2026-03-02 09:25:00 (PST),625.65,30,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-125.28,LOSS
+2026-03-02,SNDK,5m,SHORT,TREND,2,15,2026-03-02 11:40:00 (PST),620.44,622.74,615.84,2026-03-02 12:00:00 (PST),622.74,20,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-34.53,LOSS
+2026-03-03,SNDK,5m,SHORT,TREND,2,16,2026-03-03 09:30:00 (PST),584.22,591.47,569.73,2026-03-03 10:20:00 (PST),591.47,50,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-115.97,LOSS
+2026-03-03,SNDK,5m,SHORT,TREND,2,16,2026-03-03 10:50:00 (PST),586.6,589.67,580.46,2026-03-03 11:05:00 (PST),580.46,15,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),TP Hit,98.16,WIN
+2026-03-05,SNDK,5m,SHORT,TREND,2,17,2026-03-05 12:50:00 (PST),565.68,571.01,555.03,2026-03-05 12:55:00 (PST),565.55,5,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),EOD Close,2.21,WIN
+2026-03-06,SNDK,5m,SHORT,TREND,2,17,2026-03-06 07:30:00 (PST),562.97,567.28,554.36,2026-03-06 08:25:00 (PST),567.28,55,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-73.2,LOSS
+2026-03-06,SNDK,5m,SHORT,TREND,2,17,2026-03-06 09:05:00 (PST),564.5,565.89,561.72,2026-03-06 09:15:00 (PST),561.72,10,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),TP Hit,47.31,WIN
+2026-03-12,SNDK,5m,SHORT,TREND,2,16,2026-03-12 09:05:00 (PST),620.72,630.54,601.06,2026-03-12 12:55:00 (PST),618.77,230,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),EOD Close,31.12,WIN
+2026-03-20,SNDK,5m,SHORT,TREND,2,13,2026-03-20 09:15:00 (PST),733.0,738.01,722.98,2026-03-20 09:50:00 (PST),722.98,35,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),TP Hit,130.29,WIN
+2026-03-23,SNDK,5m,SHORT,TREND,2,14,2026-03-23 11:15:00 (PST),689.94,697.77,674.28,2026-03-23 11:45:00 (PST),697.77,30,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-109.59,LOSS
+2026-03-23,SNDK,5m,SHORT,TREND,2,14,2026-03-23 12:00:00 (PST),687.14,696.58,668.26,2026-03-23 12:20:00 (PST),696.58,20,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-132.18,LOSS
+2026-03-25,SNDK,5m,SHORT,TREND,2,14,2026-03-25 07:45:00 (PST),678.03,684.96,664.17,2026-03-25 08:10:00 (PST),664.17,25,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),TP Hit,194.05,WIN
+2026-03-25,SNDK,5m,SHORT,TREND,2,14,2026-03-25 10:00:00 (PST),671.91,676.34,663.05,2026-03-25 10:30:00 (PST),676.34,30,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-61.99,LOSS
+2026-03-26,SNDK,5m,SHORT,TREND,2,16,2026-03-26 12:40:00 (PST),610.79,618.72,594.92,2026-03-26 12:55:00 (PST),603.04,15,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),EOD Close,124.0,WIN
+2026-03-27,SNDK,5m,SHORT,TREND,2,16,2026-03-27 12:25:00 (PST),612.34,615.46,606.09,2026-03-27 12:30:00 (PST),615.46,5,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-49.97,LOSS
+2026-03-27,SNDK,5m,SHORT,TREND,2,16,2026-03-27 12:45:00 (PST),612.9,615.36,607.97,2026-03-27 12:55:00 (PST),615.36,10,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-39.42,LOSS
+2026-04-15,SNDK,5m,SHORT,TREND,2,12,2026-04-15 11:55:00 (PST),891.65,895.21,884.52,2026-04-15 12:35:00 (PST),895.21,40,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-42.78,LOSS
+2026-04-15,SNDK,5m,SHORT,TREND,2,12,2026-04-15 12:45:00 (PST),890.61,894.22,883.39,2026-04-15 12:50:00 (PST),894.22,5,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-43.31,LOSS
+2026-04-21,SNDK,5m,SHORT,TREND,2,11,2026-04-21 09:35:00 (PST),907.9,912.88,897.95,2026-04-21 10:20:00 (PST),912.88,45,Prev Candle Between EMAs + Break Below EMA Slow (Trend Continuation),SL Hit,-54.73,LOSS

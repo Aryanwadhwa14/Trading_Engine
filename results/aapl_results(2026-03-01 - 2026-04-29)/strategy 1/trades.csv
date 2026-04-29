@@ -1,0 +1,20 @@
+Trade Date,Ticker,Timeframe,Side,Trade Type,Strategy No,Units,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
+2026-03-04,AAPL,5m,LONG,TREND,1,37,2026-03-04 07:55:00 (PST),264.06,263.18,265.81,2026-03-04 10:55:00 (PST),263.18,180,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),SL Hit,-32.36,LOSS
+2026-03-10,AAPL,5m,LONG,TREND,1,38,2026-03-10 07:10:00 (PST),259.13,258.09,261.21,2026-03-10 07:40:00 (PST),261.21,30,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),TP Hit,79.11,WIN
+2026-03-16,AAPL,5m,LONG,TREND,1,39,2026-03-16 09:10:00 (PST),253.05,252.69,253.79,2026-03-16 09:20:00 (PST),252.69,10,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),SL Hit,-14.38,LOSS
+2026-03-17,AAPL,5m,LONG,TREND,1,39,2026-03-17 10:40:00 (PST),254.22,254.04,254.58,2026-03-17 10:50:00 (PST),254.58,10,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),TP Hit,14.12,WIN
+2026-03-23,AAPL,5m,LONG,TREND,1,39,2026-03-23 09:00:00 (PST),251.99,250.98,254.0,2026-03-23 09:25:00 (PST),250.98,25,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),SL Hit,-39.16,LOSS
+2026-03-23,AAPL,5m,LONG,TREND,1,39,2026-03-23 10:50:00 (PST),251.53,251.1,252.39,2026-03-23 11:55:00 (PST),252.39,65,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),TP Hit,33.59,WIN
+2026-03-25,AAPL,5m,LONG,TREND,1,39,2026-03-25 11:10:00 (PST),254.09,253.69,254.89,2026-03-25 11:35:00 (PST),253.69,25,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),SL Hit,-15.58,LOSS
+2026-03-31,AAPL,5m,LONG,TREND,1,40,2026-03-31 08:10:00 (PST),248.38,247.54,250.05,2026-03-31 09:20:00 (PST),250.05,70,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),TP Hit,66.9,WIN
+2026-04-01,AAPL,5m,LONG,TREND,1,39,2026-04-01 08:15:00 (PST),254.45,253.47,256.41,2026-04-01 12:55:00 (PST),255.69,280,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),EOD Close,48.36,WIN
+2026-04-08,AAPL,5m,LONG,TREND,1,38,2026-04-08 09:30:00 (PST),257.9,256.33,261.04,2026-04-08 12:55:00 (PST),258.93,205,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),EOD Close,39.14,WIN
+2026-04-09,AAPL,5m,LONG,TREND,1,39,2026-04-09 08:20:00 (PST),257.83,257.61,258.27,2026-04-09 08:25:00 (PST),257.61,5,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),SL Hit,-8.64,LOSS
+2026-04-10,AAPL,5m,LONG,TREND,1,38,2026-04-10 06:35:00 (PST),260.29,259.63,261.59,2026-04-10 06:40:00 (PST),259.63,5,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),SL Hit,-24.85,LOSS
+2026-04-20,AAPL,5m,LONG,TREND,1,36,2026-04-20 06:30:00 (PST),272.43,270.07,277.17,2026-04-20 12:55:00 (PST),272.93,385,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),EOD Close,17.85,WIN
+2026-04-22,AAPL,5m,LONG,TREND,1,36,2026-04-22 12:20:00 (PST),272.74,272.24,273.73,2026-04-22 12:55:00 (PST),273.19,35,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),EOD Close,16.2,WIN
+2026-04-23,AAPL,5m,LONG,TREND,1,36,2026-04-23 08:20:00 (PST),273.69,273.23,274.6,2026-04-23 08:45:00 (PST),273.23,25,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),SL Hit,-16.43,LOSS
+2026-04-23,AAPL,5m,LONG,TREND,1,36,2026-04-23 09:25:00 (PST),273.6,273.33,274.14,2026-04-23 09:40:00 (PST),273.33,15,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),SL Hit,-9.81,LOSS
+2026-04-23,AAPL,5m,LONG,TREND,1,36,2026-04-23 12:45:00 (PST),273.8,273.48,274.45,2026-04-23 12:50:00 (PST),273.48,5,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),SL Hit,-11.69,LOSS
+2026-04-28,AAPL,5m,LONG,TREND,1,36,2026-04-28 10:25:00 (PST),269.87,269.57,270.48,2026-04-28 10:50:00 (PST),270.48,25,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),TP Hit,21.81,WIN
+2026-04-28,AAPL,5m,LONG,TREND,1,36,2026-04-28 12:05:00 (PST),270.23,269.95,270.78,2026-04-28 12:50:00 (PST),270.78,45,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),TP Hit,19.91,WIN

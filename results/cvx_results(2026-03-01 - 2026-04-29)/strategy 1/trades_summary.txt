@@ -1,0 +1,22 @@
+
+CVX BACKTEST RESULTS -> Strategy 1
+============================================================
+
+Configuration:
+- Ticker:       CVX
+- Timeframe:    5m
+- Date Range:   2026-03-01 to 2026-04-29
+- EMA:          EMA 26 / 55
+
+Performance:
+- Total Trades: 18
+- Number of Units:    50
+- Wins:         3
+- Losses:       15
+- Win Rate:     16.7%
+- Net Profit:   $-254.04
+- Final Bal:    $9,745.96
+- Avg Win:      $38.26
+- Avg Loss:     $-24.59
+- Max Win:      $56.53
+- Max Loss:     $-44.75

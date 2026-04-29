@@ -1,0 +1,22 @@
+
+SOXL BACKTEST RESULTS -> Strategy 2
+============================================================
+
+Configuration:
+- Ticker:       SOXL
+- Timeframe:    5m
+- Date Range:   2026-03-01 to 2026-04-29
+- EMA:          EMA 26 / 55
+
+Performance:
+- Total Trades: 13
+- Number of Units:    187
+- Wins:         7
+- Losses:       6
+- Win Rate:     53.8%
+- Net Profit:   $1,578.18
+- Final Bal:    $11,578.18
+- Avg Win:      $301.26
+- Avg Loss:     $-88.44
+- Max Win:      $982.53
+- Max Loss:     $-176.22
