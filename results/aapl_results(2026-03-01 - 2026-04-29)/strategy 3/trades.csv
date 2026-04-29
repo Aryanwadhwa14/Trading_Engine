@@ -1,8 +1,0 @@
-Trade Date,Ticker,Timeframe,Side,Trade Type,Strategy No,Units,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
-2026-03-02,AAPL,5m,SHORT,SCALP,3,37,2026-03-02 10:55:00 (PST),264.68,265.09,264.19,2026-03-02 11:05:00 (PST),265.09,10,3 Red Candles (3rd closes below Slow EMA in Uptrend),SL Hit,-15.17,LOSS
-2026-03-10,AAPL,5m,SHORT,SCALP,3,38,2026-03-10 12:05:00 (PST),261.12,261.33,260.87,2026-03-10 12:10:00 (PST),261.33,5,3 Red Candles (3rd closes below Slow EMA in Uptrend),SL Hit,-7.98,LOSS
-2026-04-06,AAPL,5m,SHORT,SCALP,3,38,2026-04-06 09:20:00 (PST),258.89,259.1,258.64,2026-04-06 09:30:00 (PST),259.1,10,3 Red Candles (3rd closes below Slow EMA in Uptrend),SL Hit,-7.98,LOSS
-2026-04-17,AAPL,5m,SHORT,SCALP,3,37,2026-04-17 10:45:00 (PST),270.43,270.58,270.25,2026-04-17 10:50:00 (PST),270.25,5,3 Red Candles (3rd closes below Slow EMA in Uptrend),TP Hit,6.66,WIN
-2026-04-17,AAPL,5m,SHORT,SCALP,3,37,2026-04-17 10:55:00 (PST),270.24,270.56,269.86,2026-04-17 11:35:00 (PST),270.56,40,3 Red Candles (3rd closes below Slow EMA in Uptrend),SL Hit,-11.84,LOSS
-2026-04-28,AAPL,5m,SHORT,SCALP,3,36,2026-04-28 09:00:00 (PST),269.67,269.93,269.35,2026-04-28 09:05:00 (PST),269.93,5,3 Red Candles (3rd closes below Slow EMA in Uptrend),SL Hit,-9.54,LOSS
-2026-04-28,AAPL,5m,SHORT,SCALP,3,36,2026-04-28 09:20:00 (PST),269.65,269.99,269.24,2026-04-28 09:50:00 (PST),269.99,30,3 Red Candles (3rd closes below Slow EMA in Uptrend),SL Hit,-12.22,LOSS

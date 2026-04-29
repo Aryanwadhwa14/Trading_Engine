@@ -1,6 +1,0 @@
-Trade Date,Ticker,Timeframe,Side,Trade Type,Strategy No,Units,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
-2026-04-06,CVX,5m,LONG,SCALP,4,51,2026-04-06 10:05:00 (PST),198.79,198.07,199.65,2026-04-06 12:55:00 (PST),198.93,170,3 Green Candles (3rd closes above Slow EMA in Downtrend),EOD Close,7.14,WIN
-2026-04-08,CVX,5m,LONG,SCALP,4,52,2026-04-08 12:30:00 (PST),192.94,192.2,193.83,2026-04-08 12:55:00 (PST),192.89,25,3 Green Candles (3rd closes above Slow EMA in Downtrend),EOD Close,-2.6,LOSS
-2026-04-15,CVX,5m,LONG,SCALP,4,52,2026-04-15 10:05:00 (PST),186.39,186.16,186.67,2026-04-15 10:20:00 (PST),186.16,15,3 Green Candles (3rd closes above Slow EMA in Downtrend),SL Hit,-11.96,LOSS
-2026-04-17,CVX,5m,LONG,SCALP,4,53,2026-04-17 10:30:00 (PST),182.54,182.09,183.08,2026-04-17 11:05:00 (PST),183.08,35,3 Green Candles (3rd closes above Slow EMA in Downtrend),TP Hit,28.62,WIN
-2026-04-17,CVX,5m,LONG,SCALP,4,53,2026-04-17 11:15:00 (PST),183.48,182.52,184.63,2026-04-17 12:55:00 (PST),183.98,100,3 Green Candles (3rd closes above Slow EMA in Downtrend),EOD Close,26.55,WIN

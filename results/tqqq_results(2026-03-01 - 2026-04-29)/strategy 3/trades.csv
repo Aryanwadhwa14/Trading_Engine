@@ -1,2 +1,0 @@
-Trade Date,Ticker,Timeframe,Side,Trade Type,Strategy No,Units,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
-2026-04-08,TQQQ,5m,SHORT,SCALP,3,208,2026-04-08 11:50:00 (PST),47.57,47.88,47.19,2026-04-08 12:55:00 (PST),47.88,65,3 Red Candles (3rd closes below Slow EMA in Uptrend),SL Hit,-65.52,LOSS

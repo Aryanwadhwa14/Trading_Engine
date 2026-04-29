@@ -1,3 +1,0 @@
-Trade Date,Ticker,Timeframe,Side,Trade Type,Strategy No,Units,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
-2026-03-11,TSLA,5m,SHORT,SCALP,3,23,2026-03-11 08:50:00 (PST),407.01,408.39,405.35,2026-03-11 09:30:00 (PST),408.39,40,3 Red Candles (3rd closes below Slow EMA in Uptrend),SL Hit,-31.85,LOSS
-2026-04-17,TSLA,5m,SHORT,SCALP,3,24,2026-04-17 10:35:00 (PST),401.53,403.5,399.17,2026-04-17 12:55:00 (PST),400.66,140,3 Red Candles (3rd closes below Slow EMA in Uptrend),EOD Close,20.88,WIN

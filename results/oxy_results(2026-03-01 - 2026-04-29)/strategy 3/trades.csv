@@ -1,3 +1,0 @@
-Trade Date,Ticker,Timeframe,Side,Trade Type,Strategy No,Units,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
-2026-03-09,OXY,5m,SHORT,SCALP,3,179,2026-03-09 09:00:00 (PST),55.09,55.35,54.78,2026-03-09 09:05:00 (PST),55.35,5,3 Red Candles (3rd closes below Slow EMA in Uptrend),SL Hit,-46.54,LOSS
-2026-03-27,OXY,5m,SHORT,SCALP,3,145,2026-03-27 11:00:00 (PST),65.32,65.55,65.04,2026-03-27 11:25:00 (PST),65.55,25,3 Red Candles (3rd closes below Slow EMA in Uptrend),SL Hit,-33.35,LOSS
