@@ -2,12 +2,16 @@ import os
 import pandas as pd
 from datetime import datetime
 from strategies.ema_pullback import generate_signal
+from upload.tradelogs_update import upload_trade_log_tab, append_strategy_row
 
 
 def run_backtest(df, config, start_date, end_date):
 
-    balance = config.get("INITIAL_BALANCE", 10000)
+    balance = config["INITIAL_BALANCE"]
     ticker = config["SINGLE_TICKER"]
+
+    # Optional metadata from config (used in trade log)
+    indicators = config.get("INDICATORS", "")
 
     position = 0
     units = 0
@@ -40,7 +44,7 @@ def run_backtest(df, config, start_date, end_date):
         # ENTRY
         if position == 0:
 
-            signal = generate_signal(current_df)
+            signal = generate_signal(current_df, config)
 
             if signal:
                 position = 1 if signal["signal"] == "LONG" else -1
@@ -74,7 +78,8 @@ def run_backtest(df, config, start_date, end_date):
                     entry_reason,
                     "SL Hit" if low <= stop_loss else "TP Hit",
                     pnl,
-                    units
+                    units,
+                    market=config.get("MARKET", ""), indicators=indicators
                 ))
 
                 balance += pnl
@@ -94,7 +99,8 @@ def run_backtest(df, config, start_date, end_date):
                     entry_reason,
                     "EOD Close",
                     pnl,
-                    units
+                    units,
+                    market=config.get("MARKET", ""), indicators=indicators
                 ))
 
                 balance += pnl
@@ -117,7 +123,8 @@ def run_backtest(df, config, start_date, end_date):
                     entry_reason,
                     "SL Hit" if high >= stop_loss else "TP Hit",
                     pnl,
-                    units
+                    units,
+                    market=config.get("MARKET", ""), indicators=indicators
                 ))
 
                 balance += pnl
@@ -137,7 +144,8 @@ def run_backtest(df, config, start_date, end_date):
                     entry_reason,
                     "EOD Close",
                     pnl,
-                    units
+                    units,
+                    market=config.get("MARKET", ""), indicators=indicators
                 ))
 
                 balance += pnl
@@ -145,15 +153,20 @@ def run_backtest(df, config, start_date, end_date):
 
     trades_df = pd.DataFrame(trade_log)
 
-    ticker = config.get("SINGLE_TICKER", "UNKNOWN")
+    ticker = config["SINGLE_TICKER"]
     sd_str = str(start_date).split(' ')[0]
     ed_str = str(end_date).split(' ')[0]
     
     base_folder_name = f"{ticker.lower()}_results({sd_str} - {ed_str})"
-    base_dir = os.path.join("results", base_folder_name)
+    
+    if "RUN_DIR" in config:
+        base_dir = os.path.join(config["RUN_DIR"], base_folder_name)
+    else:
+        base_dir = os.path.join("results", base_folder_name)
+        
     os.makedirs(base_dir, exist_ok=True)
 
-    initial_balance = config.get("INITIAL_BALANCE", 10000)
+    initial_balance = config["INITIAL_BALANCE"]
 
     if len(trades_df) > 0:
         if "Strategy No" in trades_df.columns:
@@ -163,20 +176,46 @@ def run_backtest(df, config, start_date, end_date):
                 
                 strat_dir = os.path.join(base_dir, f"strategy {int(strat)}")
                 os.makedirs(strat_dir, exist_ok=True)
-                
-                strat_df.to_csv(os.path.join(strat_dir, "trades.csv"), index=False)
+
+                csv_path  = os.path.join(strat_dir, "trades.csv")
+                summ_path = os.path.join(strat_dir, "trades_summary.txt")
+                strat_df.to_csv(csv_path, index=False)
                 
                 summary = _generate_summary(strat_df, initial_balance, config, start_date, end_date, int(strat))
-                with open(os.path.join(strat_dir, "trades_summary.txt"), "w") as f:
+                with open(summ_path, "w") as f:
                     f.write(summary)
-                    
                 print(summary)
+
+                # ── Google Sheets upload ──────────────────────────────────
+                if config.get("UPLOAD_TO_SHEETS", True):
+                    tab_name = base_folder_name  # e.g. nvdl_results(2024-01-01 - 2024-12-31)
+                    upload_trade_log_tab(strat_df, config, tab_name=tab_name)
+                    append_strategy_row(
+                        strat_df, config,
+                        strategy_id=int(strat),
+                        trades_csv_path=csv_path,
+                        summary_path=summ_path,
+                    )
+                # ─────────────────────────────────────────────────────────
         else:
-            trades_df.to_csv(os.path.join(base_dir, "trades.csv"), index=False)
+            csv_path  = os.path.join(base_dir, "trades.csv")
+            summ_path = os.path.join(base_dir, "trades_summary.txt")
+            trades_df.to_csv(csv_path, index=False)
             summary = _generate_summary(trades_df, initial_balance, config, start_date, end_date)
-            with open(os.path.join(base_dir, "trades_summary.txt"), "w") as f:
+            with open(summ_path, "w") as f:
                 f.write(summary)
             print(summary)
+
+            # ── Google Sheets upload ──────────────────────────────────
+            if config.get("UPLOAD_TO_SHEETS", True):
+                tab_name = base_folder_name
+                upload_trade_log_tab(trades_df, config, tab_name=tab_name)
+                append_strategy_row(
+                    trades_df, config,
+                    trades_csv_path=csv_path,
+                    summary_path=summ_path,
+                )
+            # ─────────────────────────────────────────────────────────
     else:
         summary = _generate_summary(trades_df, initial_balance, config, start_date, end_date)
         with open(os.path.join(base_dir, "trades_summary.txt"), "w") as f:
@@ -205,15 +244,21 @@ def _log_trade(ticker, timeframe, side, trade_type, strategy_id,
                sl, tp,
                exit_time, exit_price,
                entry_reason, exit_reason,
-               pnl, units=0):
+               pnl, units=0,
+               market="", indicators=""):
+
+    raw_pnl_pct = ((exit_price - entry_price) / entry_price * 100) if side == "LONG" else \
+                  ((entry_price - exit_price) / entry_price * 100)
 
     return {
         "Trade Date": entry_time.date(),
         "Ticker": ticker,
+        "Market": market,
         "Timeframe": timeframe,
         "Side": side,
         "Trade Type": trade_type.upper(),
         "Strategy No": strategy_id,
+        "Indicators": indicators,
         "Units": units,
         "Entry Time": _format_time_pst(entry_time),
         "Entry Price": round(entry_price, 2),
@@ -225,6 +270,7 @@ def _log_trade(ticker, timeframe, side, trade_type, strategy_id,
         "Entry Reason": entry_reason,
         "Exit Reason": exit_reason,
         "PnL ($)": round(pnl, 2),
+        "Return %": round(raw_pnl_pct, 4),
         "Result": "WIN" if pnl > 0 else "LOSS"
     }
 

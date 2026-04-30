@@ -1,7 +1,0 @@
-Trade Date,Ticker,Timeframe,Side,Trade Type,Strategy No,Units,Entry Time,Entry Price,Stop Loss,Take Profit,Exit Time,Exit Price,Duration (min),Entry Reason,Exit Reason,PnL ($),Result
-2026-04-06,QQQ,5m,LONG,TREND,1,16,2026-04-06 08:40:00 (PST),586.83,585.87,588.75,2026-04-06 10:10:00 (PST),585.87,90,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),SL Hit,-15.36,LOSS
-2026-04-09,QQQ,5m,LONG,TREND,1,16,2026-04-09 07:00:00 (PST),604.85,604.33,605.89,2026-04-09 07:05:00 (PST),604.33,5,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),SL Hit,-8.31,LOSS
-2026-04-09,QQQ,5m,LONG,TREND,1,16,2026-04-09 11:35:00 (PST),608.55,607.56,610.53,2026-04-10 06:30:00 (PST),610.53,1135,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),TP Hit,31.66,WIN
-2026-04-14,QQQ,5m,LONG,TREND,1,15,2026-04-14 11:35:00 (PST),626.66,625.68,628.63,2026-04-15 06:30:00 (PST),628.63,1135,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),TP Hit,29.55,WIN
-2026-04-15,QQQ,5m,LONG,TREND,1,15,2026-04-15 10:05:00 (PST),632.68,630.95,636.14,2026-04-15 12:05:00 (PST),636.14,120,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),TP Hit,51.9,WIN
-2026-04-16,QQQ,5m,LONG,TREND,1,15,2026-04-16 10:20:00 (PST),640.19,639.3,641.97,2026-04-16 10:55:00 (PST),639.3,35,Prev Candle Between EMAs + Break Above EMA Fast (Trend Continuation),SL Hit,-13.35,LOSS

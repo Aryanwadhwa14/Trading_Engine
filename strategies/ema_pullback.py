@@ -34,7 +34,7 @@ def is_body_between_emas(candle) -> bool:
 
 # ── Signal generator ───────────────────────────────────────────────────────────
 
-def generate_signal(df):
+def generate_signal(df, config):
     """
     Analyse the latest candles and return a signal dict or None.
 
@@ -46,6 +46,8 @@ def generate_signal(df):
     ----------
     df : pd.DataFrame
         Must contain columns: open, high, low, close, ema_fast, ema_slow
+    config : dict
+        Must contain strategy enablement flags
 
     Returns
     -------
@@ -82,7 +84,7 @@ def generate_signal(df):
     # =========================================================================
     # Strategy 3 → SHORT SCALP  (uptrend + 3 red exhaustion candles + 3rd closes below EMA 55)
     # =========================================================================
-    if uptrend and three_red and float(prev1["close"]) > ema_slow and float(prev3["open"]) < ema_fast: # changed logic in the code for first candle (S3.2)
+    if config["ENABLE_S3"] and uptrend and three_red and float(prev1["close"]) > ema_slow and float(prev3["open"]) < ema_fast: # changed logic in the code for first candle (S3.2)
         entry = open
         sl    = prev3["open"] # S3.3 (sl = first candle open)
         risk  = sl - entry
@@ -102,7 +104,7 @@ def generate_signal(df):
     # =========================================================================
     # Strategy 4 → LONG SCALP  (downtrend + 3 green exhaustion candles + 3rd closes above EMA 55)
     # =========================================================================
-    if downtrend and three_green and float(prev1["close"]) > ema_fast and float(prev3["open"]) > ema_slow : # changed logic in the code (S4.2)
+    if config["ENABLE_S4"] and downtrend and three_green and float(prev1["close"]) > ema_fast and float(prev3["open"]) > ema_slow : # changed logic in the code (S4.2)
         entry = open
         sl    = prev3["open"] # S4.3 (sl = first candle open)
         risk  = entry - sl
@@ -122,7 +124,7 @@ def generate_signal(df):
     # =========================================================================
     # Strategy 1 → LONG TREND  (uptrend + previous candle between EMAs + close above fast EMA)
     # =========================================================================
-    if uptrend and is_body_between_emas(prev1) and close > ema_fast:
+    if config["ENABLE_S1"] and uptrend and is_body_between_emas(prev1) and close > ema_fast:
         entry = close
         sl    = ema_slow  # sl = ema_slow -> strategy 1.2
         risk  = entry - sl
@@ -141,7 +143,7 @@ def generate_signal(df):
     # =========================================================================
     # Strategy 2 → SHORT TREND  (downtrend + previous candle between EMAs + close below slow EMA)
     # =========================================================================
-    if downtrend and is_body_between_emas(prev1) and close < ema_fast:
+    if config["ENABLE_S2"] and downtrend and is_body_between_emas(prev1) and close < ema_fast:
         entry = close
         sl    = ema_slow # sl = ema_slow -> strategy 2.2
         risk  = sl - entry

@@ -1,39 +1,58 @@
+from datetime import datetime, timedelta
+
+end_date = datetime.now()
+start_date = end_date - timedelta(days=60)
+
 CONFIG = {
 
     # ASSET CONFIG
-    "TICKER_ENABILITY": "single",  # multi ticker for only forward test 
-    "SINGLE_TICKER": "OXY", # single ticker for both backtest & forward test 
+    "USE_MULTI": True,  # True for multi ticker, False for single ticker
+    "SINGLE_TICKER": "NVDL", # single ticker for both backtest & forward test 
     
-    "MULTI_TICKER": ["NVDA", "MSFT", "AAPL","NVDL", "TQQQ", "TSLA", "AMD", "MU", "SNDK", "SOXL", "SNXX","JPM","V","MS","AXP","XOM","OXY","CVX"]                                   , # multi for only forward test 
+    "MULTI_TICKER": ["NVDA", "MSFT", "AAPL","NVDL", "TQQQ", "TSLA", "AMD", "MU", "SNDK", "SOXL", "SNXX","JPM","V","MS","AXP","XOM","OXY","CVX"]                                   , # multi for backtest & forward test 
     "TIMEFRAME": "5m",
 
-            
+    
     # DATE RANGE (Backtest)
-    "START_DATE": "2026-02-28",     
-    "END_DATE": "2026-04-28",
+    "START_DATE": start_date.strftime("%Y-%m-%d"),     
+    "END_DATE": end_date.strftime("%Y-%m-%d"),
 
     # INDICATORS
     "EMA_FAST": 26,
     "EMA_SLOW": 55,
     "ATR_PERIOD": 14,   # (kept for future use)
+    "INDICATORS": "EMA 26/55",
+    "MARKET": "US",
 
     # CAPITAL & RISK
     "INITIAL_BALANCE": 10000,
     "RISK_PERCENT": 0.01,   # not yet used fully (future position sizing)
 
     # STRATEGY CONFIG
+    "ENABLE_S1": True,
+    "ENABLE_S2": True,
+    "ENABLE_S3": False,
+    "ENABLE_S4": False,
     "TREND_RR": 2.0,    # Trend trades RR
     "SCALP_RR": 1.2,    # Scalp trades RR
 
-    # BACKTEST CONTROL
-    "MAX_TRADES": 10000,
+    # # BACKTEST CONTROL
+    # "MAX_TRADES": 10000,
 
     # OUTPUT CONTROL
     "SAVE_RESULTS": True,
     "RESULTS_FOLDER": "results",
 
     # MODES
-    "MODE": "backtest"  # "backtest" or "forward"
+    "MODE": "backtest",  # "backtest" or "forward"
+
+    # Google Sheet upload
+    "UPLOAD_TO_SHEETS": False,           # set False to skip auto-upload after backtest
+    "STRATEGY_SHEET_ID": "11dMzBHzDPkDgPYgDwdf9xAMu5-9OxtiVlCfJx08Miq0",
+    "STRATEGY_SHEET_NAME": "Strategy Sheet 2 months",
+    
+    "TRADE_LOG_SHEET_ID": "1ScmIPXicEoS_Jlk05tYAinPQDGXTd4HmlIuSJZGSfk8",
+    "TRADE_LOG_SHEET_NAME": ""
 }
 
 # Indian market equity tickers
