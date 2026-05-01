@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
 end_date = datetime.now()
-start_date = end_date - timedelta(days=60)
+start_date = end_date - timedelta(days=59)
 
 CONFIG = {
 
@@ -31,8 +31,8 @@ CONFIG = {
     # STRATEGY CONFIG
     "ENABLE_S1": True,
     "ENABLE_S2": True,
-    "ENABLE_S3": False,
-    "ENABLE_S4": False,
+    "ENABLE_S3": True,
+    "ENABLE_S4": True,
     "TREND_RR": 2.0,    # Trend trades RR
     "SCALP_RR": 1.2,    # Scalp trades RR
 
@@ -47,12 +47,12 @@ CONFIG = {
     "MODE": "backtest",  # "backtest" or "forward"
 
     # Google Sheet upload
-    "UPLOAD_TO_SHEETS": False,           # set False to skip auto-upload after backtest
-    "STRATEGY_SHEET_ID": "11dMzBHzDPkDgPYgDwdf9xAMu5-9OxtiVlCfJx08Miq0",
-    "STRATEGY_SHEET_NAME": "Strategy Sheet 2 months",
+    "UPLOAD_TO_SHEETS": True,           # set False to skip auto-upload after backtest
+    "STRATEGY_SHEET_ID": "1nmjelTU6o6UXr4qgz4e8Fl5pohu4KCM5sc2X1u11N_U",
+    "STRATEGY_SHEET_NAME": "trade sheets",
     
-    "TRADE_LOG_SHEET_ID": "1ScmIPXicEoS_Jlk05tYAinPQDGXTd4HmlIuSJZGSfk8",
-    "TRADE_LOG_SHEET_NAME": ""
+    "TRADE_LOG_SHEET_ID": "1Wi7hw90YozkdMSiS0K_u7UaAjFPsa6t6RrWN0MAmRYo",
+    "TRADE_LOG_SHEET_NAME": "Trade logs"
 }
 
 # Indian market equity tickers

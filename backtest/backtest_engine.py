@@ -188,7 +188,7 @@ def run_backtest(df, config, start_date, end_date):
 
                 # ── Google Sheets upload ──────────────────────────────────
                 if config.get("UPLOAD_TO_SHEETS", True):
-                    tab_name = base_folder_name  # e.g. nvdl_results(2024-01-01 - 2024-12-31)
+                    tab_name = f"{base_folder_name} - S{int(strat)}"  # Add strategy number to tab name
                     upload_trade_log_tab(strat_df, config, tab_name=tab_name)
                     append_strategy_row(
                         strat_df, config,

@@ -125,7 +125,8 @@ def upload_strategy_folder(
         config = config.copy()
         config["SINGLE_TICKER"] = trades_df["Ticker"].iloc[0]
 
-    upload_trade_log_tab(trades_df, config, tab_name=ticker_folder_name)
+    tab_name = f"{ticker_folder_name} - S{strategy_id}" if strategy_id is not None else ticker_folder_name
+    upload_trade_log_tab(trades_df, config, tab_name=tab_name)
     append_strategy_row(
         trades_df, config,
         strategy_id=strategy_id,
