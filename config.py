@@ -1,15 +1,15 @@
 from datetime import datetime, timedelta
 
 end_date = datetime.now()
-start_date = end_date - timedelta(days=59)
+start_date = end_date - timedelta(days=365)
 
 CONFIG = {
 
     # ASSET CONFIG
     "USE_MULTI": True,  # True for multi ticker, False for single ticker
-    "SINGLE_TICKER": "NVDL", # single ticker for both backtest & forward test 
+    "SINGLE_TICKER": "NVDA", # single ticker for both backtest & forward test 
     
-    "MULTI_TICKER": ["NVDA", "MSFT", "AAPL","NVDL", "TQQQ", "TSLA", "AMD", "MU", "SNDK", "SOXL", "SNXX","JPM","V","MS","AXP","XOM","OXY","CVX"]                                   , # multi for backtest & forward test 
+    "MULTI_TICKER": ["MSFT", "AAPL","NVDL", "TQQQ", "TSLA", "AMD", "MU", "SNDK", "SOXL", "SNXX","JPM","V","MS","AXP","XOM","OXY","CVX"]                                   , # multi for backtest & forward test 
     "TIMEFRAME": "5m",
 
     

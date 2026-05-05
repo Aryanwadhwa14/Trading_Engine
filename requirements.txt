@@ -6,3 +6,4 @@ python-dotenv
 gspread
 google-auth
 tenacity
+polygon-api-client
