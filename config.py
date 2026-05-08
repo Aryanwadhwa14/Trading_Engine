@@ -1,12 +1,12 @@
 from datetime import datetime, timedelta
 
 end_date = datetime.now()
-start_date = end_date - timedelta(days=365)
+start_date = end_date - timedelta(days=30)
 
 CONFIG = {
 
     # ASSET CONFIG
-    "USE_MULTI": True,  # True for multi ticker, False for single ticker
+    "USE_MULTI": False,  # True for multi ticker, False for single ticker
     "SINGLE_TICKER": "NVDA", # single ticker for both backtest & forward test 
     
     "MULTI_TICKER": ["MSFT", "AAPL","NVDL", "TQQQ", "TSLA", "AMD", "MU", "SNDK", "SOXL", "SNXX","JPM","V","MS","AXP","XOM","OXY","CVX"]                                   , # multi for backtest & forward test 

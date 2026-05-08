@@ -59,6 +59,12 @@ def download_for_ticker(ticker, start, end, multiplier, timespan):
     df['datetime'] = pd.to_datetime(df['timestamp'], unit='ms')
     df.set_index('datetime', inplace=True)
     
+    # Convert from UTC to PST (US/Pacific)
+    df.index = df.index.tz_localize('UTC').tz_convert('US/Pacific')
+    
+    # Filter to keep only Regular Trading Hours (9:30 AM - 4:00 PM ET -> 6:30 AM - 1:00 PM PST)
+    df = df.between_time('06:30', '13:00')
+    
     # Keep only OHLCV
     # Polygon natively returns 'open', 'high', 'low', 'close', 'volume'
     if all(c in df.columns for c in ['open', 'high', 'low', 'close', 'volume']):

@@ -47,6 +47,7 @@ cp .env.example .env
 TELEGRAM_BOT_TOKEN=your_token_here
 TELEGRAM_CHAT_ID=your_chat_id_here
 GOOGLE_SERVICE_ACCOUNT_JSON={"type":"service_account",...}   # paste full JSON as one line
+POLYGON_API_KEY=your_polygon_api_key_here                    # required for downloading backtest data
 ```
 
 ## 3. Run
@@ -57,6 +58,7 @@ Use `uv run` instead of `python` to ensure the correct virtual environment is us
 uv run main.py                          # uses MODE from config.py
 uv run main.py --mode backtest          # force backtest mode
 uv run main.py --mode forward           # force forward test mode
+uv run python data/download_polygon_data.py       # fetch historical data from Polygon.io
 uv run main.py --mode backtest --use_multi true   # multi-ticker backtest
 uv run upload.py                        # upload past runs to Google Sheets
 ```
@@ -69,7 +71,8 @@ uv run upload.py                        # upload past runs to Google Sheets
 trading_engine/
 │
 ├── data/
-│   ├── historical_loader.py        ← downloads & cleans price data
+│   ├── download_polygon_data.py    ← fetches historical data from Polygon.io
+│   ├── historical_loader.py        ← loads local CSV data for backtesting
 │   ├── live_data_loader.py         ← fetches latest candles for paper trading
 │
 ├── indicators/
@@ -490,9 +493,12 @@ Take Profit: 927.30
 
 # Data Layer
 
-## `historical_loader.py`
+## `download_polygon_data.py` & `historical_loader.py`
 
-Downloads OHLCV data via `yfinance`. Returns a standardised DataFrame:
+Backtesting uses high-quality historical data from **Polygon.io**.
+
+1. **Download**: Run `python data/download_polygon_data.py` to fetch data using your `POLYGON_API_KEY` and save it locally to `data/historical_csvs/`. It automatically respects Polygon's free-tier rate limits.
+2. **Load**: `historical_loader.py` reads these local CSV files and returns a standardised DataFrame:
 
 ```
 datetime (index) | open | high | low | close | volume
