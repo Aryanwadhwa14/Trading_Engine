@@ -1,8 +1,7 @@
 import yfinance as yf
 import pandas as pd
-
-
 import datetime as dt
+from data.validation import validate_ohlcv
 
 def load_live_data(ticker: str, interval: str = "5m", max_ema_length: int = 200) -> pd.DataFrame:
     """
@@ -97,4 +96,5 @@ def load_live_data(ticker: str, interval: str = "5m", max_ema_length: int = 200)
             f"[live_data_loader] DataFrame is empty after cleaning for {ticker} / {interval}"
         )
 
-    return df
+    validated_df, _ = validate_ohlcv(df, raise_on_error=True, timeframe=interval)
+    return validated_df

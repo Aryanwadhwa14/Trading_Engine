@@ -29,10 +29,10 @@ def test_calculate_atr(sample_ohlcv_df):
     atr = calculate_atr(sample_ohlcv_df, period=5)
     assert isinstance(atr, pd.Series)
     assert len(atr) == len(sample_ohlcv_df)
-    # Note: Because tr[0] is NaN from close.shift(1), tr.rolling(period).mean() produces
-    # period (5) NaNs: rows 0 through 4 are NaN, and first valid ATR is at row index 5.
-    assert atr.iloc[:5].isna().all()
-    assert (atr.iloc[5:] > 0).all()
+    # With TR[0] initialized to high[0] - low[0], rolling(period=5) produces
+    # exactly period - 1 (4) NaNs (rows 0 through 3), and first valid ATR is at row index 4.
+    assert atr.iloc[:4].isna().all()
+    assert (atr.iloc[4:] > 0).all()
 
 def test_candle_helpers():
     """Verify candle coloring and body-between-EMAs helpers."""
