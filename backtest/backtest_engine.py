@@ -3,6 +3,7 @@ import pandas as pd
 from datetime import datetime
 from strategies.ema_pullback import generate_signal
 from upload.tradelogs_update import upload_trade_log_tab, append_strategy_row
+from risk.position_sizing import calculate_position_size
 
 
 def run_backtest(df, config, start_date, end_date):
@@ -22,6 +23,8 @@ def run_backtest(df, config, start_date, end_date):
     entry_reason = None
     trade_type = None
     strategy_id = None
+    risk_budget = 0.0
+    estimated_risk = 0.0
 
     trade_log = []
 
@@ -47,19 +50,31 @@ def run_backtest(df, config, start_date, end_date):
             signal = generate_signal(current_df, config)
 
             if signal:
-                position = 1 if signal["signal"] == "LONG" else -1
-
                 entry_price = signal["entry"]
                 stop_loss = signal["stop_loss"]
                 take_profit = signal["take_profit"]
-                
-                # Maximizing profit by using all available capital
-                units = max(1, int(balance / entry_price)) if entry_price > 0 else 1
+                side = signal["signal"]
+                risk_pct = config.get("RISK_PERCENT", 0.01)
 
-                entry_time = row.name
-                entry_reason = signal["reason"]
-                trade_type = signal["type"]
-                strategy_id = signal["strategy_id"]
+                size_result = calculate_position_size(
+                    equity=balance,
+                    entry_price=entry_price,
+                    stop_price=stop_loss,
+                    risk_percent=risk_pct,
+                    cash_available=balance,
+                    side=side,
+                )
+
+                if size_result.is_approved and size_result.quantity > 0:
+                    position = 1 if side == "LONG" else -1
+                    units = size_result.quantity
+                    risk_budget = size_result.risk_budget
+                    estimated_risk = size_result.estimated_risk
+
+                    entry_time = row.name
+                    entry_reason = signal["reason"]
+                    trade_type = signal["type"]
+                    strategy_id = signal["strategy_id"]
 
         # EXIT LONG
         elif position == 1:
@@ -79,7 +94,8 @@ def run_backtest(df, config, start_date, end_date):
                     "SL Hit" if low <= stop_loss else "TP Hit",
                     pnl,
                     units,
-                    market=config.get("MARKET", ""), indicators=indicators
+                    market=config.get("MARKET", ""), indicators=indicators,
+                    risk_budget=risk_budget, estimated_risk=estimated_risk
                 ))
 
                 balance += pnl
@@ -100,7 +116,8 @@ def run_backtest(df, config, start_date, end_date):
                     "EOD Close",
                     pnl,
                     units,
-                    market=config.get("MARKET", ""), indicators=indicators
+                    market=config.get("MARKET", ""), indicators=indicators,
+                    risk_budget=risk_budget, estimated_risk=estimated_risk
                 ))
 
                 balance += pnl
@@ -124,7 +141,8 @@ def run_backtest(df, config, start_date, end_date):
                     "SL Hit" if high >= stop_loss else "TP Hit",
                     pnl,
                     units,
-                    market=config.get("MARKET", ""), indicators=indicators
+                    market=config.get("MARKET", ""), indicators=indicators,
+                    risk_budget=risk_budget, estimated_risk=estimated_risk
                 ))
 
                 balance += pnl
@@ -145,7 +163,8 @@ def run_backtest(df, config, start_date, end_date):
                     "EOD Close",
                     pnl,
                     units,
-                    market=config.get("MARKET", ""), indicators=indicators
+                    market=config.get("MARKET", ""), indicators=indicators,
+                    risk_budget=risk_budget, estimated_risk=estimated_risk
                 ))
 
                 balance += pnl
@@ -245,7 +264,8 @@ def _log_trade(ticker, timeframe, side, trade_type, strategy_id,
                exit_time, exit_price,
                entry_reason, exit_reason,
                pnl, units=0,
-               market="", indicators=""):
+               market="", indicators="",
+               risk_budget=0.0, estimated_risk=0.0):
 
     raw_pnl_pct = ((exit_price - entry_price) / entry_price * 100) if side == "LONG" else \
                   ((entry_price - exit_price) / entry_price * 100)
@@ -260,6 +280,8 @@ def _log_trade(ticker, timeframe, side, trade_type, strategy_id,
         "Strategy No": strategy_id,
         "Indicators": indicators,
         "Units": units,
+        "Risk Budget ($)": round(risk_budget, 2),
+        "Est Risk ($)": round(estimated_risk, 2),
         "Entry Time": _format_time_pst(entry_time),
         "Entry Price": round(entry_price, 2),
         "Stop Loss": round(sl, 2),
@@ -305,10 +327,10 @@ def _generate_summary(df, initial_balance, config, start_date, end_date, strateg
 ============================================================
 
 Configuration:
-- Ticker:       {config['SINGLE_TICKER']}
-- Timeframe:    {config['TIMEFRAME']}
+- Ticker:       {config.get('SINGLE_TICKER', '')}
+- Timeframe:    {config.get('TIMEFRAME', '')}
 - Date Range:   {start_date} to {end_date}
-- EMA:          EMA {config['EMA_FAST']} / {config['EMA_SLOW']}
+- EMA:          EMA {config.get('EMA_FAST', '')} / {config.get('EMA_SLOW', '')}
 
 Performance:
 - Total Trades: {len(df)}
