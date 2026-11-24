@@ -18,6 +18,7 @@ def run_backtest(df, config, start_date, end_date):
     units = 0
     entry_price = None
     entry_time = None
+    signal_time = None
     stop_loss = None
     take_profit = None
     entry_reason = None
@@ -25,6 +26,10 @@ def run_backtest(df, config, start_date, end_date):
     strategy_id = None
     risk_budget = 0.0
     estimated_risk = 0.0
+    pending_signal = None
+
+    entry_timing = config.get("ENTRY_TIMING", "next_bar")
+    risk_pct = config.get("RISK_PERCENT", 0.01)
 
     trade_log = []
 
@@ -44,40 +49,40 @@ def run_backtest(df, config, start_date, end_date):
         else:
             is_last_candle = True
 
-        # ENTRY
-        if position == 0:
+        # ── 1. Causal Entry from Pending Signal (Next-Bar Execution) ─────────
+        if position == 0 and pending_signal is not None and entry_timing == "next_bar":
+            fill_price = row["open"]
+            side = pending_signal["signal"]
+            sl = pending_signal["stop_loss"]
+            tp = pending_signal["take_profit"]
 
-            signal = generate_signal(current_df, config)
+            size_result = calculate_position_size(
+                equity=balance,
+                entry_price=fill_price,
+                stop_price=sl,
+                risk_percent=risk_pct,
+                cash_available=balance,
+                side=side,
+            )
 
-            if signal:
-                entry_price = signal["entry"]
-                stop_loss = signal["stop_loss"]
-                take_profit = signal["take_profit"]
-                side = signal["signal"]
-                risk_pct = config.get("RISK_PERCENT", 0.01)
+            if size_result.is_approved and size_result.quantity > 0:
+                position = 1 if side == "LONG" else -1
+                units = size_result.quantity
+                risk_budget = size_result.risk_budget
+                estimated_risk = size_result.estimated_risk
+                entry_price = fill_price
+                stop_loss = sl
+                take_profit = tp
+                entry_time = row.name
+                signal_time = pending_signal.get("signal_time", row.name)
+                entry_reason = pending_signal["reason"]
+                trade_type = pending_signal["type"]
+                strategy_id = pending_signal["strategy_id"]
 
-                size_result = calculate_position_size(
-                    equity=balance,
-                    entry_price=entry_price,
-                    stop_price=stop_loss,
-                    risk_percent=risk_pct,
-                    cash_available=balance,
-                    side=side,
-                )
+            pending_signal = None
 
-                if size_result.is_approved and size_result.quantity > 0:
-                    position = 1 if side == "LONG" else -1
-                    units = size_result.quantity
-                    risk_budget = size_result.risk_budget
-                    estimated_risk = size_result.estimated_risk
-
-                    entry_time = row.name
-                    entry_reason = signal["reason"]
-                    trade_type = signal["type"]
-                    strategy_id = signal["strategy_id"]
-
-        # EXIT LONG
-        elif position == 1:
+        # ── 2. Position Exits ────────────────────────────────────────────────
+        if position == 1:
 
             if low <= stop_loss or high >= take_profit:
 
@@ -95,7 +100,8 @@ def run_backtest(df, config, start_date, end_date):
                     pnl,
                     units,
                     market=config.get("MARKET", ""), indicators=indicators,
-                    risk_budget=risk_budget, estimated_risk=estimated_risk
+                    risk_budget=risk_budget, estimated_risk=estimated_risk,
+                    signal_time=signal_time
                 ))
 
                 balance += pnl
@@ -117,13 +123,13 @@ def run_backtest(df, config, start_date, end_date):
                     pnl,
                     units,
                     market=config.get("MARKET", ""), indicators=indicators,
-                    risk_budget=risk_budget, estimated_risk=estimated_risk
+                    risk_budget=risk_budget, estimated_risk=estimated_risk,
+                    signal_time=signal_time
                 ))
 
                 balance += pnl
                 position = 0
 
-        # EXIT SHORT
         elif position == -1:
 
             if high >= stop_loss or low <= take_profit:
@@ -142,7 +148,8 @@ def run_backtest(df, config, start_date, end_date):
                     pnl,
                     units,
                     market=config.get("MARKET", ""), indicators=indicators,
-                    risk_budget=risk_budget, estimated_risk=estimated_risk
+                    risk_budget=risk_budget, estimated_risk=estimated_risk,
+                    signal_time=signal_time
                 ))
 
                 balance += pnl
@@ -164,11 +171,48 @@ def run_backtest(df, config, start_date, end_date):
                     pnl,
                     units,
                     market=config.get("MARKET", ""), indicators=indicators,
-                    risk_budget=risk_budget, estimated_risk=estimated_risk
+                    risk_budget=risk_budget, estimated_risk=estimated_risk,
+                    signal_time=signal_time
                 ))
 
                 balance += pnl
                 position = 0
+
+        # ── 3. Strategy Evaluation at Completed Bar Close ────────────────────
+        if position == 0 and pending_signal is None:
+
+            signal = generate_signal(current_df, config)
+
+            if signal:
+                if entry_timing == "next_bar":
+                    # Queue for next-bar execution
+                    pending_signal = signal
+                else:
+                    # Legacy same-bar immediate fill
+                    entry_price = signal["entry"]
+                    stop_loss = signal["stop_loss"]
+                    take_profit = signal["take_profit"]
+                    side = signal["signal"]
+
+                    size_result = calculate_position_size(
+                        equity=balance,
+                        entry_price=entry_price,
+                        stop_price=stop_loss,
+                        risk_percent=risk_pct,
+                        cash_available=balance,
+                        side=side,
+                    )
+
+                    if size_result.is_approved and size_result.quantity > 0:
+                        position = 1 if side == "LONG" else -1
+                        units = size_result.quantity
+                        risk_budget = size_result.risk_budget
+                        estimated_risk = size_result.estimated_risk
+                        entry_time = row.name
+                        signal_time = signal.get("signal_time", row.name)
+                        entry_reason = signal["reason"]
+                        trade_type = signal["type"]
+                        strategy_id = signal["strategy_id"]
 
     trades_df = pd.DataFrame(trade_log)
 
@@ -265,10 +309,13 @@ def _log_trade(ticker, timeframe, side, trade_type, strategy_id,
                entry_reason, exit_reason,
                pnl, units=0,
                market="", indicators="",
-               risk_budget=0.0, estimated_risk=0.0):
+               risk_budget=0.0, estimated_risk=0.0,
+               signal_time=None):
 
     raw_pnl_pct = ((exit_price - entry_price) / entry_price * 100) if side == "LONG" else \
                   ((entry_price - exit_price) / entry_price * 100)
+
+    sig_time_str = _format_time_pst(signal_time if signal_time is not None else entry_time)
 
     return {
         "Trade Date": entry_time.date(),
@@ -282,6 +329,7 @@ def _log_trade(ticker, timeframe, side, trade_type, strategy_id,
         "Units": units,
         "Risk Budget ($)": round(risk_budget, 2),
         "Est Risk ($)": round(estimated_risk, 2),
+        "Signal Time": sig_time_str,
         "Entry Time": _format_time_pst(entry_time),
         "Entry Price": round(entry_price, 2),
         "Stop Loss": round(sl, 2),
