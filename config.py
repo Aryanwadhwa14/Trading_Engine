@@ -26,7 +26,14 @@ CONFIG = {
 
     # CAPITAL & RISK
     "INITIAL_BALANCE": 10000,
-    "RISK_PERCENT": 0.01,   # not yet used fully (future position sizing)
+    "RISK_PERCENT": 0.01,   # 1% equity risk per trade
+
+    # EXECUTION & COSTS
+    "COMMISSION_RATE": 0.0005,          # 0.05% (5 bps) commission per side
+    "SLIPPAGE_BPS": 5.0,                # 5 bps adverse slippage on market/stop/EOD fills
+    "ENTRY_TIMING": "next_bar",         # "next_bar" (causal) or "same_bar" (legacy)
+    "STOP_TARGET_CONFLICT": "stop_first",
+    "CLOSE_POSITIONS_AT_END": True,
 
     # STRATEGY CONFIG
     "ENABLE_S1": True,
