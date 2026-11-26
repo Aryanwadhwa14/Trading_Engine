@@ -6,6 +6,13 @@ from upload.tradelogs_update import upload_trade_log_tab, append_strategy_row
 from risk.position_sizing import calculate_position_size
 from execution.fill_simulator import simulate_entry_fill, simulate_exit_fill
 from portfolio.ledger import PortfolioLedger
+from backtest.performance import (
+    build_run_metadata,
+    compute_performance_metrics,
+    compute_strategy_attribution,
+    format_portfolio_report,
+    save_run_metadata,
+)
 
 
 def run_backtest(df, config, start_date, end_date):
@@ -26,6 +33,7 @@ def run_backtest(df, config, start_date, end_date):
     close_at_end = bool(config.get("CLOSE_POSITIONS_AT_END", True))
 
     trade_log = []
+    equity_records = []
 
     for i in range(5, len(df)):
 
@@ -189,7 +197,18 @@ def run_backtest(df, config, start_date, end_date):
                             estimated_risk=size_result.estimated_risk,
                         )
 
+        # ── 4. Record Bar-by-Bar Equity Curve ────────────────────────────────
+        pos_val = (ledger.position.quantity * bar_close) if not ledger.is_flat else 0.0
+        equity_records.append({
+            "timestamp": row.name,
+            "equity": ledger.mark_to_market_equity(bar_close),
+            "cash": ledger.cash,
+            "in_market": 0 if ledger.is_flat else 1,
+            "position_value": pos_val,
+        })
+
     trades_df = pd.DataFrame(trade_log)
+    equity_df = pd.DataFrame(equity_records)
 
     ticker = config["SINGLE_TICKER"]
     sd_str = str(start_date).split(' ')[0]
@@ -259,6 +278,39 @@ def run_backtest(df, config, start_date, end_date):
         with open(os.path.join(base_dir, "trades_summary.txt"), "w") as f:
             f.write(summary)
         print(summary)
+
+    # ── Portfolio Analytics, Equity Curve & Run Metadata ───────────────────
+    benchmark_close = df["close"].iloc[5:] if len(df) > 5 else df["close"]
+    metrics, enriched_equity_df = compute_performance_metrics(
+        equity_df=equity_df,
+        trades_df=trades_df,
+        initial_balance=initial_balance,
+        timeframe=config.get("TIMEFRAME", "5m"),
+        benchmark_close=benchmark_close,
+        split_label=config.get("SPLIT_LABEL", "in_sample"),
+    )
+    attribution = compute_strategy_attribution(trades_df)
+
+    enriched_equity_df.to_csv(os.path.join(base_dir, "equity_curve.csv"), index=False)
+
+    portfolio_report = format_portfolio_report(
+        metrics=metrics,
+        attribution=attribution,
+        ticker=ticker,
+        start_date=str(start_date),
+        end_date=str(end_date),
+    )
+    with open(os.path.join(base_dir, "portfolio_summary.txt"), "w", encoding="utf-8") as f:
+        f.write(portfolio_report)
+
+    metadata = build_run_metadata(
+        config=config,
+        start_date=str(start_date),
+        end_date=str(end_date),
+        metrics=metrics,
+        attribution=attribution,
+    )
+    save_run_metadata(metadata, os.path.join(base_dir, "run_metadata.json"))
 
     return trades_df
 
