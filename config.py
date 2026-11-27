@@ -27,6 +27,10 @@ CONFIG = {
     # CAPITAL & RISK
     "INITIAL_BALANCE": 10000,
     "RISK_PERCENT": 0.01,   # 1% equity risk per trade
+    "MAX_OPEN_POSITIONS": 3,
+    "MAX_GROSS_EXPOSURE": 0.80,
+    "MAX_SYMBOL_EXPOSURE": 0.50,
+    "MAX_DAILY_LOSS": 0.02,
 
     # EXECUTION & COSTS
     "COMMISSION_RATE": 0.0005,          # 0.05% (5 bps) commission per side

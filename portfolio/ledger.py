@@ -1,7 +1,7 @@
 """
 portfolio/ledger.py
 ───────────────────
-Single source of truth for cash, open positions, realized/unrealized P&L,
+Single source of truth for cash, multi-asset open positions, realized/unrealized P&L,
 commissions, slippage, and mark-to-market equity reconciliation.
 """
 
@@ -53,12 +53,12 @@ class ClosedTrade:
 
 class PortfolioLedger:
     """
-    Maintains authoritative cash, position, and P&L accounting.
+    Maintains authoritative cash, multi-asset positions, and P&L accounting.
 
     Accounting Invariants:
     - net_pnl = gross_pnl - slippage_cost - commission_cost
     - When flat: cash == initial_balance + realized_pnl
-    - equity = cash + marked_position_value
+    - equity = cash + sum(signed_marked_position_values)
     """
 
     def __init__(self, initial_balance: float) -> None:
@@ -69,30 +69,76 @@ class PortfolioLedger:
         self.realized_pnl = 0.0
         self.total_commissions = 0.0
         self.total_slippage = 0.0
-        self.position: Position | None = None
+        self.positions: dict[str, Position] = {}
 
     @property
     def is_flat(self) -> bool:
-        return self.position is None
+        return len(self.positions) == 0
 
-    def mark_to_market_equity(self, mark_price: float | None = None) -> float:
-        """Compute current equity: cash + marked position value."""
-        if self.position is None:
+    @property
+    def open_position_count(self) -> int:
+        return len(self.positions)
+
+    @property
+    def position(self) -> Position | None:
+        """Backward-compatible accessor for single-asset mode."""
+        if not self.positions:
+            return None
+        if len(self.positions) == 1:
+            return next(iter(self.positions.values()))
+        raise RuntimeError(
+            "Multiple positions open; access ledger.positions[symbol] instead of ledger.position."
+        )
+
+    def has_position(self, symbol: str) -> bool:
+        return symbol in self.positions
+
+    def gross_exposure(self, mark_prices: dict[str, float] | None = None) -> float:
+        """Compute total absolute marked notional across all open positions."""
+        total = 0.0
+        for sym, pos in self.positions.items():
+            px = mark_prices.get(sym, pos.entry_price) if mark_prices else pos.entry_price
+            total += abs(pos.quantity * px)
+        return total
+
+    def mark_to_market_equity(
+        self, mark_prices: float | dict[str, float] | None = None
+    ) -> float:
+        """
+        Compute current portfolio equity: cash + sum(signed marked position values).
+        Accepts either a float (single-asset mode) or a dict {symbol: mark_price}.
+        """
+        if not self.positions:
             return self.cash
-        if mark_price is None:
-            mark_price = self.position.entry_price
-        if self.position.side == "LONG":
-            return self.cash + (self.position.quantity * mark_price)
-        # SHORT: cash includes initial short sale proceeds, subtract buy-back liability
-        return self.cash - (self.position.quantity * mark_price)
 
-    def unrealized_pnl(self, mark_price: float) -> float:
-        """Compute current unrealized P&L at `mark_price` (excluding exit costs)."""
-        if self.position is None:
+        equity = self.cash
+        for sym, pos in self.positions.items():
+            if isinstance(mark_prices, dict):
+                px = mark_prices.get(sym, pos.entry_price)
+            elif isinstance(mark_prices, (int, float)):
+                px = float(mark_prices)
+            else:
+                px = pos.entry_price
+
+            if pos.side == "LONG":
+                equity += pos.quantity * px
+            else:
+                equity -= pos.quantity * px
+        return equity
+
+    def unrealized_pnl(self, mark_prices: float | dict[str, float]) -> float:
+        """Compute total unrealized P&L across all open positions (excluding exit costs)."""
+        if not self.positions:
             return 0.0
-        if self.position.side == "LONG":
-            return (mark_price - self.position.entry_price) * self.position.quantity
-        return (self.position.entry_price - mark_price) * self.position.quantity
+
+        total = 0.0
+        for sym, pos in self.positions.items():
+            px = mark_prices.get(sym, pos.entry_price) if isinstance(mark_prices, dict) else float(mark_prices)
+            if pos.side == "LONG":
+                total += (px - pos.entry_price) * pos.quantity
+            else:
+                total += (pos.entry_price - px) * pos.quantity
+        return total
 
     def open_position(
         self,
@@ -108,9 +154,9 @@ class PortfolioLedger:
         risk_budget: float,
         estimated_risk: float,
     ) -> Position:
-        """Record an entry fill and update cash."""
-        if self.position is not None:
-            raise RuntimeError("Cannot open position while another position is active.")
+        """Record an entry fill for `symbol` and update shared cash."""
+        if symbol in self.positions:
+            raise RuntimeError(f"Position already open for {symbol}.")
         if entry_fill.action != "ENTRY":
             raise ValueError("open_position requires an ENTRY FillResult.")
 
@@ -123,7 +169,7 @@ class PortfolioLedger:
         self.total_commissions += entry_fill.commission
         self.total_slippage += entry_fill.slippage_cost
 
-        self.position = Position(
+        pos = Position(
             symbol=symbol,
             side=entry_fill.side,
             quantity=entry_fill.quantity,
@@ -141,16 +187,24 @@ class PortfolioLedger:
             risk_budget=risk_budget,
             estimated_risk=estimated_risk,
         )
-        return self.position
+        self.positions[symbol] = pos
+        return pos
 
-    def close_position(self, exit_fill: FillResult) -> ClosedTrade:
-        """Record an exit fill, settle cash, and compute gross & net P&L."""
-        if self.position is None:
+    def close_position(self, exit_fill: FillResult, symbol: str | None = None) -> ClosedTrade:
+        """Record an exit fill for `symbol`, settle shared cash, and compute gross & net P&L."""
+        if not self.positions:
             raise RuntimeError("Cannot close position when portfolio is flat.")
-        if exit_fill.action != "EXIT":
-            raise ValueError("close_position requires an EXIT FillResult.")
 
-        pos = self.position
+        if symbol is None:
+            if len(self.positions) == 1:
+                symbol = next(iter(self.positions.keys()))
+            else:
+                raise ValueError("`symbol` must be specified when multiple positions are open.")
+
+        if symbol not in self.positions:
+            raise KeyError(f"No open position found for symbol '{symbol}'.")
+
+        pos = self.positions.pop(symbol)
         qty = pos.quantity
         exit_notional = exit_fill.fill_price * qty
 
@@ -168,7 +222,6 @@ class PortfolioLedger:
         self.total_commissions += exit_fill.commission
         self.total_slippage += exit_fill.slippage_cost
         self.realized_pnl += net_pnl
-        self.position = None
 
         return ClosedTrade(
             symbol=pos.symbol,
@@ -185,4 +238,3 @@ class PortfolioLedger:
             exit_reason=exit_fill.exit_reason or "Exit",
             ambiguous_bar=exit_fill.ambiguous_bar,
         )
-

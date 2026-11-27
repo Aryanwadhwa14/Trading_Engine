@@ -7,6 +7,7 @@ from data.historical_loader import load_historical_data
 from indicators.ema import calculate_ema
 from indicators.atr import calculate_atr
 from backtest.backtest_engine import run_backtest
+from backtest.event_loop import run_portfolio_backtest
 from forward_test.forward_test_engine import run_forward_test
 from utils.market_schedule import is_market_open
 from utils.logger import get_logger
@@ -60,9 +61,37 @@ def run_backtest_mode():
     
     if use_multi:
         tickers = CONFIG["MULTI_TICKER"]
-    else:
-        ticker_val = CONFIG["SINGLE_TICKER"]
-        tickers = [ticker_val]
+        data_by_symbol = {}
+        for ticker in tickers:
+            df = load_historical_data(
+                ticker=ticker,
+                interval=CONFIG["TIMEFRAME"],
+                start=CONFIG["START_DATE"],
+                end=CONFIG["END_DATE"]
+            )
+            if df is None or df.empty:
+                print(f"❌ No data loaded for {ticker}. Skipping.")
+                continue
+            df["ema_fast"] = calculate_ema(df, CONFIG["EMA_FAST"])
+            df["ema_slow"] = calculate_ema(df, CONFIG["EMA_SLOW"])
+            df["atr"] = calculate_atr(df, CONFIG["ATR_PERIOD"])
+            data_by_symbol[ticker] = df
+
+        if not data_by_symbol:
+            print("❌ No data loaded for any ticker in MULTI_TICKER.")
+            return
+
+        print(f"\n--- Running Shared Portfolio Backtest ({len(data_by_symbol)} tickers) ---\n")
+        run_portfolio_backtest(
+            data_by_symbol=data_by_symbol,
+            config=CONFIG.copy(),
+            start_date=CONFIG["START_DATE"],
+            end_date=CONFIG["END_DATE"],
+        )
+        return
+
+    ticker_val = CONFIG["SINGLE_TICKER"]
+    tickers = [ticker_val]
 
     for ticker in tickers:
         print(f"\n--- Backtesting for {ticker} ---\n")
